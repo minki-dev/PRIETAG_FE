@@ -23,7 +23,10 @@ module.exports = {
       },
       height: {
         priceModal : '596px'
-      }
+      },
+       textColor: {
+       borderGray: "#747474",
+      },
     },
   },
   plugins: [],

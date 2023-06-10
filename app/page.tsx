@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Counter from '@/components/Counter';
 import PriceModal from './editTemplate/components/PriceModal';
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
 				모달 나와라 얍!
 			</button>
 			{isModalOpen && <PriceModal toggleModal={toggleModal} />}
+			<Counter />
 		</main>
 	);
 }

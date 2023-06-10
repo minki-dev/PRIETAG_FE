@@ -1,3 +1,9 @@
+import PriceModal from './editTemplate/components/PriceModal';
+
 export default function Home() {
-	return <div>EZFEE</div>;
+	return (
+		<main>
+			<PriceModal />
+		</main>
+	);
 }

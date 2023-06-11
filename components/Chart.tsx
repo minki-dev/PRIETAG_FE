@@ -5,12 +5,12 @@ import { HiOutlinePlus } from 'react-icons/hi';
 import { HiOutlineXCircle } from 'react-icons/hi2';
 
 export default function Chart() {
-	const [cards, setCards] = useState(['card1', 'card2', 'card3', 'card4']);
-	const [cardIds, setCardIds] = useState([0, 1, 2, 3]);
+	const [cards, ] = useState(['card1', 'card2', 'card3', 'card4']);
+	const [cardIds, ] = useState([0, 1, 2, 3]);
 	const [chartByRow, setChartByRow] = useState<Array<string[]>>([
 		['', '', '', '', ''],
 	]);
-	const [chartByColumn, setChartByColumn] = useState<Array<string[]>>([
+	const [, ] = useState<Array<string[]>>([
 		['', '', '', '', ''],
 	]);
 	const [isPreview, setIsPreview] = useState<boolean>(false);

@@ -1,10 +1,11 @@
-import PriceModal from "./editTemplate/components/PriceModal";
-
-
+// import Chart from "@/components/Chart";
+import DraggableArea from "@/components/DraggableArea";
+// import PriceModal from "./editTemplate/components/PriceModal";
 
 export default function Home() {
-  return (
-    <main>
-      <PriceModal/>
-    </main>)
+  return <div>
+    {/* <PriceModal/> */}
+    {/* <Chart /> */}
+    <DraggableArea />
+  </div>;
 }

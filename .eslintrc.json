@@ -9,6 +9,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
+  "files": ["*.ts", "*.tsx"],
   "rules": {
     "prettier/prettier": "off",
     "react/react-in-jsx-scope": "off",

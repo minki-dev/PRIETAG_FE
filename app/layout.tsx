@@ -22,8 +22,8 @@ export default function RootLayout({
 			<link rel="icon" href="/logo.ico" sizes="any" />
 			<body className={inter.className}>
 				<Provider store={store}>
-					<main className="w-screen min-h-screen bg-gray-100">
-						<main className="m-auto bg-white max-w-screen-2xl">{children}</main>
+					<main className="min-h-screen w-screen bg-gray-100">
+						<main className="m-auto max-w-screen-2xl bg-white">{children}</main>
 					</main>
 				</Provider>
 			</body>

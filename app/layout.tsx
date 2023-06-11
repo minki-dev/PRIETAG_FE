@@ -1,6 +1,9 @@
-import Header from '@/components/Header';
+'use client';
+
+import { Provider } from 'react-redux';
 import './globals.css';
 import { Inter } from 'next/font/google';
+import { store } from '@/store';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,12 +21,11 @@ export default function RootLayout({
 		<html lang="en">
 			<link rel="icon" href="/logo.ico" sizes="any" />
 			<body className={inter.className}>
-				<main className="min-h-screen w-screen bg-gray-100">
-					<main className="m-auto max-w-screen-2xl bg-white">
-						<Header />
-						{children}
+				<Provider store={store}>
+					<main className="min-h-screen w-screen bg-gray-100">
+						<main className="m-auto max-w-screen-2xl bg-white">{children}</main>
 					</main>
-				</main>
+				</Provider>
 			</body>
 		</html>
 	);

@@ -1,4 +1,4 @@
-'use-client';
+'use client';
 import { Content } from 'next/font/google';
 import React from 'react';
 

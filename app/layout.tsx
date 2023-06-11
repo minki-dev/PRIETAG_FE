@@ -18,8 +18,8 @@ export default function RootLayout({
 		<html lang="en">
 			<link rel="icon" href="/logo.ico" sizes="any" />
 			<body className={inter.className}>
-				<main className="w-screen min-h-screen bg-gray-100">
-					<main className="m-auto bg-white max-w-screen-2xl">
+				<main className="min-h-screen w-screen bg-gray-100">
+					<main className="m-auto max-w-screen-2xl bg-white">
 						<Header />
 						{children}
 					</main>

@@ -1,11 +1,21 @@
-// import Chart from "@/components/Chart";
-import DraggableArea from "@/components/DraggableArea";
-// import PriceModal from "./editTemplate/components/PriceModal";
+'use client';
+
+import { useState } from 'react';
+import Counter from '@/components/Counter';
+import PriceModal from './editTemplate/components/PriceModal';
 
 export default function Home() {
-  return <div>
-    {/* <PriceModal/> */}
-    {/* <Chart /> */}
-    <DraggableArea />
-  </div>;
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const toggleModal = () => {
+		setIsModalOpen(!isModalOpen);
+	};
+	return (
+		<main>
+			<button type="button" onClick={toggleModal}>
+				모달 나와라 얍!
+			</button>
+			{isModalOpen && <PriceModal toggleModal={toggleModal} />}
+			<Counter />
+		</main>
+	);
 }

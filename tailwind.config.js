@@ -31,6 +31,9 @@ module.exports = {
         '1': '1px',
       },
 
+       textColor: {
+       borderGray: "#747474",
+      },
     },
   },
   plugins: [],

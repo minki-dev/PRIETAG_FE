@@ -5,9 +5,11 @@
     "airbnb-typescript",
     "plugin:prettier/recommended"
   ],
+  "ignorePatterns": ["tailwind.config.js"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
+  "files": ["*.ts", "*.tsx"],
   "rules": {
     "prettier/prettier": "off",
     "react/react-in-jsx-scope": "off",

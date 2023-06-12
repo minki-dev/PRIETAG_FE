@@ -19,11 +19,18 @@ module.exports = {
         ptLight: ['Pretendard-Light'],
       },
       width: {
-       priceModal : '832px'
+      priceModal : '832px'
       },
       height: {
         priceModal : '596px'
-      }
+      },
+      borderColor: {
+        'gray-700': '#747474',
+      },
+      borderWidth: {
+        '1': '1px',
+      },
+
     },
   },
   plugins: [],

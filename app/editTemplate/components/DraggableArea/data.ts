@@ -1,4 +1,4 @@
-import { BoxType } from "./DraggableArea/constants";
+import { BoxType } from "../../../../constants/box";
 
 export const cardState = {
 	cardArea: [

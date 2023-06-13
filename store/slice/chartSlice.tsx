@@ -7,7 +7,7 @@ import { getInitialBoxList } from '@/constants/box';
 type Row = string[];
 type Chart = Row[];
 
-type ChartState = { draggableArea: Object[]; chartList: Chart[] };
+type ChartState = { chartList: Chart[] };
 type ColumnActionPayload = {
 	colIndex: number;
 	to?: number;
@@ -18,8 +18,10 @@ type RowActionPayload = {
 	rowIndex?: number;
 };
 
+type ChartPayload = {
+	newChartList: Chart[]
+}
 const initialState: ChartState = {
-	draggableArea: [...getInitialBoxList({title: '가격 정책표 타이틀', subTitle: '소제목', text: '설명'})],
 	chartList: [[['']]],
 };
 
@@ -107,11 +109,15 @@ export const chartSlice = createSlice({
         const updatedChartList = state.chartList.splice(chartIndex, 1, updatedChart)
         return { ...state, chartList: updatedChartList as Chart[]}
 			}
+			return state
     },
+		updateChartData: (state: ChartState, action: PayloadAction<ChartPayload>) => {
+			return { ...state, chartList: action.payload.newChartList as Chart[] }
+		}
 	},
 });
 
-export const { swapColumns, addColumn, removeColumn, addRow, removeRow } = chartSlice.actions;
+export const { swapColumns, addColumn, removeColumn, addRow, removeRow, updateChartData } = chartSlice.actions;
 
 export function useChart() {
 	const chartState = useSelector((state: RootState) => state.chart);

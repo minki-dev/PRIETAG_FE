@@ -6,7 +6,6 @@ import counterReducer from './slice/counterslice';
 import chartReudcer from './slice/chartSlice';
 import DNDBoxReducer from './slice/dndBoxSlice';
 
-
 const logger = createLogger();
 
 const rootReducer = combineReducers({

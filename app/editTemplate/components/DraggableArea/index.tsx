@@ -5,7 +5,7 @@ import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 // import StrictModeDroppable from '@/utils/StrictModeDroppable';
 import TextBox from './TextBox';
 import PaddingBox from './PaddingBox';
-import { cardState } from '../data';
+import { cardState } from './data';
 
 export default function DraggableArea() {
 	const [list, setList] = useState(cardState.cardArea);

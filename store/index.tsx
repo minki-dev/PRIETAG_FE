@@ -4,12 +4,16 @@ import { configureStore } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import counterReducer from './slice/counterslice';
 import modalReducer from './slice/modalSlice';
+import chartReudcer from './slice/chartSlice';
+import DNDBoxReducer from './slice/dndBoxSlice';
 
 const logger = createLogger();
 
 const rootReducer = combineReducers({
 	counter: counterReducer,
 	modal: modalReducer,
+	chart: chartReudcer,
+	dndBox: DNDBoxReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

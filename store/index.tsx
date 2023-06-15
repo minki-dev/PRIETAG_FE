@@ -7,6 +7,7 @@ import modalReducer from './slice/modalSlice';
 import chartReudcer from './slice/chartSlice';
 // import DNDBoxReducer from './slice/DNDBoxSlice';
 import priceModalReducer from './slice/priceModalSlice';
+import faqSliceReducer from './slice/faqSlice';
 
 // const logger = createLogger();
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
 	counter: counterReducer,
 	modal: modalReducer,
 	chart: chartReudcer,
+	faq: faqSliceReducer,
 	// dndBox: DNDBoxReducer,
 	priceModal: priceModalReducer,
 });

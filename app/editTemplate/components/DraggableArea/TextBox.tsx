@@ -3,46 +3,59 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { BOX_PROPERTY, BoxType } from '../../../../constants/box';
+import { useConfig } from '@/store/slice/configSlice';
+import Image from 'next/image';
 
 type Props = {
 	id: string;
 	index: number;
 	placeholder: string;
-	isPreview: boolean;
-	// inputRef: React.MutableRefObject<any>;
-	boxData: {
-		role: BoxType;
-		content: string;
-	};
+	isSelected: boolean;
+	role: BoxType;
+	content: string;
+	onClick: (id: string) => void;
 };
 
 export default function TextBox({
 	id,
 	index,
 	placeholder,
-	// inputRef,
-	isPreview,
-	boxData,
+	isSelected,
+	role,
+	content,
+	onClick,
 }: Props) {
-	const { height, inputHeight, textSize } = BOX_PROPERTY[boxData.role];
+	const { divClassName, inputClassName } = BOX_PROPERTY[role];
+	const { configState } = useConfig();
+	const { isPreview } = configState;
+
 	return (
 		<Draggable draggableId={id} index={index}>
 			{(provided) => (
 				<div
+					onClick={() => onClick(id)}
 					{...provided.draggableProps}
 					ref={provided.innerRef}
 					className={`${
-						isPreview ? '' : 'border-2 border-dashed border-[#989898]'
-					} ${height} relative flex justify-center items-center font-ptRegular`}
+						!isPreview
+							? isSelected
+								? 'border-black'
+								: 'border-dashed border-[#989898]'
+							: 'border-transparent'
+					}  ${divClassName} editable-inner border-2 font-ptRegular`}
 				>
 					<div
 						{...provided.dragHandleProps}
-						className="absolute z-10 w-6 h-6 rounded-lg left-1 top-1 bg-sky-200"
+						className={`draggable-handle ${
+							isSelected ? '-translate-x-9 opacity-100' : ''
+						} `}
 					>
-						{}
+						<Image width={24} height={24} src={"/icons/drag_vert.svg"} alt='drag handle svg image'/>
 					</div>
+
 					<input
-						className={`${inputHeight} ${textSize} font-bold text-center disabled:bg-transparent focus:outline-none`}
+						className={` ${inputClassName} text-center font-bold focus:outline-none disabled:bg-transparent`}
+						defaultValue={content}
 						disabled={isPreview}
 						type="text"
 						placeholder={isPreview ? '' : placeholder}

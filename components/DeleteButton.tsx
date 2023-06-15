@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 import { HiOutlineXCircle } from 'react-icons/hi2';
 type Props = {
@@ -10,9 +11,9 @@ export default function DeleteButton({className, onClick}: Props) {
 		<button
 			type="button"
 			onClick={onClick}
-			className={`absolute hidden bg-white rounded-full -right-2 -top-2 group-hover:block ${className ? className : ""}`}
+			className={`absolute hidden -right-3 -top-3 group-hover:block ${className ? className : ""}`}
 		>
-			<HiOutlineXCircle className="h-[26px] w-[26px] " />
+			<Image src={'/icons/hover_delete.svg'} width={24} height={24} alt='delete button icon svg' />
 		</button>
 	);
 }

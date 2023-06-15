@@ -1,23 +1,60 @@
 @tailwind base;
 @tailwind components;
+
+.draggable-title {
+	@apply relative flex h-[109px];
+}
+.draggable-handle {
+	@apply opacity-0 left-0 absolute top-[50%]  translate-y-[-50%] rounded-lg transition duration-200 ease-out;
+}
+.draggable-title input {
+	@apply m-auto h-[77px] w-full text-center text-5xl;
+}
+.draggable-subtitle {
+	@apply relative flex h-[84px];
+}
+.draggable-subtitle input {
+	@apply m-auto h-[52px] w-full text-center text-4xl;
+}
+.draggable-text {
+	@apply relative flex h-[58px];
+}
+.draggable-text input {
+	@apply m-auto h-[26px] w-full text-center text-base;
+}
+.draggable-padding {
+	@apply m-auto max-h-[200px] min-h-[10px];
+}
+
+.editable-outer {
+	@apply box-border p-4 shadow-outer;
+}
+.editable-inner {
+	@apply box-border p-4 shadow-inner;
+}
+.react-resizable-handle.react-resizable-handle-s {
+	@apply left-0 w-full h-full ml-0 bg-white transform-none bg-none;
+	cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;
+}
+
 @tailwind utilities;
 
 @font-face {
-  font-family:"Pretendard-Bold";
-  src: url('/fonts/Pretendard-Bold.ttf')
+	font-family: 'Pretendard-Bold';
+	src: url('/fonts/Pretendard-Bold.ttf');
 }
 
 @font-face {
-font-family:'Pretendard-Regular';
-src: url('/fonts/Pretendard-Regular.ttf')
+	font-family: 'Pretendard-Regular';
+	src: url('/fonts/Pretendard-Regular.ttf');
 }
 
 @font-face {
-font-family:'Pretendard-Medium';
-src: url('/fonts/Pretendard-Medium.ttf')
+	font-family: 'Pretendard-Medium';
+	src: url('/fonts/Pretendard-Medium.ttf');
 }
 
 @font-face {
-font-family:'Pretendard-Light';
-src: url('/fonts/Pretendard-Light.ttf')
+	font-family: 'Pretendard-Light';
+	src: url('/fonts/Pretendard-Light.ttf');
 }

@@ -3,7 +3,7 @@
 import DeleteButton from '@/components/DeleteButton';
 import { useConfig } from '@/store/slice/configSlice';
 import { addRow, removeRow, useTable } from '@/store/slice/tableSlice';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { HiOutlinePlus } from 'react-icons/hi';
 import { HiOutlineXCircle } from 'react-icons/hi2';
 import { v4 as uuid } from 'uuid';
@@ -12,6 +12,10 @@ export default function Table() {
 	const [cards] = useState(['card1', 'card2', 'card3', 'card4']);
 	const [cardIds] = useState([0, 1, 2, 3]);
 
+	const refArray = useRef([])
+	const featureNameRef = useRef([])
+	const headRef = useRef(null)
+	
 	const { tableState, dispatch } = useTable();
 
 	const tableByRow = tableState.tableList[0];
@@ -31,9 +35,11 @@ export default function Table() {
 	};
 
 	return (
-		<div className="editable-inner">
+		<div className={`${!isPreview && "editable-inner"}`}>
 			{withHead && (
-				<div className="relative grid grid-cols-5 border-2 border-transparent group gap-x-5 hover:border-black">
+				<div className={`relative grid grid-cols-5 border-2 border-transparent  gap-x-5  ${
+					!isPreview && "group hover:border-black"
+				}`}>
 					<DeleteButton onClick={() => setWithHead(!withHead)} />
 					{cardIds.map((cardId, index) => {
 						return (
@@ -55,13 +61,13 @@ export default function Table() {
 			{featureName && (
 				<div className="grid grid-cols-5 gap-x-5">
 					<div
-						className={`group relative col-span-1 mb-4 ml-[1.5px] mt-4 h-12 border-2 border-dashed border-gray-500 ${
-							!isPreview ? 'hover:border-black hover:border-solid' : 'border-transparent'
+						className={`relative  mb-4 ml-[1.5px] mt-4 h-12 border-2 border-dashed border-gray-500 ${
+							!isPreview ? 'hover:border-black group hover:border-solid' : 'border-transparent'
 						}`}
 					>
 						<DeleteButton onClick={() => setFeatureName(!featureName)} />
 						<input
-							placeholder="포함된 기능"
+							placeholder={`${!isPreview ? "포함된 기능" : ""}`}
 							disabled={isPreview}
 							className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
 						/>
@@ -78,8 +84,8 @@ export default function Table() {
 					>
 						<div
 							className={`relative grid grid-cols-5 gap-x-5 border-2 border-transparent ${
-								!isPreview && 'hover:border-black'
-							} group `}
+								!isPreview && 'hover:border-black group'
+							}`}
 						>
 							<DeleteButton onClick={() => handleDeleteRow(rowIndex)} />
 							{col.map((col, colIndex) => {
@@ -87,12 +93,12 @@ export default function Table() {
 									<input
 										defaultValue={col}
 										key={uuid()}
-										placeholder={`값을 입력해주세요 ${
-											colIndex !== 0 ? '(공란 가능)' : ''
-										}`}
+										placeholder={`${!isPreview 
+																			? "값을 입력해주세요" + (colIndex !== 0 ? "(공란 가능)" : "") 
+																			: ""}`}
 										disabled={isPreview}
-										className={`h-10 flex-grow border border-dashed p-2 focus:outline-none disabled:bg-transparent ${
-											!isPreview ? 'border-black' : 'border-transparent'
+										className={`h-10 flex-grow border-2 border-dashed p-2 focus:outline-none disabled:bg-transparent ${
+											!isPreview ? 'border-gray-500' : 'border-transparent'
 										} ${colIndex === 0 ? '' : 'text-center'}`}
 									/>
 								);

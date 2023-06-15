@@ -17,6 +17,11 @@ import PriceModal from './components/PriceModal';
 import RightMenu from './components/RightMenu';
 import { FAQCard, setFAQ, useFAQ } from '@/store/slice/faqSlice';
 import { set } from 'react-hook-form';
+import DraggableArea from './components/DraggableArea';
+import Table from './components/Table/Table';
+import { useConfig } from '@/store/slice/configSlice';
+import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
+import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -98,29 +103,31 @@ export default function EditTemplate() {
 		dispatch(setPriceCard(testCard));
 	}, []);
 
+
+	const { configState } = useConfig()
+	const { isPreview } = configState
 	return (
-    <div>
-      <div>TemplateEdit</div>
-      <RightMenu />
-			<FAQ />
-		</div>
+		// <div>
+		//   <div>TemplateEdit</div>
+		//   <RightMenu />
+		// 	<FAQ />
+		// </div>
+
+		<main className="flex w-[calc(100vw-14.5rem)] mx-10 flex-col justify-center">
+			<RightMenu />
+			<section className={`${isPreview ? "editable-outer-preview" : "editable-outer "}`}>
+				<DraggableArea areaType="priceCardArea" />
+				<DiscountOptionBox />
+				<PriceCardBox />
+			</section>
+			<section className={`${isPreview ? "editable-outer-preview" : "editable-outer "}`}>
+				<DraggableArea areaType="tableArea" />
+				<Table />
+			</section>
+			<section className={`${isPreview ? "editable-outer-preview" : "editable-outer "}`}>
+				<DraggableArea areaType="faqArea" />
+				<FAQ />
+			</section>
+		</main>
 	);
 }
-{/* <main className="flex w-[calc(100vw-14.5rem)] flex-col justify-center">
-			
-
-<section className='editable-outer '>
-	
-
-	<DraggableArea areaType="priceCardArea" />
-</section>
-<section className='editable-outer' >
-	<DraggableArea areaType="tableArea" />
-	<Table />
-</section>
-<section className='editable-outer'>
-	<DraggableArea areaType="faqArea" />
-	<FAQ />
-</section>
-
-</main> */}

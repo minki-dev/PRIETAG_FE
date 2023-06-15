@@ -42,10 +42,12 @@ export default function PaddingBox({
 		e: React.SyntheticEvent,
 		{ size }: ResizeCallbackData,
 	) => {
-		debounce(() => {
-			setHeight(size.height);
-			dispatch(updateHeight({ areaType, id, content: height.toString() }));
-		}, 700);
+		setHeight(size.height);
+		
+		// debounce(() => {
+		// 	console.log(height)
+		// 	dispatch(updateHeight({ areaType, id, content: height.toString() }));
+		// }, 7);
 	};
 
 	useEffect(() => {
@@ -66,19 +68,26 @@ export default function PaddingBox({
 			{(provided) => (
 				<div
 					onClick={() => onClick(id)}
-					className={`${
-						isSelected ? 'border-black' : 'border-transparent'
+					className={`
+					${
+						isSelected && !isPreview ? 'border-black' : 'border-transparent'
 					} group relative border-2`}
 					{...provided.draggableProps}
 					ref={provided.innerRef}
 				>
 					<div
 						{...provided.dragHandleProps}
-						className={`draggable-handle ${
-							isSelected ? '-translate-x-9 opacity-100' : ''
+						className={`draggable-handle flex gap-1 flex-col items-center ${
+							isSelected && !isPreview ? '-translate-x-11 opacity-100' : ''
 						} `}
 					>
-						<Image width={24} height={24} src={"/icons/drag_vert.svg"} alt='drag handle svg image'/>
+						<div className='text-xs text-center shadow-md w-9'>{Math.floor(height)}px</div>
+						<Image
+							width={24}
+							height={24}
+							src={'/icons/drag_vert.svg'}
+							alt="drag handle svg image"
+						/>
 					</div>
 					<div ref={wrapperRef}>
 						<ResizableBox

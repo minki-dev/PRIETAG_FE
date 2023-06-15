@@ -38,16 +38,18 @@ export default function TextBox({
 					ref={provided.innerRef}
 					className={`${
 						!isPreview
-							? isSelected
-								? 'border-black'
-								: 'border-dashed border-[#989898]'
-							: 'border-transparent'
-					}  ${divClassName} editable-inner border-2 font-ptRegular`}
+							? "editable-inner border-gray-500"
+							: 'editable-inner-preview border-transparent'
+					} ${
+						isSelected && !isPreview
+						? 'border-black'
+						: 'border-dashed'						
+					} ${divClassName}  border-2 font-ptRegular`}
 				>
 					<div
 						{...provided.dragHandleProps}
 						className={`draggable-handle ${
-							isSelected ? '-translate-x-9 opacity-100' : ''
+							isSelected && !isPreview  ? '-translate-x-10 opacity-100' : ''
 						} `}
 					>
 						<Image width={24} height={24} src={"/icons/drag_vert.svg"} alt='drag handle svg image'/>

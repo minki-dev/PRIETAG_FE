@@ -32,6 +32,12 @@
 .editable-inner {
 	@apply box-border p-4 shadow-inner;
 }
+.editable-outer-preview {
+	@apply box-border p-4;
+}
+.editable-inner-preview {
+	@apply box-border p-4;
+}
 .react-resizable-handle.react-resizable-handle-s {
 	@apply left-0 w-full h-full ml-0 bg-white transform-none bg-none;
 	cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;

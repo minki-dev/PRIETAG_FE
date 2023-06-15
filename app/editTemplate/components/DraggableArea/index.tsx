@@ -42,16 +42,8 @@ export default function DraggableArea({
 		dispatch(updateSelected({ id, areaType }));
 	};
 
-	const handleClick = () => {
-		dispatch(addBox({ boxType: 'TITLE'}))
-	}
-
 	return (
 		<div>
-			{/* <button type="button" onClick={() => setIsPreview(!isPreview)}>
-				preview
-			</button> */}
-			{/* <button onClick={handleClick}>AddItem</button> */}
 			<DragDropContext onDragEnd={handleOnDragEnd}>
 				<StrictModeDroppable droppableId="draggable">
 					{(provided) => (

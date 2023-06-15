@@ -91,11 +91,11 @@ export const tableSlice = createSlice({
 
 			const newTableList = deepCopy(state.tableList);
 			const newTable = newTableList[tableIndex];
-
+			
 			newTable.push(['', '', '', '', '']);
+			
 			// newTable.push([`${Math.random()}`, `${Math.random()}`, `${Math.random()}`, `${Math.random()}`, `${Math.random()}`]);
-			newTableList.splice(tableIndex, 1, newTable);
-			console.log(newTable)
+			// newTableList.splice(tableIndex, 1, newTable);
 			return { ...state, tableList: newTableList };
 		},
 		removeRow: (state: TableState, action: PayloadAction<RowActionPayload>) => {
@@ -119,6 +119,14 @@ export const tableSlice = createSlice({
 		) => {
 			return { ...state, tableList: action.payload.newTableList as Table[] };
 		},
+		addTable: (
+			state: TableState
+		) => {
+			const newTableList = deepCopy(state.tableList)
+			newTableList.push([["", "", "", "", ""]])
+			console.log("🚀 ~ file: tableSlice.tsx:129 ~ newTableList:", newTableList)
+			return { ...state, tableList: newTableList };
+		},
 	},
 });
 
@@ -129,6 +137,7 @@ export const {
 	addRow,
 	removeRow,
 	updateTableData,
+	addTable
 } = tableSlice.actions;
 
 export function useTable() {

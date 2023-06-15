@@ -3,6 +3,7 @@
 import { BoxType } from '@/constants/box';
 import { addBox, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import { togglePreview, useConfig } from '@/store/slice/configSlice';
+import { addTable } from '@/store/slice/tableSlice';
 import React, { useState } from 'react'
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos } from'react-icons/md';
@@ -21,7 +22,11 @@ export default function RightMenu() {
   const { dispatch: dndDispatch } = useDNDBox();
   
   const { dispatch: configDispatch } = useConfig();
-  
+
+  const handleAddTable = () => {
+    dndDispatch(addTable())
+  }
+
   const handleAddBox = (boxType: BoxType) => {
     dndDispatch(addBox({ boxType }))
   }
@@ -73,7 +78,7 @@ export default function RightMenu() {
             </button>
           {isOption &&
             <div>
-              <button type='button' className='group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 my-3 items-center w-[198px] h-[39px]'>
+              <button onClick={handleAddTable} type='button' className='group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 my-3 items-center w-[198px] h-[39px]'>
                 <RxPlus />
                 <div className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474]'>상세 기능표 추가</div>
               </button>

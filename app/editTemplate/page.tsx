@@ -22,6 +22,7 @@ import Table from './components/Table/Table';
 import { useConfig } from '@/store/slice/configSlice';
 import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
 import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
+import TableContainer from './components/Table/TableContainer';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,10 +121,7 @@ export default function EditTemplate() {
 				<DiscountOptionBox />
 				<PriceCardBox />
 			</section>
-			<section className={`${isPreview ? "editable-outer-preview" : "editable-outer "}`}>
-				<DraggableArea areaType="tableArea" />
-				<Table />
-			</section>
+			<TableContainer />
 			<section className={`${isPreview ? "editable-outer-preview" : "editable-outer "}`}>
 				<DraggableArea areaType="faqArea" />
 				<FAQ />

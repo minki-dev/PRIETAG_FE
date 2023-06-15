@@ -15,10 +15,13 @@ import FAQ from './components/FAQ';
 import PriceModal from './components/PriceModal';
 // import { testCard } from './components/Test';
 import RightMenu from './components/RightMenu';
+import { FAQCard, setFAQ, useFAQ } from '@/store/slice/faqSlice';
+import { set } from 'react-hook-form';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { priceModal, dispatch } = usePriceModal();
+	const { faq, faqDispatch } = useFAQ();
 	const toggleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
@@ -47,6 +50,25 @@ export default function EditTemplate() {
 			detail: '테스트 카드 상세',
 			feature: '테스트 카드 특징',
 			content: ['테스트 카드 내용1', '테스트 카드 내용2', '테스트 카드 내용3'],
+		},
+	];
+
+	const faqTest: FAQCard[] = [
+		{
+			question: '진짜 총으로 쏴주나요?',
+			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
+		},
+		{
+			question: '진짜 총으로 쏴주나요?',
+			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
+		},
+		{
+			question: '진짜 총으로 쏴주나요?',
+			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
+		},
+		{
+			question: '진짜 총으로 쏴주나요?',
+			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
 		},
 	];
 

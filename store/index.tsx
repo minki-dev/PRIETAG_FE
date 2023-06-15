@@ -3,21 +3,21 @@
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './slice/counterslice';
+import modalReducer from './slice/modalSlice';
 import tableReducer from './slice/tableSlice';
 import DNDBoxReducer from './slice/DNDBoxSlice';
-import configReducer from './slice/configSlice';
-import faqReducer from './slice/faqSlice'
-import modalReducer from './slice/modalSlice'
+import priceModalReducer from './slice/priceModalSlice';
+import faqSliceReducer from './slice/faqSlice';
 
 // const logger = createLogger();
 
 const rootReducer = combineReducers({
 	counter: counterReducer,
+	modal: modalReducer,
 	table: tableReducer,
+	faq: faqSliceReducer,
 	dndBox: DNDBoxReducer,
-	config: configReducer,
-	faq: faqReducer,
-	modal: modalReducer
+	priceModal: priceModalReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

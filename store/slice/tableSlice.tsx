@@ -124,7 +124,6 @@ export const tableSlice = createSlice({
 		) => {
 			const newTableList = deepCopy(state.tableList)
 			newTableList.push([["", "", "", "", ""]])
-			console.log("🚀 ~ file: tableSlice.tsx:129 ~ newTableList:", newTableList)
 			return { ...state, tableList: newTableList };
 		},
 	},

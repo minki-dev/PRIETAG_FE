@@ -20,7 +20,8 @@ function UserCountChecked({ color }: { color: colorInfo }) {
 			<div className="flex h-[40px] w-[174px] items-center justify-center gap-[8px] rounded-l-[4px] rounded-r-[22px] bg-white">
 				<input
 					className={`w-[90px] text-end ${textColor.mainColor} font-medium outline-none`}
-					type="text"
+					type="number"
+					min="1"
 					name="userCount"
 					placeholder="0"
 				/>

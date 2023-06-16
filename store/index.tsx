@@ -9,6 +9,7 @@ import chartReudcer from './slice/chartSlice';
 import priceModalReducer from './slice/priceModalSlice';
 import priceCardReducer from './slice/priceCardSlice';
 import faqSliceReducer from './slice/faqSlice';
+import monthYearToggleReducer from './slice/monthYearToggleSlice';
 
 // const logger = createLogger();
 
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	// dndBox: DNDBoxReducer,
 	priceModal: priceModalReducer,
 	priceCard: priceCardReducer,
+	monthYearToggle: monthYearToggleReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

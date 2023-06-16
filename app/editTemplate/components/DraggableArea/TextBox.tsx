@@ -3,46 +3,72 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { BOX_PROPERTY, BoxType } from '../../../../constants/box';
+import { useConfig } from '@/store/slice/configSlice';
+import Image from 'next/image';
+import { DNDBoxState, removeBox, useDNDBox } from '@/store/slice/DNDBoxSlice';
+import DeleteButton from '@/components/DeleteButton';
 
 type Props = {
 	id: string;
 	index: number;
 	placeholder: string;
-	isPreview: boolean;
-	// inputRef: React.MutableRefObject<any>;
-	boxData: {
-		role: BoxType;
-		content: string;
-	};
+	isSelected: boolean;
+	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'priceCardArea' | 'tableArea'>;
+	role: BoxType;
+	content: string;
+	onClick: (id: string) => void;
 };
 
 export default function TextBox({
 	id,
 	index,
 	placeholder,
-	// inputRef,
-	isPreview,
-	boxData,
+	isSelected,
+	role,
+	content,
+	areaType,
+	onClick,
 }: Props) {
-	const { height, inputHeight, textSize } = BOX_PROPERTY[boxData.role];
+	const { divClassName, inputClassName } = BOX_PROPERTY[role];
+	const { dispatch } = useDNDBox();
+
+	const { configState } = useConfig();
+	const { isPreview } = configState;
+	const handleRemove = () => {
+		dispatch(removeBox({ id, areaType }));
+	};
 	return (
 		<Draggable draggableId={id} index={index}>
 			{(provided) => (
 				<div
+					onClick={() => onClick(id)}
 					{...provided.draggableProps}
 					ref={provided.innerRef}
 					className={`${
-						isPreview ? '' : 'border-2 border-dashed border-[#989898]'
-					} ${height} relative flex justify-center items-center font-ptRegular`}
+						!isPreview
+							? 'editable-inner border-gray-500'
+							: 'editable-inner-preview border-transparent'
+					} ${
+						isSelected && !isPreview ? 'border-black border-[3px]' : 'border-dashed'
+					} ${divClassName} relative group border-2 font-ptRegular`}
 				>
 					<div
 						{...provided.dragHandleProps}
-						className="absolute z-10 w-6 h-6 rounded-lg left-1 top-1 bg-sky-200"
+						className={`draggable-handle ${
+							isSelected && !isPreview ? '-translate-x-10 opacity-100' : ''
+						} `}
 					>
-						{}
+						<Image
+							width={24}
+							height={24}
+							src={'/icons/drag_vert.svg'}
+							alt="drag handle svg image"
+						/>
 					</div>
+					<DeleteButton onClick={handleRemove} />
 					<input
-						className={`${inputHeight} ${textSize} font-bold text-center disabled:bg-transparent focus:outline-none`}
+						className={` ${inputClassName} text-center font-bold focus:outline-none disabled:bg-transparent`}
+						defaultValue={content}
 						disabled={isPreview}
 						type="text"
 						placeholder={isPreview ? '' : placeholder}

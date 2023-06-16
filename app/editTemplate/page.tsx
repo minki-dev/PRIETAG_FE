@@ -17,7 +17,15 @@ import PriceModal from './components/PriceModal';
 import RightMenu from './components/RightMenu';
 import { FAQCard, setFAQ, useFAQ } from '@/store/slice/faqSlice';
 import { set } from 'react-hook-form';
+import DraggableArea from './components/DraggableArea';
+import Table from './components/Table/Table';
+import { useConfig } from '@/store/slice/configSlice';
+import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
+import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
+import TableContainer from './components/Table/TableContainer';
+import { useModal } from '@/store/slice/modalSlice';
 import Header from '@/components/header/Header';
+import TemplateHeader from '@/components/header/TemplateHeader';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -99,41 +107,35 @@ export default function EditTemplate() {
 		dispatch(setPriceCard(testCard));
 	}, []);
 
+	const { configState } = useConfig();
+	const { isPreview } = configState;
+
+	const {} = useModal();
 	return (
-		<div>
-			<Header />
-			<div>TemplateEdit</div>
-			<RightMenu />
-			<FAQ />
-			<main>
-				<button type="button" onClick={toggleModal}>
-					모달 나와라 얍!
-				</button>
-				{isModalOpen && <PriceModal toggleModal={toggleModal} />}
-				<Counter />
-				{/* 테스트 카드 내용 */}
-				{priceModal.priceCard.map((card) => (
-					<div className="mb-4">
-						<h1>카드 이름: {card.title}</h1>
-						<h2>가격 : {card.price}</h2>
-						<h3>할인율 : {card.discountRate}</h3>
-						<h4>디테일 : {card.detail}</h4>
-						<h5>제공 기능{card.feature}</h5>
-						{card.content.map((content) => (
-							<p>기능 상세 설명 : {content}</p>
-						))}
-					</div>
-				))}
-				인원별 할인 내용
-				{priceModal.headDiscount.map((card) => (
-					<div>
-						<h1>인원 : {card.headCount}</h1>
-						<h2>할인율 :{card.discountRate}</h2>
-					</div>
-				))}
-				연간 할인율
-				{priceModal.yearDiscountRate}
+		<>
+			{/* <Header /> */}
+			<TemplateHeader />
+			<main className="mx-auto mt-36 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
+				<RightMenu />
+				<section
+					className={`${
+						isPreview ? 'editable-outer-preview' : 'editable-outer '
+					}`}
+				>
+					<DraggableArea areaType="priceCardArea" />
+					<DiscountOptionBox />
+					<PriceCardBox />
+				</section>
+				<TableContainer />
+				<section
+					className={`${
+						isPreview ? 'editable-outer-preview' : 'editable-outer '
+					}`}
+				>
+					<DraggableArea areaType="faqArea" />
+					<FAQ />
+				</section>
 			</main>
-		</div>
+		</>
 	);
 }

@@ -21,3 +21,16 @@ src: url('/fonts/Pretendard-Medium.ttf')
 font-family:'Pretendard-Light';
 src: url('/fonts/Pretendard-Light.ttf')
 }
+
+
+@layer components {
+  .rightmenu_li {
+    @apply border-b border-solid p-3 border-gray-300
+  }
+  .button_li {
+    @apply w-full flex items-center justify-between
+  }
+  .option_li {
+    @apply text-sm font-bold top-[114px] text-[#747474]
+  }
+}

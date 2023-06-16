@@ -1,5 +1,11 @@
 'use client';
 
+import { ModalTypes } from '@/components/modal/ModalState';
+import { BoxType } from '@/constants/box';
+import { addBox, useDNDBox } from '@/store/slice/DNDBoxSlice';
+import { togglePreview, useConfig } from '@/store/slice/configSlice';
+import { openModal, useModal } from '@/store/slice/modalSlice';
+import { addTable } from '@/store/slice/tableSlice';
 import React, { useState } from 'react'
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos } from'react-icons/md';
@@ -15,6 +21,27 @@ export default function RightMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   
 
+  const { dispatch: dndDispatch, boxState } = useDNDBox();
+  const { dispatch: modalDispatch } = useModal()
+  const { dispatch: configDispatch } = useConfig();
+
+  const handleAddTable = () => {
+    dndDispatch(addTable())
+  }
+
+  const handleAddBox = (boxType: BoxType) => {
+    if (boxState.selectedBox === null) {
+      modalDispatch(openModal(ModalTypes.PositionSelectModal))
+      return
+    }
+    dndDispatch(addBox({ boxType }))
+  }
+
+  const handleTogglePreview = () => {
+    configDispatch(togglePreview())
+  }
+
+
   return (
     <>
       <div className={`fixed h-full top-0 z-10 pt-10 transition-all ${!isMenuOpen ? '-right-[246px]':' right-0'}`}>
@@ -26,7 +53,7 @@ export default function RightMenu() {
         <div className={`relative z-[2] h-fit pb-[59px] overflow-x-hidden shadow-[0px_0px_4px_rgba(0,0,0,0.5)] rounded-[12px_0px_0px_12px] bg-white box-border`}>
           {/* 미리보기 & 저장하기 */}
           <section className='flex flex-row h-[63px] px-2 mx-auto bottom-0 left-0 right-0  border-b border-solid border-gray-300'>
-            <button type='button' className='w-[104px] h-[31px] m-auto mr-2 border-gray-700 border-1 rounded [3px] text-[#747474]'>미리보기</button>
+            <button onClick={handleTogglePreview} type='button' className='w-[104px] h-[31px] m-auto mr-2 border-gray-700 border-1 rounded [3px] text-[#747474]'>미리보기</button>
             <button type='button' className='w-[104px] h-[31px] m-auto text-base font-medium text-white bg-[#00A3FF] font-ptMedium gap-10 rounded [3px]'>저장하기</button>
           </section>
 
@@ -57,7 +84,8 @@ export default function RightMenu() {
             </button>
           {isOption &&
             <div>
-              <button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>                <RxPlus />
+              <button onClick={handleAddTable} type='button' className='group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 my-3 items-center w-[198px] h-[39px]'>
+                <RxPlus />
                 <div className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474]'>상세 기능표 추가</div>
               </button>
               <button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>                <RxPlus  />
@@ -75,13 +103,16 @@ export default function RightMenu() {
           </button>
           {isTextboxOption &&
             <div>
-              <button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>                <RxPlus  />
+              <button onClick={() => handleAddBox("TITLE")} type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 my-3 items-center'>
+                <RxPlus  />
                 <span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474]'>타이틀 텍스트 박스 추가</span>
               </button>
-              <button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>                <RxPlus  />
+              <button onClick={() => handleAddBox("SUBTITLE")} type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 my-3 items-center'>
+                <RxPlus  />
                 <span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474] '>서브 타이틀 텍스트 박스 추가</span>
               </button>
-              <button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>                <RxPlus />
+              <button onClick={() => handleAddBox("TEXT")} type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 my-3 items-center'>
+                <RxPlus />
                 <span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474] '>미니 타이틀 텍스트 박스 추가</span>
               </button>
             </div>}
@@ -94,7 +125,8 @@ export default function RightMenu() {
           </button>
           {isDesignOption &&
             <div>
-              <button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center '>                <RxPlus  />
+              <button onClick={() => handleAddBox("PADDING")} type='button' className='w-[198px] h-[39px] hover:px-2 group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 my-3 items-center '>
+                <RxPlus  />
                 <span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474] 	'>임의 상하 패딩 추가</span>
               </button>
               <button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>                <RxPlus />
@@ -113,8 +145,8 @@ export default function RightMenu() {
               {isColorOption ? <IoMdArrowDropup className='hover:text-[#00A3FF]'/>:<IoMdArrowDropdown className='hover:text-[#00A3FF]'/>}
           </button>
           {isColorOption &&
-            <div>
-              <button type='button' className='flex items-center pt-4  mr-3'>
+            <div className='h-[194px]'>
+              <button type='button' className='flex items-center pt-4 mr-3'>
                 <div className='w-[32px] h-[32px] ml-2 rounded-[50%] flex items-center justify-center border border-solid border-[#dddddd]'>
                   <div className='w-[24px] h-[24px] bg-[#00A3FF] rounded-[50%]'> </div>
                 </div>

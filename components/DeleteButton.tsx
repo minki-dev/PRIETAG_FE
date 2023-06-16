@@ -3,7 +3,7 @@ import React from 'react';
 import { HiOutlineXCircle } from 'react-icons/hi2';
 type Props = {
 	className?: string
-	onClick: () => void;
+	onClick: () => void | ((id: string) => void)
 };
 
 export default function DeleteButton({className, onClick}: Props) {

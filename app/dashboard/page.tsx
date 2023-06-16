@@ -1,7 +1,11 @@
-import React from 'react'
+import Header from '@/components/header/Header';
+import React from 'react';
 
 export default function Dashboard() {
-  return (
-    <div>Dashboard</div>
-  )
+	return (
+		<div>
+			<Header />
+			Dashboard
+		</div>
+	);
 }

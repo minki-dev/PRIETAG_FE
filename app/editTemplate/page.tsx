@@ -17,6 +17,7 @@ import PriceModal from './components/PriceModal';
 import RightMenu from './components/RightMenu';
 import { FAQCard, setFAQ, useFAQ } from '@/store/slice/faqSlice';
 import { set } from 'react-hook-form';
+import Header from '@/components/header/Header';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,6 +101,7 @@ export default function EditTemplate() {
 
 	return (
 		<div>
+			<Header />
 			<div>TemplateEdit</div>
 			<RightMenu />
 			<FAQ />

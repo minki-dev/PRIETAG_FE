@@ -1,4 +1,5 @@
 import { ModalState } from '@/store/slice/modalSlice';
+import { ReactNode } from 'react';
 
 type ModalType = {
 	TemplateDelModal: ModalState;
@@ -11,6 +12,7 @@ type ModalType = {
 	DetailedFunctionSectionDelModal: ModalState;
 	FAQResetModal: ModalState;
 	FAQSectionDelModal: ModalState;
+	LinkInsertModal: ModalState;
 };
 
 const blue = `bg-[#00A3FF]`;
@@ -176,6 +178,27 @@ export const ModalTypes: ModalType = {
 				behaveButton: {
 					text: '삭제',
 					color: red,
+				},
+			},
+		},
+	},
+	LinkInsertModal: {
+		isOpen: true,
+		params: {
+			title: '링크 입력',
+			description: (
+				<div>
+					버튼을 클릭할 경우 이동하게될 페이지의 주소를 입력해 주세요.
+					<textarea className="opacity-15 mt-[18px] max-h-[52px] w-[416px] max-w-[416px] overflow-y-auto break-words rounded border-[1px] border-[#505050] p-[4px] focus:outline-none" />
+				</div>
+			),
+			buttons: {
+				cancelButton: {
+					text: '취소',
+				},
+				behaveButton: {
+					text: '링크 입력',
+					color: blue,
 				},
 			},
 		},

@@ -1,4 +1,5 @@
 'use client';
+import { useMonthYearToggle } from '@/store/slice/monthYearToggleSlice';
 import React from 'react';
 
 interface colorInfo {
@@ -8,6 +9,8 @@ interface colorInfo {
 }
 
 function MonthYearChecked({ color }: { color: colorInfo }) {
+	const { monthYearToggle, dispatch } = useMonthYearToggle();
+
 	const textColor: colorInfo = {
 		mainColor: `text-[${color.mainColor}]`,
 		subColor01: `text-[${color.subColor01}]`,
@@ -22,10 +25,10 @@ function MonthYearChecked({ color }: { color: colorInfo }) {
 					type="radio"
 					name="monthYear"
 					value="month"
-					// checked
+					checked
 				/>
 				<span
-					className={`flex h-full w-full cursor-pointer items-center justify-center rounded-[24px] text-sm text-[#989898] peer-checked/month:bg-white peer-checked/month:text-[16px] peer-checked/month:${textColor.mainColor} peer-checked/month:shadow peer-checked/month:transition`}
+					className={`flex h-full w-full cursor-pointer items-center justify-center rounded-[24px] text-sm text-[#989898] peer-checked/month:bg-white peer-checked/month:text-[16px] peer-checked/month:shadow peer-checked/month:transition`}
 				>
 					월간 구독
 				</span>

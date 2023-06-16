@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { ResizableBox, ResizeCallbackData } from 'react-resizable';
 import { Draggable } from 'react-beautiful-dnd';
 
-
 type Props = {
 	id: string;
 	index: number;

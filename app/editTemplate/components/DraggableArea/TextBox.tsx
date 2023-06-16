@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { BOX_PROPERTY, BoxType } from './constants';
+import { BOX_PROPERTY, BoxType } from '../../../../constants/box';
 
 type Props = {
 	id: string;

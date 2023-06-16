@@ -1,6 +1,5 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { store } from '@/store';
 import React from 'react';
 import ReduxProvider from '@/store/ReduxProvider';
 

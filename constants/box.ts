@@ -1,33 +1,40 @@
 import { v4 as uuid } from 'uuid';
-
 export type BoxType = 'TITLE' | 'SUBTITLE' | 'TEXT' | 'PADDING';
+export type PaddingType = 'outer' | 'inner';
 
+export type PaddingHeightRange = {
+	[key in PaddingType]: {
+		minHeight: number;
+		maxHeight: number;
+	}
+};
 export const BOX_PROPERTY: {
 	[key in BoxType]: {
-		divClassName: string
-		inputClassName: string
-		minHeight?:number
-		maxHeight?:number
-	};
+		divClassName: string;
+	} & (key extends 'PADDING'
+		? PaddingHeightRange
+		: {});
 } = {
 	TITLE: {
-		divClassName: "draggable-title",
-		inputClassName: "draggable-title"
+		divClassName: 'draggable-title',
 	},
 	SUBTITLE: {
-		divClassName: "draggable-subtitle",
-		inputClassName: "draggable-subtitle"
+		divClassName: 'draggable-subtitle',
 	},
-	TEXT:{
-		divClassName: "draggable-text",
-		inputClassName: "draggable-text"
+	TEXT: {
+		divClassName: 'draggable-text',
 	},
 	PADDING: {
-		divClassName: "draggable-padding",
-		inputClassName: "",
-		minHeight: 10,
-		maxHeight: 200
-	}
+		divClassName: 'draggable-padding',
+		outer: {
+			minHeight: 100,
+			maxHeight: 500,
+		},
+		inner: {
+			minHeight: 10,
+			maxHeight: 200,
+		},
+	},
 };
 
 export interface DraggableBox {
@@ -35,7 +42,7 @@ export interface DraggableBox {
 	placeholder?: string;
 	role: BoxType;
 	content: string;
-	isSelected: boolean
+	isSelected: boolean;
 }
 
 export function generateDraggableBoxProp({
@@ -46,33 +53,33 @@ export function generateDraggableBoxProp({
 		case 'TITLE':
 			return {
 				id: uuid(),
-				placeholder: placeholder ?? "타이틀",
+				placeholder: placeholder ?? '타이틀',
 				role: 'TITLE' as BoxType,
 				content: '',
-				isSelected: false
+				isSelected: false,
 			};
 		case 'SUBTITLE':
 			return {
 				id: uuid(),
-				placeholder: placeholder ?? "서브 타이틀",
+				placeholder: placeholder ?? '서브 타이틀',
 				role: 'SUBTITLE' as BoxType,
 				content: '',
-				isSelected: false
+				isSelected: false,
 			};
 		case 'TEXT':
 			return {
 				id: uuid(),
-				placeholder: placeholder ?? "텍스트",
+				placeholder: placeholder ?? '텍스트',
 				role: 'TEXT' as BoxType,
 				content: '',
-				isSelected: false
+				isSelected: false,
 			};
 		case 'PADDING':
 			return {
 				id: uuid(),
 				role: 'PADDING' as BoxType,
 				content: '10',
-				isSelected: false
+				isSelected: false,
 			};
 
 		default:

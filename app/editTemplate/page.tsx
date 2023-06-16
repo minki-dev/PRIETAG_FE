@@ -25,6 +25,7 @@ import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/Discoun
 import TableContainer from './components/Table/TableContainer';
 import { useModal } from '@/store/slice/modalSlice';
 import Header from '@/components/header/Header';
+import TemplateHeader from '@/components/header/TemplateHeader';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,27 +112,30 @@ export default function EditTemplate() {
 
 	const {} = useModal();
 	return (
-		<main className="mx-10 flex w-[calc(100vw-14.5rem)] flex-col justify-center">
-			<Header />
-			<RightMenu />
-			<section
-				className={`${
-					isPreview ? 'editable-outer-preview' : 'editable-outer '
-				}`}
-			>
-				<DraggableArea areaType="priceCardArea" />
-				<DiscountOptionBox />
-				<PriceCardBox />
-			</section>
-			<TableContainer />
-			<section
-				className={`${
-					isPreview ? 'editable-outer-preview' : 'editable-outer '
-				}`}
-			>
-				<DraggableArea areaType="faqArea" />
-				<FAQ />
-			</section>
-		</main>
+		<>
+			{/* <Header /> */}
+			<TemplateHeader />
+			<main className="mx-auto mt-36 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
+				<RightMenu />
+				<section
+					className={`${
+						isPreview ? 'editable-outer-preview' : 'editable-outer '
+					}`}
+				>
+					<DraggableArea areaType="priceCardArea" />
+					<DiscountOptionBox />
+					<PriceCardBox />
+				</section>
+				<TableContainer />
+				<section
+					className={`${
+						isPreview ? 'editable-outer-preview' : 'editable-outer '
+					}`}
+				>
+					<DraggableArea areaType="faqArea" />
+					<FAQ />
+				</section>
+			</main>
+		</>
 	);
 }

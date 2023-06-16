@@ -40,7 +40,7 @@ const initialState: ModalState = {
 	isOpen: false,
 	params: {
 		title: '',
-		description: '',
+		description: null,
 		buttons: {
 			cancelButton: {
 				text: '',

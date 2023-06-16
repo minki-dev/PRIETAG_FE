@@ -44,10 +44,10 @@ export default function RightMenu() {
 
   return (
     <>
-      <div className={`fixed h-full top-0 z-10 pt-10 transition-all ${!isMenuOpen ? '-right-[232px]':' right-0'}`}>
+      <div className={`fixed h-full top-0 z-10 pt-10 transition-all ${!isMenuOpen ? '-right-[246px]':' right-0'}`}>
         <div className='relative h-fit'>
-        <button type='button' onClick={() => setIsMenuOpen(!isMenuOpen)} className={`absolute flex justify-center items-center right-[232px] z-[1] w-[32px] h-[80px] top-1/2 -translate-y-1/2 shadow-[0px_0px_6px_rgba(0,0,0,0.15)] rounded-l-xl  ${!isMenuOpen ? ' bg-[#00A3FF]':'bg-[#ffffff]'}`}>
-          {isMenuOpen ? <MdOutlineArrowForwardIos className=' text-[#00A3FF] text-xl'/> : <MdOutlineArrowBackIos className=' text-[#ffffff] text-xl'/>}
+        <button type='button' onClick={() => setIsMenuOpen(!isMenuOpen)} className={`absolute flex justify-center items-center right-[232px] z-[1] w-[40px] h-[80px] top-1/2 -translate-y-1/2 shadow-[0px_0px_6px_rgba(0,0,0,0.15)] rounded-l-xl  ${!isMenuOpen ? ' bg-[#00A3FF]':'bg-[#ffffff]'}`}>
+          {isMenuOpen ? <MdOutlineArrowForwardIos className=' text-[#00A3FF] mr-3 text-xl'/> : <MdOutlineArrowBackIos className=' text-[#ffffff] mr-3 text-xl'/>}
         </button>
 
         <div className={`relative z-[2] h-fit pb-[59px] overflow-x-hidden shadow-[0px_0px_4px_rgba(0,0,0,0.5)] rounded-[12px_0px_0px_12px] bg-white box-border 'w-[232px]`}>

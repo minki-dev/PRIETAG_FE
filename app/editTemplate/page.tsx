@@ -24,6 +24,7 @@ import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
 import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
 import TableContainer from './components/Table/TableContainer';
 import { useModal } from '@/store/slice/modalSlice';
+import Header from '@/components/header/Header';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -105,27 +106,29 @@ export default function EditTemplate() {
 		dispatch(setPriceCard(testCard));
 	}, []);
 
+	const { configState } = useConfig();
+	const { isPreview } = configState;
 
-	const { configState } = useConfig()
-	const { isPreview } = configState
-	
-	const { } = useModal()
+	const {} = useModal();
 	return (
-		// <div>
-		//   <div>TemplateEdit</div>
-		//   <RightMenu />
-		// 	<FAQ />
-		// </div>
-
-		<main className="flex w-[calc(100vw-14.5rem)] mx-10 flex-col justify-center">
+		<main className="mx-10 flex w-[calc(100vw-14.5rem)] flex-col justify-center">
+			<Header />
 			<RightMenu />
-			<section className={`${isPreview ? "editable-outer-preview" : "editable-outer "}`}>
+			<section
+				className={`${
+					isPreview ? 'editable-outer-preview' : 'editable-outer '
+				}`}
+			>
 				<DraggableArea areaType="priceCardArea" />
 				<DiscountOptionBox />
 				<PriceCardBox />
 			</section>
 			<TableContainer />
-			<section className={`${isPreview ? "editable-outer-preview" : "editable-outer "}`}>
+			<section
+				className={`${
+					isPreview ? 'editable-outer-preview' : 'editable-outer '
+				}`}
+			>
 				<DraggableArea areaType="faqArea" />
 				<FAQ />
 			</section>

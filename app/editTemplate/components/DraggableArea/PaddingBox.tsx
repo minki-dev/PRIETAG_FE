@@ -1,26 +1,25 @@
 'use client';
 
 import 'react-resizable/css/styles.css';
-import React, { useEffect, useRef, useState } from 'react';
-import { ResizableBox, ResizeCallbackData } from 'react-resizable';
+import React, { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { BOX_PROPERTY } from '@/constants/box';
 import { useConfig } from '@/store/slice/configSlice';
 import {
 	DNDBoxState,
 	removeBox,
 	updateHeight,
+	updateSelected,
 	useDNDBox,
 } from '@/store/slice/DNDBoxSlice';
 import Image from 'next/image';
 import DeleteButton from '@/components/DeleteButton';
+import ResizablePaddingBox from '@/components/ResizablePaddingBox';
 
 type Props = {
 	id: string;
 	index: number;
 	isSelected: boolean;
-	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'priceCardArea' | 'tableArea'>;
-	onClick: (id: string) => void;
+	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'priceCardArea' | 'tableArea'>
 };
 
 export default function PaddingBox({
@@ -28,54 +27,24 @@ export default function PaddingBox({
 	areaType,
 	index,
 	isSelected,
-	onClick,
 }: Props) {
-	const { boxState, dispatch } = useDNDBox();
+	const { dispatch } = useDNDBox();
 	const { configState } = useConfig();
 	const { isPreview } = configState;
+  const heightState = useState<number>(10)
 
-
-	const [width, setWidth] = useState(0);
-	const [height, setHeight] = useState(Number(boxState[areaType][index]) | 10);
-
-
-	const wrapperRef = useRef<HTMLDivElement>(null);
-
-	const handleResize = (
-		e: React.SyntheticEvent,
-		{ size }: ResizeCallbackData,
-	) => {
-		const flooredHeight = Math.floor(size.height)
-		dispatch(updateHeight({ index, areaType, content: flooredHeight.toString()}))
-	};
 	const handleRemove = () => {
 		dispatch(removeBox({ id, areaType }));
 	};
 
-	const handleDisplayHeight = (
-		e: React.SyntheticEvent,
-		{ size }: ResizeCallbackData,
-	) => {
-		setHeight(size.height);
+	const handleHeightUpdate = (height: number) => {
+		dispatch(updateHeight({ areaType, index, content: height.toString()}))
 	}
-	useEffect(() => {
-		const handleWindowResize = () => {
-			if (wrapperRef.current) {
-				setWidth(wrapperRef.current.getBoundingClientRect().width);
-			}
-		};
-		handleWindowResize();
-		window.addEventListener('resize', handleWindowResize);
-
-		return () => {
-			window.removeEventListener('resize', handleWindowResize);
-		};
-	}, []);
 	return (
 		<Draggable draggableId={id} index={index}>
 			{(provided) => (
 				<div
-					onClick={() => onClick(id)}
+					onClick={() => dispatch(updateSelected({ id, areaType }))}
 					className={`
 					${
 						isSelected && !isPreview ? 'border-black' : 'border-transparent'
@@ -93,7 +62,7 @@ export default function PaddingBox({
 					>
 						<div className='relative'>
 							<div className="absolute text-xs text-center shadow-md -top-5 right-[50%] translate-x-[50%] w-9">
-								{Math.floor(height)}px
+								{Math.floor(heightState[0])}px
 							</div>
 							<Image
 								width={24}
@@ -104,21 +73,7 @@ export default function PaddingBox({
 						</div>
 					</div>
 					<DeleteButton className='z-[1]' onClick={handleRemove} />
-					<div ref={wrapperRef}>
-						<ResizableBox
-							height={Number(height)}
-							lockAspectRatio={true}
-							onResizeStop={handleResize}
-							minConstraints={[width, BOX_PROPERTY.PADDING.minHeight!]}
-							maxConstraints={[width, BOX_PROPERTY.PADDING.maxHeight!]}
-							width={width}
-							// axis="y"
-							onResize={handleDisplayHeight}
-							resizeHandles={isPreview ? [] : ['s']}
-							handleSize={[10, 10]}
-							className="flex items-center justify-center"
-						></ResizableBox>
-					</div>
+					<ResizablePaddingBox type='inner' heightState={heightState} onAction={handleHeightUpdate} />
 				</div>
 			)}
 		</Draggable>

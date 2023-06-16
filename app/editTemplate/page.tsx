@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	PriceCard,
 	setPriceCard,
@@ -26,6 +26,9 @@ import TableContainer from './components/Table/TableContainer';
 import { useModal } from '@/store/slice/modalSlice';
 import Header from '@/components/header/Header';
 import TemplateHeader from '@/components/header/TemplateHeader';
+import PaddingBox from './components/DraggableArea/PaddingBox';
+import ResizablePaddingWithHandle from '@/components/ResizablePaddingWithHandle';
+import { updateHeight, useDNDBox } from '@/store/slice/DNDBoxSlice';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -110,6 +113,19 @@ export default function EditTemplate() {
 	const { configState } = useConfig();
 	const { isPreview } = configState;
 
+	const { boxState, dispatch: dndDispatch } = useDNDBox();
+
+	const handleHeightUpdate = (index: number, height: number) => {
+		dndDispatch(
+			updateHeight({
+				areaType: 'outerPaddings',
+				index,
+				content: height.toString(),
+			}),
+		);
+
+	};
+
 	const {} = useModal();
 	return (
 		<>
@@ -126,7 +142,19 @@ export default function EditTemplate() {
 					<DiscountOptionBox />
 					<PriceCardBox />
 				</section>
+				<ResizablePaddingWithHandle
+					type="outer"
+					onAction={(height) => {
+						handleHeightUpdate(0, height);
+					}}
+				/>
 				<TableContainer />
+				<ResizablePaddingWithHandle
+					type="outer"
+					onAction={(height) => {
+						handleHeightUpdate(1, height);
+					}}
+				/>
 				<section
 					className={`${
 						isPreview ? 'editable-outer-preview' : 'editable-outer '

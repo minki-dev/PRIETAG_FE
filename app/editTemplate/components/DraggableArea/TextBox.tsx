@@ -5,7 +5,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { BOX_PROPERTY, BoxType } from '../../../../constants/box';
 import { useConfig } from '@/store/slice/configSlice';
 import Image from 'next/image';
-import { DNDBoxState, removeBox, useDNDBox } from '@/store/slice/DNDBoxSlice';
+import { DNDBoxState, removeBox, updateSelected, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import DeleteButton from '@/components/DeleteButton';
 
 type Props = {
@@ -16,7 +16,6 @@ type Props = {
 	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'priceCardArea' | 'tableArea'>;
 	role: BoxType;
 	content: string;
-	onClick: (id: string) => void;
 };
 
 export default function TextBox({
@@ -27,9 +26,8 @@ export default function TextBox({
 	role,
 	content,
 	areaType,
-	onClick,
 }: Props) {
-	const { divClassName, inputClassName } = BOX_PROPERTY[role];
+	const { divClassName } = BOX_PROPERTY[role];
 	const { dispatch } = useDNDBox();
 
 	const { configState } = useConfig();
@@ -41,7 +39,7 @@ export default function TextBox({
 		<Draggable draggableId={id} index={index}>
 			{(provided) => (
 				<div
-					onClick={() => onClick(id)}
+				onClick={() => dispatch(updateSelected({ id, areaType }))}
 					{...provided.draggableProps}
 					ref={provided.innerRef}
 					className={`${
@@ -67,7 +65,7 @@ export default function TextBox({
 					</div>
 					<DeleteButton onClick={handleRemove} />
 					<input
-						className={` ${inputClassName} text-center font-bold focus:outline-none disabled:bg-transparent`}
+						className='font-bold text-center focus:outline-none disabled:bg-transparent'
 						defaultValue={content}
 						disabled={isPreview}
 						type="text"

@@ -2,16 +2,9 @@
 
 import React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-// import StrictModeDroppable from '@/utils/StrictModeDroppable';
 import TextBox from './TextBox';
 import PaddingBox from './PaddingBox';
-import {
-	DNDBoxState,
-	addBox,
-	updateOrder,
-	updateSelected,
-	useDNDBox,
-} from '@/store/slice/DNDBoxSlice';
+import { DNDBoxState, updateOrder, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import { StrictModeDroppable } from '@/app/helpers/StrictModeDroppable';
 
 export default function DraggableArea({
@@ -37,10 +30,6 @@ export default function DraggableArea({
 		dispatch(updateOrder({ areaType, newList: updatedList }));
 	};
 
-	const handleSelect = (id: string) => {
-		dispatch(updateSelected({ id, areaType }));
-	};
-	
 	return (
 		<div>
 			<DragDropContext onDragEnd={handleOnDragEnd}>
@@ -53,7 +42,6 @@ export default function DraggableArea({
 										key={item.id}
 										index={index}
 										{...item}
-										onClick={handleSelect}
 										areaType={areaType}
 									/>
 								) : (
@@ -61,7 +49,6 @@ export default function DraggableArea({
 										key={item.id}
 										{...item}
 										placeholder={item.placeholder || ''}
-										onClick={handleSelect}
 										index={index}
 										areaType={areaType}
 										// inputRef={addRef(index, React.createRef())}

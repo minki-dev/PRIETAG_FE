@@ -71,7 +71,7 @@ export function generateDraggableBoxProp({
 			return {
 				id: uuid(),
 				role: 'PADDING' as BoxType,
-				content: '',
+				content: '10',
 				isSelected: false
 			};
 

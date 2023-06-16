@@ -23,6 +23,7 @@ import { useConfig } from '@/store/slice/configSlice';
 import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
 import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
 import TableContainer from './components/Table/TableContainer';
+import { useModal } from '@/store/slice/modalSlice';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -107,6 +108,8 @@ export default function EditTemplate() {
 
 	const { configState } = useConfig()
 	const { isPreview } = configState
+	
+	const { } = useModal()
 	return (
 		// <div>
 		//   <div>TemplateEdit</div>

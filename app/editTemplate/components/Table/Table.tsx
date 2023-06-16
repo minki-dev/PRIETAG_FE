@@ -1,8 +1,10 @@
 'use client';
 
 import DeleteButton from '@/components/DeleteButton';
+import { ModalTypes } from '@/components/modal/ModalState';
 import { useConfig } from '@/store/slice/configSlice';
-import { addRow, removeRow, useTable } from '@/store/slice/tableSlice';
+import { openModal, useModal } from '@/store/slice/modalSlice';
+import { addRow, removeRow, removeTable, useTable } from '@/store/slice/tableSlice';
 import React, { useRef, useState } from 'react';
 import { HiOutlinePlus } from 'react-icons/hi';
 import { HiOutlineXCircle } from 'react-icons/hi2';
@@ -16,7 +18,8 @@ export default function Table({ tableIndex }: { tableIndex: number }) {
 	const featureNameRef = useRef([]);
 	const headRef = useRef(null);
 
-	const { tableState, dispatch } = useTable();
+	const { tableState, dispatch:tableDispatch } = useTable();
+	const { dispatch: modalDispatch } = useModal();
 
 	const tableByRow = tableState.tableList[tableIndex];
 
@@ -27,15 +30,30 @@ export default function Table({ tableIndex }: { tableIndex: number }) {
 	const [featureName, setFeatureName] = useState<boolean>(true);
 
 	const handleAddRow = () => {
-		dispatch(addRow({ tableIndex }));
+		tableDispatch(addRow({ tableIndex }));
 	};
 
 	const handleDeleteRow = (idx: number) => {
-		dispatch(removeRow({ tableIndex, rowIndex: idx }));
+		tableDispatch(removeRow({ tableIndex, rowIndex: idx }));
 	};
 
+	const handleTableRemove = () => {
+		if (tableState.tableList.length <= 1) {
+			modalDispatch(openModal(ModalTypes.DetailedFunctionContainerDelModal))
+			return
+		}
+		tableDispatch(removeTable({ tableIndex }))
+	}
+
 	return (
-		<div className={`${!isPreview && 'editable-inner'}`}>
+		<div
+			className={`${
+				isPreview
+					? 'editable-inner-preview'
+					: 'editable-inner  border-[#ebf2ff] hover:border-black'
+			} relative group border-2`}
+		>
+			<DeleteButton onClick={handleTableRemove} />
 			{withHead && (
 				<div
 					className={`relative grid grid-cols-5 gap-x-5 border-2  border-transparent  ${

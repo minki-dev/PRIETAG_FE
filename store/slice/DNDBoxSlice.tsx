@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '..';
 import {
@@ -24,7 +24,7 @@ type DNDBoxPayload = {
 	boxType: BoxType;
 	id: string;
 	content: string;
-
+	index: number
 };
 
 const initialState: DNDBoxState = {
@@ -56,7 +56,6 @@ export const DNDBoxSlice = createSlice({
 			action: PayloadAction<Pick<DNDBoxPayload, 'areaType' | 'newList'>>,
 		) => {
 			const { areaType, newList } = action.payload;
-			
 			return { ...state, [areaType]: newList };
 		},
 		addBox: (
@@ -87,21 +86,18 @@ export const DNDBoxSlice = createSlice({
 			action: PayloadAction<Pick<DNDBoxPayload, 'id' | 'areaType'>>,
 		) => {
 			const { id, areaType } = action.payload;
-
-			return { ...state, [areaType]: state[areaType].filter((box) => box.id === id) };
+			if (state[areaType].length <= 1) return
+			const newList = state[areaType].filter((box) => box.id !== id) 
+			return { ...state, [areaType]: newList };
 		},
 		updateHeight: (
 			state: DNDBoxState,
-			action: PayloadAction<Pick<DNDBoxPayload, 'id' | 'areaType' | 'content'>>,
+			action: PayloadAction<Pick<DNDBoxPayload, 'index' | 'areaType' | 'content'>>,
 		) => {
-			const { id, areaType, content } = action.payload;
-
-			const updatedList = state[areaType].map((box) => {
-				if (box.id === id) {
-					return { ...box, content };
-				}
-			});
-			return { ...state, [areaType]: updatedList };
+			const { index, areaType, content } = action.payload;
+			state[areaType][index].content = content
+			console.log(current(state))
+			return state
 		},
 		updateSelected: (
 			state: DNDBoxState,

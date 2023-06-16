@@ -21,7 +21,6 @@ export default function DraggableArea({
 }) {
 	const { boxState, dispatch } = useDNDBox();
 	const list = boxState[areaType];
-
 	const handleOnDragEnd = ({ destination, source }: DropResult) => {
 		if (!destination) return;
 
@@ -41,7 +40,7 @@ export default function DraggableArea({
 	const handleSelect = (id: string) => {
 		dispatch(updateSelected({ id, areaType }));
 	};
-
+	
 	return (
 		<div>
 			<DragDropContext onDragEnd={handleOnDragEnd}>
@@ -64,7 +63,7 @@ export default function DraggableArea({
 										placeholder={item.placeholder || ''}
 										onClick={handleSelect}
 										index={index}
-										
+										areaType={areaType}
 										// inputRef={addRef(index, React.createRef())}
 									/>
 								),

@@ -8,16 +8,19 @@ import tableReducer from './slice/tableSlice';
 import DNDBoxReducer from './slice/DNDBoxSlice';
 import priceModalReducer from './slice/priceModalSlice';
 import faqSliceReducer from './slice/faqSlice';
-
+import configReducer from './slice/configSlice';
+import priceCardReducer from './slice/priceCardSlice';
 // const logger = createLogger();
 
 const rootReducer = combineReducers({
 	counter: counterReducer,
 	modal: modalReducer,
+	priceCard: priceCardReducer,
 	table: tableReducer,
 	faq: faqSliceReducer,
 	dndBox: DNDBoxReducer,
 	priceModal: priceModalReducer,
+	config: configReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

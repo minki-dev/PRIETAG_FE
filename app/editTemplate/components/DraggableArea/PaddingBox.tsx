@@ -8,11 +8,12 @@ import { BOX_PROPERTY } from '@/constants/box';
 import { useConfig } from '@/store/slice/configSlice';
 import {
 	DNDBoxState,
+	removeBox,
 	updateHeight,
 	useDNDBox,
 } from '@/store/slice/DNDBoxSlice';
-import debounce from 'lodash.debounce';
 import Image from 'next/image';
+import DeleteButton from '@/components/DeleteButton';
 
 type Props = {
 	id: string;
@@ -29,12 +30,14 @@ export default function PaddingBox({
 	isSelected,
 	onClick,
 }: Props) {
-	const [width, setWidth] = useState(0);
-	const [height, setHeight] = useState(10);
-
-	const { dispatch } = useDNDBox();
+	const { boxState, dispatch } = useDNDBox();
 	const { configState } = useConfig();
 	const { isPreview } = configState;
+
+
+	const [width, setWidth] = useState(0);
+	const [height, setHeight] = useState(Number(boxState[areaType][index]) | 10);
+
 
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -42,14 +45,19 @@ export default function PaddingBox({
 		e: React.SyntheticEvent,
 		{ size }: ResizeCallbackData,
 	) => {
-		setHeight(size.height);
-		
-		// debounce(() => {
-		// 	console.log(height)
-		// 	dispatch(updateHeight({ areaType, id, content: height.toString() }));
-		// }, 7);
+		const flooredHeight = Math.floor(size.height)
+		dispatch(updateHeight({ index, areaType, content: flooredHeight.toString()}))
+	};
+	const handleRemove = () => {
+		dispatch(removeBox({ id, areaType }));
 	};
 
+	const handleDisplayHeight = (
+		e: React.SyntheticEvent,
+		{ size }: ResizeCallbackData,
+	) => {
+		setHeight(size.height);
+	}
 	useEffect(() => {
 		const handleWindowResize = () => {
 			if (wrapperRef.current) {
@@ -71,33 +79,41 @@ export default function PaddingBox({
 					className={`
 					${
 						isSelected && !isPreview ? 'border-black' : 'border-transparent'
-					} group relative border-2`}
+					} group relative border-2 ${
+						!isPreview ? "hover:border-black" : ""
+					} w-full`}
 					{...provided.draggableProps}
 					ref={provided.innerRef}
 				>
 					<div
 						{...provided.dragHandleProps}
-						className={`draggable-handle flex gap-1 flex-col items-center ${
+						className={`draggable-handle flex flex-col items-center gap-1 ${
 							isSelected && !isPreview ? '-translate-x-11 opacity-100' : ''
 						} `}
 					>
-						<div className='text-xs text-center shadow-md w-9'>{Math.floor(height)}px</div>
-						<Image
-							width={24}
-							height={24}
-							src={'/icons/drag_vert.svg'}
-							alt="drag handle svg image"
-						/>
+						<div className='relative'>
+							<div className="absolute text-xs text-center shadow-md -top-5 right-[50%] translate-x-[50%] w-9">
+								{Math.floor(height)}px
+							</div>
+							<Image
+								width={24}
+								height={24}
+								src={'/icons/drag_vert.svg'}
+								alt="drag handle svg image"
+							/>
+						</div>
 					</div>
+					<DeleteButton className='z-[1]' onClick={handleRemove} />
 					<div ref={wrapperRef}>
 						<ResizableBox
 							height={Number(height)}
 							lockAspectRatio={true}
+							onResizeStop={handleResize}
 							minConstraints={[width, BOX_PROPERTY.PADDING.minHeight!]}
 							maxConstraints={[width, BOX_PROPERTY.PADDING.maxHeight!]}
 							width={width}
 							// axis="y"
-							onResize={handleResize}
+							onResize={handleDisplayHeight}
 							resizeHandles={isPreview ? [] : ['s']}
 							handleSize={[10, 10]}
 							className="flex items-center justify-center"

@@ -20,6 +20,7 @@ type RowActionPayload = {
 
 type TablePayload = {
 	newTableList: Table[];
+	tableIndex: number;
 };
 const initialState: TableState = {
 	tableList: [[['', '', '', '', '']]],
@@ -91,9 +92,9 @@ export const tableSlice = createSlice({
 
 			const newTableList = deepCopy(state.tableList);
 			const newTable = newTableList[tableIndex];
-			
+
 			newTable.push(['', '', '', '', '']);
-			
+
 			// newTable.push([`${Math.random()}`, `${Math.random()}`, `${Math.random()}`, `${Math.random()}`, `${Math.random()}`]);
 			// newTableList.splice(tableIndex, 1, newTable);
 			return { ...state, tableList: newTableList };
@@ -103,27 +104,39 @@ export const tableSlice = createSlice({
 
 			if (tableIndex < 0 || rowIndex < 0) return;
 			if (tableIndex > state.tableList.length) return;
-			if (rowIndex > state.tableList[tableIndex].length) return
+			if (rowIndex > state.tableList[tableIndex].length) return;
 
 			const newTableList = deepCopy(state.tableList);
 			const newTable = newTableList[tableIndex];
 
-			newTable.splice(rowIndex, 1, );
+			newTable.splice(rowIndex, 1);
 			newTableList.splice(tableIndex, 1, newTable);
 
 			return { ...state, tableList: newTableList };
 		},
 		updateTableData: (
 			state: TableState,
-			action: PayloadAction<TablePayload>,
+			action: PayloadAction<Pick<TablePayload, 'newTableList'>>,
 		) => {
-			return { ...state, tableList: action.payload.newTableList as Table[] };
+			const { newTableList } = action.payload;
+			return { ...state, tableList: newTableList };
 		},
-		addTable: (
-			state: TableState
+		addTable: (state: TableState) => {
+			const newTableList = deepCopy(state.tableList);
+			newTableList.push([['', '', '', '', '']]);
+			return { ...state, tableList: newTableList };
+		},
+
+		removeTable: (
+			state: TableState,
+			action: PayloadAction<Pick<TablePayload, 'tableIndex'>>,
 		) => {
-			const newTableList = deepCopy(state.tableList)
-			newTableList.push([["", "", "", "", ""]])
+			const { tableIndex } = action.payload;
+			const newTableList = state.tableList.filter(
+				(_, index) => index !== tableIndex,
+			);
+			if (newTableList.length === 0) newTableList.push([['', '', '', '', '']]);
+
 			return { ...state, tableList: newTableList };
 		},
 	},
@@ -136,7 +149,8 @@ export const {
 	addRow,
 	removeRow,
 	updateTableData,
-	addTable
+	addTable,
+	removeTable,
 } = tableSlice.actions;
 
 export function useTable() {

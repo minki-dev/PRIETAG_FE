@@ -5,7 +5,7 @@
 	@apply relative flex h-[109px];
 }
 .draggable-handle {
-	@apply opacity-0 left-0 absolute top-[50%]  translate-y-[-50%] rounded-lg transition duration-200 ease-out;
+	@apply absolute left-0 top-[50%] w-fit translate-y-[-50%]  rounded-lg opacity-0 transition duration-200 ease-out;
 }
 .draggable-title input {
 	@apply m-auto h-[77px] w-full text-center text-5xl;
@@ -66,10 +66,9 @@
 }
 
 @layer base {
-
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+	input[type='number']::-webkit-inner-spin-button,
+	input[type='number']::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 }

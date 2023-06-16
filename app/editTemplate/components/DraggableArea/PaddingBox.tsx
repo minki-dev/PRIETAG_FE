@@ -1,59 +1,79 @@
 'use client';
 
 import 'react-resizable/css/styles.css';
-import React, { useEffect, useState } from 'react';
-import { ResizableBox, ResizeCallbackData } from 'react-resizable';
+import React, { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import { useConfig } from '@/store/slice/configSlice';
+import {
+	DNDBoxState,
+	removeBox,
+	updateHeight,
+	updateSelected,
+	useDNDBox,
+} from '@/store/slice/DNDBoxSlice';
+import Image from 'next/image';
+import DeleteButton from '@/components/DeleteButton';
+import ResizablePaddingBox from '@/components/ResizablePaddingBox';
 
 type Props = {
 	id: string;
 	index: number;
-	isPreview: boolean;
+	isSelected: boolean;
+	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'priceCardArea' | 'tableArea'>
 };
 
-export default function PaddingBox({ id, index, isPreview }: Props) {
-	const [width, setWidth] = useState(window.innerWidth);
-	const [height, setHeight] = useState(64);
-	const handleResize = (
-		e: React.SyntheticEvent,
-		{ size }: ResizeCallbackData,
-	) => {
-		setHeight(size.height);
+export default function PaddingBox({
+	id,
+	areaType,
+	index,
+	isSelected,
+}: Props) {
+	const { dispatch } = useDNDBox();
+	const { configState } = useConfig();
+	const { isPreview } = configState;
+  const heightState = useState<number>(10)
+
+	const handleRemove = () => {
+		dispatch(removeBox({ id, areaType }));
 	};
 
-	useEffect(() => {
-		const handleWindowResize = () => {
-			setWidth(window.innerWidth);
-		};
-
-		window.addEventListener('resize', handleWindowResize);
-
-		return () => {
-			window.removeEventListener('resize', handleWindowResize);
-		};
-	}, []);
-
+	const handleHeightUpdate = (height: number) => {
+		dispatch(updateHeight({ areaType, index, content: height.toString()}))
+	}
 	return (
 		<Draggable draggableId={id} index={index}>
 			{(provided) => (
 				<div
-					className="relative"
+					onClick={() => dispatch(updateSelected({ id, areaType }))}
+					className={`
+					${
+						isSelected && !isPreview ? 'border-black' : 'border-transparent'
+					} group relative border-2 ${
+						!isPreview ? "hover:border-black" : ""
+					} w-full`}
 					{...provided.draggableProps}
 					ref={provided.innerRef}
 				>
-					<div {...provided.dragHandleProps} className='absolute z-10 w-6 h-6 rounded-lg left-1 top-1 bg-sky-200'>{}</div>
-					<ResizableBox
-						height={Number(height)}
-						minConstraints={[width, 64]}
-						maxConstraints={[width, 200]}
-						width={width}
-						onResize={handleResize}
-						resizeHandles={isPreview ? [] : ['n', 's']}
-						handleSize={[10, 10]}
-						className="flex items-center justify-center"
+					<div
+						{...provided.dragHandleProps}
+						className={`draggable-handle flex flex-col items-center gap-1 ${
+							isSelected && !isPreview ? '-translate-x-11 opacity-100' : ''
+						} `}
 					>
-						<span>{isPreview ? '' : '패딩 박스'}</span>
-					</ResizableBox>
+						<div className='relative'>
+							<div className="absolute text-xs text-center shadow-md -top-5 right-[50%] translate-x-[50%] w-9">
+								{Math.floor(heightState[0])}px
+							</div>
+							<Image
+								width={24}
+								height={24}
+								src={'/icons/drag_vert.svg'}
+								alt="drag handle svg image"
+							/>
+						</div>
+					</div>
+					<DeleteButton className='z-[1]' onClick={handleRemove} />
+					<ResizablePaddingBox type='inner' heightState={heightState} onAction={handleHeightUpdate} />
 				</div>
 			)}
 		</Draggable>

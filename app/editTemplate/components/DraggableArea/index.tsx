@@ -1,24 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
-import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
-// import StrictModeDroppable from '@/utils/StrictModeDroppable';
+import React from 'react';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import TextBox from './TextBox';
 import PaddingBox from './PaddingBox';
-import { cardState } from './data';
+import { DNDBoxState, updateOrder, useDNDBox } from '@/store/slice/DNDBoxSlice';
+import { StrictModeDroppable } from '@/app/helpers/StrictModeDroppable';
 
-export default function DraggableArea() {
-	const [list, setList] = useState(cardState.cardArea);
-	const [isPreview, setIsPreview] = useState(false);
-
-	// const addRef = (index: number, ref: React.MutableRefObject<any>) => {
-	// 	const updatedList = [...list];
-	// 	const newItem = { ...updatedList[index], ref };
-	// 	updatedList.splice(index, 1, newItem);
-	// 	setList(updatedList);
-	// 	return ref;
-	// };
-
+export default function DraggableArea({
+	areaType,
+}: {
+	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'priceCardArea' | 'tableArea'>;
+}) {
+	const { boxState, dispatch } = useDNDBox();
+	const list = boxState[areaType];
 	const handleOnDragEnd = ({ destination, source }: DropResult) => {
 		if (!destination) return;
 
@@ -28,32 +23,34 @@ export default function DraggableArea() {
 		)
 			return;
 
-		const updatedList = Array.from(list);
+		const updatedList = [...list];
 		const [itemToReorder] = updatedList.splice(source.index, 1);
 		updatedList.splice(destination.index, 0, itemToReorder);
 
-		setList(updatedList);
+		dispatch(updateOrder({ areaType, newList: updatedList }));
 	};
 
 	return (
 		<div>
-			<button type="button" onClick={() => setIsPreview(!isPreview)}>
-				preview
-			</button>
 			<DragDropContext onDragEnd={handleOnDragEnd}>
-				<Droppable droppableId="draggable">
+				<StrictModeDroppable droppableId="draggable">
 					{(provided) => (
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{list.map((item, index) =>
-								item?.boxData.role === 'PADDING' ? (
-									<PaddingBox  key={item.id} index={index} {...item} isPreview={isPreview}/>
+								item.role === 'PADDING' ? (
+									<PaddingBox
+										key={item.id}
+										index={index}
+										{...item}
+										areaType={areaType}
+									/>
 								) : (
 									<TextBox
 										key={item.id}
 										{...item}
 										placeholder={item.placeholder || ''}
 										index={index}
-										isPreview={isPreview}
+										areaType={areaType}
 										// inputRef={addRef(index, React.createRef())}
 									/>
 								),
@@ -61,7 +58,7 @@ export default function DraggableArea() {
 							{provided.placeholder}
 						</div>
 					)}
-				</Droppable>
+				</StrictModeDroppable>
 			</DragDropContext>
 		</div>
 	);

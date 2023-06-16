@@ -84,7 +84,7 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 	};
 
 	return (
-		<div className="flex min-h-[665px] w-[342px] flex-col items-center rounded-lg bg-white shadow-md">
+		<div className="flex h-full min-h-[665px] w-[342px] flex-col items-center rounded-lg bg-white shadow-md">
 			<label
 				className={`flex h-[79px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
 			>
@@ -119,7 +119,7 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 				/>
 			</div>
 			<div className="w-[294px] border border-[#989898]"></div>
-			<div className="flex min-h-[302px] w-[310px] flex-col gap-[2px] py-[24px]">
+			<div className="flex h-[80%] min-h-[302px] w-[310px] flex-col gap-[2px] py-[24px]">
 				<input
 					className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
 					type="text"

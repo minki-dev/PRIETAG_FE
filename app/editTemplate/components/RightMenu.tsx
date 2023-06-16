@@ -1,8 +1,10 @@
 'use client';
 
+import { ModalTypes } from '@/components/modal/ModalState';
 import { BoxType } from '@/constants/box';
 import { addBox, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import { togglePreview, useConfig } from '@/store/slice/configSlice';
+import { openModal, useModal } from '@/store/slice/modalSlice';
 import { addTable } from '@/store/slice/tableSlice';
 import React, { useState } from 'react'
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
@@ -19,8 +21,8 @@ export default function RightMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   
 
-  const { dispatch: dndDispatch } = useDNDBox();
-  
+  const { dispatch: dndDispatch, boxState } = useDNDBox();
+  const { dispatch: modalDispatch } = useModal()
   const { dispatch: configDispatch } = useConfig();
 
   const handleAddTable = () => {
@@ -28,6 +30,10 @@ export default function RightMenu() {
   }
 
   const handleAddBox = (boxType: BoxType) => {
+    if (boxState.selectedBox === null) {
+      modalDispatch(openModal(ModalTypes.PositionSelectModal))
+      return
+    }
     dndDispatch(addBox({ boxType }))
   }
 

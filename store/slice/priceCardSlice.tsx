@@ -18,7 +18,7 @@ interface priceCardInfo {
 interface priceCardSection {
 	priceCardOrder: string[];
 	priceCards: priceCardInfo[];
-	padding: number;
+	priceCardAreaPadding: number;
 	detailMaxHeight: string;
 }
 
@@ -36,7 +36,7 @@ const initialState: priceCardSection = {
 			content: [''],
 		},
 	],
-	padding: 10,
+	priceCardAreaPadding: 10,
 	detailMaxHeight: '',
 };
 
@@ -118,6 +118,12 @@ export const priceCardSlice = createSlice({
 				priceCards: newPriceCards,
 			});
 		},
+		updatePriceCardAreaPadding: (
+			state: priceCardSection,
+			action: PayloadAction<number>,
+		) => {
+			return Object.assign({}, state, { priceCardAreaPadding: action.payload });
+		},
 	},
 });
 
@@ -126,6 +132,7 @@ export const {
 	changeOrderPriceCard,
 	updatePriceCard,
 	deletePriceCard,
+	updatePriceCardAreaPadding,
 } = priceCardSlice.actions;
 
 export function usePriceCard() {

@@ -5,7 +5,7 @@ import { BoxType } from '@/constants/box';
 import { addBox, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import { togglePreview, useConfig } from '@/store/slice/configSlice';
 import { openModal, useModal } from '@/store/slice/modalSlice';
-import { addTable } from '@/store/slice/tableSlice';
+import { addTable } from '@/store/slice/featureTableSlice';
 import React, { useState } from 'react'
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos } from'react-icons/md';

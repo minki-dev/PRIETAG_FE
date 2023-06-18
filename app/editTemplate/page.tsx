@@ -29,6 +29,8 @@ import TemplateHeader from '@/components/header/TemplateHeader';
 import PaddingBox from './components/DraggableArea/PaddingBox';
 import ResizablePaddingWithHandle from '@/components/ResizablePaddingWithHandle';
 import { updateHeight, useDNDBox } from '@/store/slice/DNDBoxSlice';
+import debounce from 'lodash.debounce';
+import { GlobalModal } from '@/components/modal/GlobalModal';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -125,18 +127,20 @@ export default function EditTemplate() {
 		);
 
 	};
+	
 
-	const {} = useModal();
 	return (
 		<>
 			{/* <Header /> */}
+			<GlobalModal />
+
 			<TemplateHeader />
-			<main className="mx-auto mt-36 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
+			<main className="box-content flex flex-col items-center mx-auto mt-36">
 				<RightMenu />
 				<section
 					className={`${
 						isPreview ? 'editable-outer-preview' : 'editable-outer '
-					}`}
+					} w-full`}
 				>
 					<DraggableArea areaType="priceCardArea" />
 					<DiscountOptionBox />
@@ -158,7 +162,7 @@ export default function EditTemplate() {
 				<section
 					className={`${
 						isPreview ? 'editable-outer-preview' : 'editable-outer '
-					}`}
+					} w-full`}
 				>
 					<DraggableArea areaType="faqArea" />
 					<FAQ />

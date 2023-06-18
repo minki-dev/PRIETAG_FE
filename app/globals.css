@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 
+/* dnd */
 .draggable-title {
 	@apply relative flex h-[109px];
 }
@@ -26,6 +27,7 @@
 	@apply m-auto max-h-[200px] min-h-[10px];
 }
 
+/* preview */
 .editable-outer {
 	@apply box-border p-4 shadow-outer;
 }
@@ -38,6 +40,13 @@
 .editable-inner-preview {
 	@apply box-border p-4;
 }
+
+/* text */
+.prevent-text-overflow {
+	@apply text-ellipsis overflow-x-hidden whitespace-nowrap
+}
+
+/* resizable */
 .react-resizable-handle.react-resizable-handle-s {
 	@apply left-0 w-full h-full ml-0 bg-white transform-none bg-none;
 	cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;

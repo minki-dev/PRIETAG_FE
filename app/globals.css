@@ -1,6 +1,12 @@
 @tailwind base;
 @tailwind components;
-
+/* layout */
+.inner-pc {
+	width: calc(100vw - 480px);
+}
+.inner-tablet {
+	width: calc(100vw - 240px);
+}
 /* dnd */
 .draggable-title {
 	@apply relative flex h-[109px];
@@ -43,7 +49,7 @@
 
 /* text */
 .prevent-text-overflow {
-	@apply text-ellipsis overflow-x-hidden whitespace-nowrap
+	@apply overflow-x-hidden text-ellipsis whitespace-nowrap;
 }
 
 /* resizable */
@@ -82,15 +88,14 @@
 	}
 }
 
-
 @layer components {
-  .rightmenu_li {
-    @apply border-b border-solid p-3 border-gray-300
-  }
-  .button_li {
-    @apply w-full flex items-center justify-between
-  }
-  .option_li {
-    @apply text-sm font-bold top-[114px] text-[#747474]
-  }
+	.rightmenu_li {
+		@apply p-3 border-b border-gray-300 border-solid;
+	}
+	.button_li {
+		@apply flex items-center justify-between w-full;
+	}
+	.option_li {
+		@apply top-[114px] text-sm font-bold text-[#747474];
+	}
 }

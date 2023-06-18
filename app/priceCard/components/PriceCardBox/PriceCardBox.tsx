@@ -10,6 +10,11 @@ import {
 	changeOrderPriceCard,
 	usePriceModal,
 } from '@/store/slice/priceModalSlice';
+import {
+	addColumn,
+	swapColumns,
+	useFeatureTable,
+} from '@/store/slice/featureTableSlice';
 
 interface priceCardid {
 	id: string;
@@ -28,7 +33,8 @@ interface colorInfo {
 // });
 
 function PriceCardBox() {
-	const { priceModal, dispatch } = usePriceModal();
+	const { priceModal, dispatch: priceModalDispatch } = usePriceModal();
+	const { dispatch: featureTableDispatch } = useFeatureTable();
 
 	const colorInfoEl: colorInfo = {
 		mainColor: '#00A3FF',
@@ -41,7 +47,8 @@ function PriceCardBox() {
 		const [removed] = result.splice(startIndex, 1);
 		result.splice(endIndex, 0, removed);
 
-		dispatch(changeOrderPriceCard(result));
+		priceModalDispatch(changeOrderPriceCard(result));
+		featureTableDispatch(swapColumns({ colIndex: startIndex, to: endIndex }));
 	};
 
 	const handleOnDragEnd = (result: DropResult) => {
@@ -54,7 +61,8 @@ function PriceCardBox() {
 	const handleAddCard = () => {
 		if (priceModal.priceCards.length > 3) return;
 
-		dispatch(addPriceCard());
+		priceModalDispatch(addPriceCard());
+		featureTableDispatch(addColumn());
 	};
 	console.log(priceModal.priceCards);
 	return (

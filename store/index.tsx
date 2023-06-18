@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './slice/counterslice';
 import modalReducer from './slice/modalSlice';
-import tableReducer from './slice/tableSlice';
+import featureTableReducer from './slice/featureTableSlice';
 import DNDBoxReducer from './slice/DNDBoxSlice';
 import priceModalReducer from './slice/priceModalSlice';
 import faqSliceReducer from './slice/faqSlice';
@@ -18,8 +18,7 @@ const rootReducer = combineReducers({
 	counter: counterReducer,
 	modal: modalReducer,
 	priceCard: priceCardReducer,
-	monthYearToggle: monthYearToggleReducer,
-	table: tableReducer,
+	featureTable: featureTableReducer,
 	faq: faqSliceReducer,
 	dndBox: DNDBoxReducer,
 	priceModal: priceModalReducer,

@@ -1,4 +1,5 @@
 'use client';
+import { removeColumn, useFeatureTable } from '@/store/slice/featureTableSlice';
 import {
 	deletePriceCard,
 	updatePriceCard,
@@ -33,6 +34,7 @@ function PriceCard({
 	color: colorInfo;
 }) {
 	const { priceModal, dispatch } = usePriceModal();
+	const { dispatch: featureTableDispatch } = useFeatureTable();
 
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
 		priceModal.priceCards[cardIndex],
@@ -180,7 +182,10 @@ function PriceCard({
 			<a
 				className={`mb-[24px] flex h-[48px] w-[310px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
 				type="button"
-				onClick={() => dispatch(deletePriceCard(cardIndex))}
+				onClick={() => {
+					dispatch(deletePriceCard(cardIndex));
+					featureTableDispatch(removeColumn({ colIndex: cardIndex }));
+				}}
 			>
 				구독하기
 			</a>

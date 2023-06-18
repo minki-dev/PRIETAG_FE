@@ -6,7 +6,7 @@ const INITIAL_FEATURE_TABLE: featureTable = {
 	featureHeader: true,
 	featureName: true,
 	featureNameValue: '',
-	table: [['', '', '', '']],
+	table: [['']],
 };
 
 export type featureTable = {
@@ -111,9 +111,9 @@ export const featureTableSlice = createSlice({
 		},
 
 		addColumn: (state: featureTableState) => {
-			state.featureTableList.forEach((featureTable) =>
-				featureTable.table.map((row) => [...row, '']),
-			);
+			state.featureTableList.forEach((featureTable) => {
+				return featureTable.table.map((row) => row.push(''));
+			});
 			return state;
 		},
 
@@ -124,15 +124,15 @@ export const featureTableSlice = createSlice({
 			const { colIndex } = action.payload;
 			const initialTable = state.featureTableList[0].table;
 
-			if (colIndex < initialTable.length) {
-				state.featureTableList.forEach((featureTable) =>
-					featureTable.table.map((row) =>
-						row.filter((rowData, i) => i !== colIndex + 1),
-					),
-				);
-			}
-			return state;
-		},
+			if (colIndex <= initialTable.length) {
+				state.featureTableList.forEach((featureTable) => {
+					 featureTable.table.forEach((row) => {
+						row.splice(colIndex + 1, 1)
+					})
+				})
+				}
+				return state
+			},
 		addRow: (
 			state: featureTableState,
 			action: PayloadAction<Pick<RowActionPayload, 'featureTableIndex'>>,
@@ -198,11 +198,6 @@ export const featureTableSlice = createSlice({
 				featureTableIndex > state.featureTableList.length
 			)
 				return;
-			console.log(
-				'🚀 ~ file: featureTableSlice.tsx:184 ~ featureTableIndex:',
-				featureTableIndex,
-			);
-
 			state.featureTableList.splice(featureTableIndex, 1);
 
 			return state;

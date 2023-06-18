@@ -1,4 +1,5 @@
 'use client';
+import { removeColumn, useFeatureTable } from '@/store/slice/featureTableSlice';
 import {
 	deletePriceCard,
 	updatePriceCard,
@@ -26,8 +27,9 @@ interface colorInfo {
 // 여기서 가격을 계산해야 한다면
 // 월, 연 할인율 / 인원별 할인율 데이터 필요해보임.
 
-function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
+function PriceCard({ cardIndex, cardId, color }: { cardIndex: number, cardId: string; color: colorInfo }) {
 	const { priceCard, dispatch } = usePriceCard();
+	const { dispatch: featureTableDispatch } = useFeatureTable()
 
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
 		priceCard.priceCards.filter((card) => card.id === cardId)[0],
@@ -149,7 +151,10 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 			<a
 				className={`mb-[24px] flex h-[48px] w-[310px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
 				type="button"
-				onClick={() => dispatch(deletePriceCard(cardId))}
+				onClick={() => {
+					dispatch(deletePriceCard(cardId))
+					featureTableDispatch(removeColumn({ colIndex: cardIndex }))
+				}}
 			>
 				구독하기
 			</a>

@@ -10,6 +10,7 @@ import {
 	changeOrderPriceCard,
 	usePriceCard,
 } from '@/store/slice/priceCardSlice';
+import { addColumn, swapColumns, useFeatureTable } from '@/store/slice/featureTableSlice';
 
 interface priceCardid {
 	id: string;
@@ -28,7 +29,8 @@ interface colorInfo {
 // });
 
 function PriceCardBox() {
-	const { priceCard, dispatch } = usePriceCard();
+	const { priceCard, dispatch: priceCardDispatch } = usePriceCard();
+	const { dispatch: featureTableDispatch } = useFeatureTable()
 
 	const colorInfoEl: colorInfo = {
 		mainColor: '#00A3FF',
@@ -41,12 +43,13 @@ function PriceCardBox() {
 		const [removed] = result.splice(startIndex, 1);
 		result.splice(endIndex, 0, removed);
 
-		dispatch(changeOrderPriceCard(result));
+		priceCardDispatch(changeOrderPriceCard(result));
+		featureTableDispatch(swapColumns({ colIndex: startIndex, to: endIndex }))
 	};
-
+	
 	const handleOnDragEnd = (result: DropResult) => {
 		if (!result.destination) return;
-
+		
 		reorder(result.source.index, result.destination.index);
 	};
 	const { v4: uuidv4 } = require('uuid');
@@ -54,7 +57,8 @@ function PriceCardBox() {
 	const handleAddCard = () => {
 		if (priceCard.priceCardOrder.length > 3) return;
 
-		dispatch(createPriceCard(uuidv4()));
+		priceCardDispatch(createPriceCard(uuidv4()));
+		featureTableDispatch(addColumn())
 	};
 
 	return (
@@ -66,7 +70,7 @@ function PriceCardBox() {
 							{...provided.droppableProps}
 							ref={provided.innerRef}
 							//style={getListStyle(snapshot.isDraggingOver)}
-							className="flex flex-nowrap justify-center gap-10"
+							className="flex justify-center gap-10 flex-nowrap"
 						>
 							{!priceCard.priceCardOrder[0]
 								? null
@@ -82,7 +86,7 @@ function PriceCardBox() {
 													{...provided.dragHandleProps}
 													ref={provided.innerRef}
 												>
-													<PriceCard cardId={card.id} color={colorInfoEl} />
+													<PriceCard cardIndex={index} cardId={card.id} color={colorInfoEl} />
 												</div>
 											)}
 										</Draggable>

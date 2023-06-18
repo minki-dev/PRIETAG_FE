@@ -2,8 +2,8 @@
 import {
 	deletePriceCard,
 	updatePriceCard,
-	usePriceCard,
-} from '@/store/slice/priceCardSlice';
+	usePriceModal,
+} from '@/store/slice/priceModalSlice';
 import React, { useEffect } from 'react';
 
 interface priceCardInfo {
@@ -25,11 +25,17 @@ interface colorInfo {
 // 여기서 가격을 계산해야 한다면
 // 월, 연 할인율 / 인원별 할인율 데이터 필요해보임.
 
-function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
-	const { priceCard, dispatch } = usePriceCard();
+function PriceCard({
+	cardIndex,
+	color,
+}: {
+	cardIndex: number;
+	color: colorInfo;
+}) {
+	const { priceModal, dispatch } = usePriceModal();
 
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
-		priceCard.priceCards.filter((card) => card.id === cardId)[0],
+		priceModal.priceCards[cardIndex],
 	);
 
 	const [priceCardContentEl, setPriceCardContentEl] = React.useState(
@@ -40,7 +46,7 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 
 	useEffect(() => {
 		if (detailRef.current) {
-			detailRef.current.style.height = priceCard.detailMaxHeight + 'px';
+			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
 		}
 	});
 
@@ -72,7 +78,12 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 				Object.assign({}, priceCardInfoEl, { [name]: event.target.value }),
 			);
 		}
-		dispatch(updatePriceCard(priceCardInfoEl));
+		dispatch(
+			updatePriceCard({
+				...{ card: priceCardInfoEl },
+				...{ index: cardIndex },
+			}),
+		);
 	};
 
 	const discountedPrice = (price: number, discountRate: number) => {
@@ -90,6 +101,8 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 		subColor01: `text-[${color.subColor01}]`,
 		subColor02: `text-[${color.subColor02}]`,
 	};
+
+	console.log(cardIndex);
 
 	return (
 		<div className="flex h-full min-h-[665px] w-[342px] flex-col items-center justify-between rounded-lg bg-white shadow-md">
@@ -117,7 +130,9 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 							-{priceCardInfoEl.discountRate}%
 						</span>
 						<span className="text-[20px] text-[#747474] line-through">
-							{priceCardInfoEl.price.toLocaleString('ko-KR')}원
+							{priceCardInfoEl.price
+								? priceCardInfoEl.price.toLocaleString('ko-KR') + '원'
+								: null}
 						</span>
 					</div>
 				</div>
@@ -165,7 +180,7 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 			<a
 				className={`mb-[24px] flex h-[48px] w-[310px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
 				type="button"
-				onClick={() => dispatch(deletePriceCard(cardId))}
+				onClick={() => dispatch(deletePriceCard(cardIndex))}
 			>
 				구독하기
 			</a>

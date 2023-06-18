@@ -4,11 +4,11 @@ import DiscountOptionSection from './DiscountOptionSection/DiscountOptionSection
 import ResizablePaddingWithHandle from '../../../../components/ResizablePaddingWithHandle';
 import {
 	updatePriceCardAreaPadding,
-	usePriceCard,
-} from '@/store/slice/priceCardSlice';
+	usePriceModal,
+} from '@/store/slice/priceModalSlice';
 
 function DiscountOptionBox() {
-	const { dispatch } = usePriceCard();
+	const { dispatch } = usePriceModal();
 	const handleHeightUpdate = (height: number) => {
 		dispatch(updatePriceCardAreaPadding(height));
 	};

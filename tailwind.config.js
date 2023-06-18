@@ -20,9 +20,15 @@ module.exports = {
 			},
 			width: {
 				priceModal: '832px',
+				tableDataPc: '264px',
+				tableDataTablet: '232px',
+				tableData: '216px'
 			},
 			height: {
 				priceModal: '596px',
+				tableDataPc: '32px',
+				tableDataTablet: '26px',
+				tableData: '20px'
 			},
 			borderColor: {
 				'gray-700': '#747474',

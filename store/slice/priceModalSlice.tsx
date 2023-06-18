@@ -3,19 +3,29 @@ import { useSelector, useDispatch } from 'react-redux';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '..';
 import { stat } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface PriceCard {
+	id: string;
 	title: string;
 	price: number;
 	discountRate: number;
 	detail: string;
+	detailHeight: number;
 	feature: string;
 	content: string[];
+}
+interface PriceCardIndex {
+	index: number;
+	card: PriceCard;
 }
 
 type PriceModalState = {
 	isCardSet: boolean;
-	priceCard: PriceCard[];
+	priceCards: PriceCard[];
+	//priceCardOrder: string[];
+	priceCardAreaPadding: number;
+	detailMaxHeight: number;
 	cardCount: number;
 	isCheckPerYear: boolean;
 	yearDiscountRate: number;
@@ -35,7 +45,10 @@ type TierDiscountItem = {
 
 const initialState: PriceModalState = {
 	isCardSet: false,
-	priceCard: [],
+	priceCards: [],
+	//priceCardOrder: [],
+	priceCardAreaPadding: 10,
+	detailMaxHeight: 30,
 	cardCount: 0,
 	isCheckPerYear: true,
 	yearDiscountRate: 0,
@@ -171,7 +184,7 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<PriceCard[]>,
 		) => {
-			return { ...state, priceCard: action.payload };
+			return { ...state, priceCards: action.payload };
 		},
 
 		/** 가격 카드 설정 여부 토글 */
@@ -186,17 +199,88 @@ export const priceModalSlice = createSlice({
 
 		/** 설정한 수만큼 카드 생성  */
 		createPriceCard: (state: PriceModalState) => {
-			state.priceCard = Array.from({ length: state.cardCount }, (_, index) => {
+			state.priceCards = Array.from({ length: state.cardCount }, (_, index) => {
 				const tier = state.tierDiscount[index];
+				const { v4: uuidv4 } = require('uuid');
 				return {
+					id: uuidv4(),
 					title: '',
 					price: tier.tierPrice,
 					discountRate: tier.discountRate,
 					detail: '',
+					detailHeight: 30,
 					feature: '',
-					content: [],
+					content: [''],
 				};
 			});
+		},
+
+		/** 가격 카드 추가하기 */
+		addPriceCard: (
+			state: PriceModalState,
+			action: PayloadAction<void>, // 카드 아이디(선택된 1개)
+		) => {
+			const { v4: uuidv4 } = require('uuid');
+			const initialPriceCard: PriceCard = {
+				id: uuidv4(),
+				title: '',
+				price: 0,
+				discountRate: 0,
+				detail: '',
+				detailHeight: 30,
+				feature: '',
+				content: [''],
+			};
+			const currentPriceCards = [...state.priceCards];
+			currentPriceCards.push(initialPriceCard);
+			return Object.assign({}, state, { priceCards: currentPriceCards });
+		},
+
+		/** 가격 카드 순서 변경하기 */
+		changeOrderPriceCard: (
+			state: PriceModalState,
+			action: PayloadAction<PriceCard[]>, // 카드 아이디 배열(priceCardOrder)
+		) => {
+			const changePriceCards: PriceCard[] = action.payload;
+			return Object.assign({}, state, {
+				priceCards: changePriceCards,
+			});
+		},
+
+		/** 가격 카드 정보 업데이트하기 */
+		updatePriceCard: (
+			state: PriceModalState,
+			action: PayloadAction<PriceCardIndex>, // 카드 정보(선택된 1개)
+		) => {
+			const newPriceCards = [...state.priceCards];
+			newPriceCards[action.payload.index] = action.payload.card;
+			const maxHeight = Math.max(
+				...newPriceCards.map((card) => Number(card.detailHeight)),
+			);
+			return Object.assign({}, state, {
+				priceCards: newPriceCards,
+				detailMaxHeight: maxHeight,
+			});
+		},
+
+		/** 가격 카드 삭제하기 */
+		deletePriceCard: (
+			state: PriceModalState,
+			action: PayloadAction<number>, // 카드 아이디(선택된 1개)
+		) => {
+			const newPriceCards = [...state.priceCards];
+			const spliceCards = newPriceCards.splice(action.payload, 1);
+			return Object.assign({}, state, {
+				priceCards: newPriceCards,
+			});
+		},
+
+		/** 가격 카드 영역 패딩 값 업데이트하기 */
+		updatePriceCardAreaPadding: (
+			state: PriceModalState,
+			action: PayloadAction<number>,
+		) => {
+			return Object.assign({}, state, { priceCardAreaPadding: action.payload });
 		},
 	},
 });
@@ -217,6 +301,11 @@ export const {
 	toggleIsCardSet,
 	getIsCardSet,
 	createPriceCard,
+	addPriceCard,
+	changeOrderPriceCard,
+	updatePriceCard,
+	deletePriceCard,
+	updatePriceCardAreaPadding,
 } = priceModalSlice.actions;
 
 export function usePriceModal() {

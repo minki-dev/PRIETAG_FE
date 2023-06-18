@@ -19,7 +19,7 @@ interface priceCardSection {
 	priceCardOrder: string[];
 	priceCards: priceCardInfo[];
 	priceCardAreaPadding: number;
-	detailMaxHeight: string;
+	detailMaxHeight: number;
 }
 
 const initialState: priceCardSection = {
@@ -31,13 +31,13 @@ const initialState: priceCardSection = {
 			price: 80000,
 			discountRate: 10,
 			detail: '',
-			detailHeight: 0,
+			detailHeight: 30,
 			feature: '',
 			content: [''],
 		},
 	],
 	priceCardAreaPadding: 10,
-	detailMaxHeight: '',
+	detailMaxHeight: 30,
 };
 
 export const priceCardSlice = createSlice({
@@ -98,9 +98,13 @@ export const priceCardSlice = createSlice({
 			);
 			const newPriceCards = Array.from(state.priceCards);
 			newPriceCards[currentPriceCardIndex] = action.payload;
+			const maxHeight = Math.max(
+				...newPriceCards.map((card) => Number(card.detailHeight)),
+			);
 			return Object.assign({}, state, {
 				priceCardOrder: currentPriceCardOrder,
 				priceCards: newPriceCards,
+				detailMaxHeight: maxHeight,
 			});
 		},
 		deletePriceCard: (

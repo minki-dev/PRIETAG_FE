@@ -4,8 +4,7 @@ import {
 	updatePriceCard,
 	usePriceCard,
 } from '@/store/slice/priceCardSlice';
-import { Content } from 'next/font/google';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface priceCardInfo {
 	id: string;
@@ -37,18 +36,16 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 		priceCardInfoEl.content,
 	);
 
-	// const [priceCardInfoEl, setPriceCardInfoEl] = React.useState<priceCardInfo>({
-	// 	id: cardId,
-	// 	title: '',
-	// 	price: 800000,
-	// 	discountRate: 10,
-	// 	detail: '',
-	// 	feature: '',
-	// 	content: [''],
-	// });
+	const detailRef = React.useRef<HTMLTextAreaElement>(null);
+
+	useEffect(() => {
+		if (detailRef.current) {
+			detailRef.current.style.height = priceCard.detailMaxHeight + 'px';
+		}
+	});
 
 	const inputHandle = (
-		event: React.ChangeEvent<HTMLInputElement>,
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 		name: string,
 		index: number,
 	) => {
@@ -57,8 +54,19 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 			newPriceCardContentEl[index] = event.target.value;
 			setPriceCardContentEl(newPriceCardContentEl);
 			setPriceCardInfoEl(
-				Object.assign({}, priceCardInfoEl, { [name]: priceCardContentEl }),
+				Object.assign({}, priceCardInfoEl, { content: priceCardContentEl }),
 			);
+		} else if (name === 'detail') {
+			if (detailRef.current) {
+				detailRef.current.style.height = '30px';
+				detailRef.current.style.height = detailRef.current.scrollHeight + 'px';
+				setPriceCardInfoEl(
+					Object.assign({}, priceCardInfoEl, {
+						detail: event.target.value,
+						detailHeight: detailRef.current.scrollHeight,
+					}),
+				);
+			}
 		} else {
 			setPriceCardInfoEl(
 				Object.assign({}, priceCardInfoEl, { [name]: event.target.value }),
@@ -84,67 +92,75 @@ function PriceCard({ cardId, color }: { cardId: string; color: colorInfo }) {
 	};
 
 	return (
-		<div className="flex h-full min-h-[665px] w-[342px] flex-col items-center rounded-lg bg-white shadow-md">
-			<label
-				className={`flex h-[79px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
-			>
-				<input
-					className={`h-[47px] w-[310px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
-					type="text"
-					placeholder="요금제 명을 입력해 주세요"
-					onChange={(event) => inputHandle(event, 'title', 0)}
-				/>
-			</label>
-			<div className="flex w-[294px] flex-col gap-[12px] pb-[16px] pt-[12px]">
-				<span className={`${textColor.mainColor} text-[32px] font-bold`}>
-					{discountedPrice(priceCardInfoEl.price, priceCardInfoEl.discountRate)}
-					원 / 년
-				</span>
-				<div className="flex gap-1">
-					<span className="text-[20px] text-[#FF0000]">
-						-{priceCardInfoEl.discountRate}%
-					</span>
-					<span className="text-[20px] text-[#747474] line-through">
-						{priceCardInfoEl.price.toLocaleString('ko-KR')}원
-					</span>
-				</div>
-			</div>
-			<div className="w-[294px] border border-[#989898]"></div>
-			<div className="min-h-[88px] w-[310px] py-[16px]">
-				<input
-					className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
-					type="text"
-					placeholder="요금제 설명"
-					onChange={(event) => inputHandle(event, 'detail', 0)}
-				/>
-			</div>
-			<div className="w-[294px] border border-[#989898]"></div>
-			<div className="flex h-[80%] min-h-[302px] w-[310px] flex-col gap-[2px] py-[24px]">
-				<input
-					className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
-					type="text"
-					placeholder="포함된 기능"
-					onChange={(event) => inputHandle(event, 'feature', 0)}
-				/>
-				{priceCardContentEl.map((data, index) => (
-					<input
-						className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
-						type="text"
-						placeholder="세부 기능을 입력해 주세요"
-						value={data}
-						onChange={(event) => inputHandle(event, 'content', index)}
-					/>
-				))}
-
-				<button
-					className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px]"
-					type="button"
-					onClick={() =>
-						setPriceCardContentEl([...Array.from(priceCardContentEl), ...['']])
-					}
+		<div className="flex h-full min-h-[665px] w-[342px] flex-col items-center justify-between rounded-lg bg-white shadow-md">
+			<div className="flex w-full flex-col items-center">
+				<label
+					className={`flex h-[79px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
 				>
-					+
-				</button>
+					<input
+						className={`h-[47px] w-[310px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
+						type="text"
+						placeholder="요금제 명을 입력해 주세요"
+						onChange={(event) => inputHandle(event, 'title', 0)}
+					/>
+				</label>
+				<div className="flex w-[294px] flex-col gap-[12px] pb-[16px] pt-[12px]">
+					<span className={`${textColor.mainColor} text-[32px] font-bold`}>
+						{discountedPrice(
+							priceCardInfoEl.price,
+							priceCardInfoEl.discountRate,
+						)}
+						원 / 년
+					</span>
+					<div className="flex gap-1">
+						<span className="text-[20px] text-[#FF0000]">
+							-{priceCardInfoEl.discountRate}%
+						</span>
+						<span className="text-[20px] text-[#747474] line-through">
+							{priceCardInfoEl.price.toLocaleString('ko-KR')}원
+						</span>
+					</div>
+				</div>
+				<div className="w-[294px] border border-[#989898]"></div>
+				<div className="min-h-[30px] w-[310px] py-[16px]">
+					<textarea
+						className="w-[310px] overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+						placeholder="요금제 설명"
+						ref={detailRef}
+						onChange={(event) => inputHandle(event, 'detail', 0)}
+					/>
+				</div>
+				<div className="w-[294px] border border-[#989898]"></div>
+
+				<div className="flex min-h-[302px] w-[310px] flex-col gap-[2px] py-[24px]">
+					<input
+						className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
+						type="text"
+						placeholder="포함된 기능"
+						onChange={(event) => inputHandle(event, 'feature', 0)}
+					/>
+					{priceCardContentEl.map((data, index) => (
+						<input
+							className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+							type="text"
+							placeholder="세부 기능을 입력해 주세요"
+							value={data}
+							onChange={(event) => inputHandle(event, 'content', index)}
+						/>
+					))}
+					<button
+						className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px]"
+						type="button"
+						onClick={() =>
+							setPriceCardContentEl([
+								...Array.from(priceCardContentEl),
+								...[''],
+							])
+						}
+					>
+						+
+					</button>
+				</div>
 			</div>
 			<a
 				className={`mb-[24px] flex h-[48px] w-[310px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}

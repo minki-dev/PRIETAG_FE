@@ -68,24 +68,24 @@ export default function EditTemplate() {
 	// 	},
 	// ];
 
-	const faqTest: FAQCard[] = [
-		{
-			question: '진짜 총으로 쏴주나요?',
-			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
-		},
-		{
-			question: '진짜 총으로 쏴주나요?',
-			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
-		},
-		{
-			question: '진짜 총으로 쏴주나요?',
-			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
-		},
-		{
-			question: '진짜 총으로 쏴주나요?',
-			answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
-		},
-	];
+	// const faqTest: FAQCard[] = [
+	// 	{
+	// 		question: '진짜 총으로 쏴주나요?',
+	// 		answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
+	// 	},
+	// 	{
+	// 		question: '진짜 총으로 쏴주나요?',
+	// 		answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
+	// 	},
+	// 	{
+	// 		question: '진짜 총으로 쏴주나요?',
+	// 		answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
+	// 	},
+	// 	{
+	// 		question: '진짜 총으로 쏴주나요?',
+	// 		answer: '네 총으로 쏴드립니다 아주 살살 쏴드릴거에요.',
+	// 	},
+	// ];
 
 	// useEffect(() => {
 	// 	// testCard 길이만큼 price와 discountRate값을 initialState의 data로 교체한다
@@ -169,10 +169,6 @@ export default function EditTemplate() {
 					<FAQ />
 				</section>
 			</main>
-			<button type="button" onClick={toggleModal}>
-				모달 나와라 얍!
-			</button>
-			{isModalOpen && <PriceModal toggleModal={toggleModal} />}
 		</>
 	);
 }

@@ -33,6 +33,8 @@ type PriceModalState = {
 	isCheckPerTier: boolean;
 	headDiscount: HeadDiscountItem[];
 	tierDiscount: TierDiscountItem[];
+	monthYearToggle: boolean; // false: month, true: year
+	userCount: number;
 };
 type HeadDiscountItem = {
 	headCount: number;
@@ -66,6 +68,8 @@ const initialState: PriceModalState = {
 		{ tierPrice: 0, discountRate: 0 },
 		{ tierPrice: 0, discountRate: 0 },
 	],
+	monthYearToggle: false, // false: month, true: year
+	userCount: 1,
 };
 
 // isCheckPerYear 가 true일때 사용자가 입력한 값에 따라서 yearDiscountRate를 변경해준다.
@@ -282,6 +286,16 @@ export const priceModalSlice = createSlice({
 		) => {
 			return Object.assign({}, state, { priceCardAreaPadding: action.payload });
 		},
+
+		/** 월간, 연간 토글 버튼 상태 */
+		updateMonthYearToggle: (
+			state: PriceModalState,
+			action: PayloadAction<string>,
+		) => {
+			const currentChecked = action.payload === 'year' ? true : false;
+			// false: month, true: year
+			return Object.assign({}, state, { monthYearToggle: currentChecked });
+		},
 	},
 });
 
@@ -306,6 +320,7 @@ export const {
 	updatePriceCard,
 	deletePriceCard,
 	updatePriceCardAreaPadding,
+	updateMonthYearToggle,
 } = priceModalSlice.actions;
 
 export function usePriceModal() {

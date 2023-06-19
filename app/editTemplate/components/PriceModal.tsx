@@ -20,6 +20,7 @@ import Dropdown from './DropDown';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { togglePriceModal, useConfig } from '@/store/slice/configSlice';
 
 const schema = yup.object().shape({
 	yearDiscountRate: yup
@@ -57,11 +58,7 @@ const schema = yup.object().shape({
 	),
 });
 
-export default function PriceModal({
-	toggleModal,
-}: {
-	toggleModal: () => void;
-}) {
+export default function PriceModal({}: {}) {
 	const {
 		register,
 		handleSubmit,
@@ -70,6 +67,7 @@ export default function PriceModal({
 		resolver: yupResolver(schema),
 	});
 	const { priceModal, dispatch } = usePriceModal();
+	const { configState, dispatch: configDispatch } = useConfig();
 	const [tierInputValues, setTierInputValues] = React.useState<
 		Array<{ price: string; discountRate: string }>
 	>(() => {
@@ -173,7 +171,7 @@ export default function PriceModal({
 			dispatch(createPriceCard());
 		}
 
-		toggleModal();
+		configDispatch(togglePriceModal());
 	};
 
 	/** 연간 구독 할인율 설정 메소드 */
@@ -183,15 +181,15 @@ export default function PriceModal({
 
 	return (
 		<form
-			className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+			className="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
 			onSubmit={handleSubmit(handleConfirm)}
 		>
 			<dialog
-				open
-				className="pt-8 pl-6 bg-white border border-gray-200 h-priceModal w-priceModal rounded-2xl"
+				open={configState.isPriceModalOpen}
+				className="h-priceModal w-priceModal rounded-2xl border border-gray-200 bg-white pl-6 pt-8"
 			>
 				{/* 타이틀 */}
-				<div className="mb-6 text-xl font-medium ml-7 font-ptBold">
+				<div className="mb-6 ml-7 font-ptBold text-xl font-medium">
 					요금제 생성과 할인 정책을 설정합니다
 				</div>
 				{/* 옵션 생성 */}
@@ -204,11 +202,11 @@ export default function PriceModal({
 									priceModal.isCardSet ? 'bg-[#BCBCBC]' : 'bg-blue-500'
 								}`}
 							>
-								<span className="text-base text-white font-ptBold ">
+								<span className="font-ptBold text-base text-white ">
 									요금제(가격카드 개수 설정)
 								</span>
 							</div>
-							<div className="flex flex-row items-center pt-4 pb-6 pl-6 rounded-b-lg">
+							<div className="flex flex-row items-center rounded-b-lg pb-6 pl-6 pt-4">
 								{priceModal.isCardSet === false ? (
 									<>
 										<div className="h-[30px] w-10  rounded-bl-[4px] rounded-tl-[4px]  border border-r-0 pl-4  focus:outline-none">
@@ -218,7 +216,7 @@ export default function PriceModal({
 											<Dropdown />
 										</div>
 
-										<div className="text-base font-ptRegular text-borderGray">
+										<div className="font-ptRegular text-base text-borderGray">
 											개 (최대 4개 설정 가능)
 										</div>
 									</>
@@ -227,7 +225,7 @@ export default function PriceModal({
 										<div className="mr-2 h-[30px] w-10  rounded-[4px]  border text-center focus:outline-none">
 											{priceModal.cardCount}
 										</div>{' '}
-										<div className="text-base font-ptRegular text-borderGray">
+										<div className="font-ptRegular text-base text-borderGray">
 											개 (최대 4개 설정 가능)
 										</div>
 									</>
@@ -236,7 +234,7 @@ export default function PriceModal({
 						</div>
 						<div className="h-[116px] w-[380px] rounded-lg border">
 							<div className="flex flex-row">
-								<div className="h-12 py-3 pl-4 bg-blue-500 rounded-tl-lg w-14">
+								<div className="h-12 w-14 rounded-tl-lg bg-blue-500 py-3 pl-4">
 									<Checkbox
 										onClick={() => dispatch(toggleIsCheckPerYear())}
 										checked={priceModal.isCheckPerYear}
@@ -246,7 +244,7 @@ export default function PriceModal({
 									연간 구독 추가 및 할인율 설정
 								</span>
 							</div>
-							<div className="pt-4 pb-6 pl-6 rounded-b-lg">
+							<div className="rounded-b-lg pb-6 pl-6 pt-4">
 								{' '}
 								<input
 									type="text"
@@ -260,7 +258,7 @@ export default function PriceModal({
 									disabled={!priceModal.isCheckPerYear}
 									onChange={changeYearDiscount}
 								/>
-								<span className="text-base font-ptRegular text-borderGray">
+								<span className="font-ptRegular text-base text-borderGray">
 									% 할인율 적용
 								</span>
 							</div>
@@ -271,7 +269,7 @@ export default function PriceModal({
 						{/* 큰 옵션 창  */}
 						<div className="h-[254px] w-[380px] rounded-lg border">
 							<div className="flex flex-row">
-								<div className="h-12 py-3 pl-4 bg-blue-500 rounded-tl-lg w-14">
+								<div className="h-12 w-14 rounded-tl-lg bg-blue-500 py-3 pl-4">
 									<Checkbox
 										onClick={() => dispatch(toggleIsCheckPerPerson())}
 										checked={priceModal.isCheckPerPerson}
@@ -281,7 +279,7 @@ export default function PriceModal({
 									인원 규모 당 할인율 설정
 								</span>
 							</div>
-							<div className="flex flex-col gap-4 pt-4 pb-6 pl-6 rounded-b-lg">
+							<div className="flex flex-col gap-4 rounded-b-lg pb-6 pl-6 pt-4">
 								{Array.from({ length: 4 }, (_, i) => {
 									return (
 										<div key={i}>
@@ -303,7 +301,7 @@ export default function PriceModal({
 													handleChangeHeadInput(i, 'headCount', e.target.value)
 												}
 											/>
-											<span className="mr-4 text-base font-ptRegular text-borderGray ">
+											<span className="mr-4 font-ptRegular text-base text-borderGray ">
 												인 미만 사용자
 											</span>
 											<input
@@ -328,7 +326,7 @@ export default function PriceModal({
 													)
 												}
 											/>
-											<span className="text-base font-ptRegular text-borderGray">
+											<span className="font-ptRegular text-base text-borderGray">
 												% 할인
 											</span>
 										</div>
@@ -338,7 +336,7 @@ export default function PriceModal({
 						</div>
 						<div className="h-[254px] w-[380px] rounded-lg border">
 							<div className="flex flex-row">
-								<div className="h-12 py-3 pl-4 bg-blue-500 rounded-tl-lg w-14">
+								<div className="h-12 w-14 rounded-tl-lg bg-blue-500 py-3 pl-4">
 									<Checkbox
 										onClick={() => dispatch(toggleIsCheckPerTier())}
 										checked={priceModal.isCheckPerTier}
@@ -348,7 +346,7 @@ export default function PriceModal({
 									요금제 별 할인율 설정
 								</span>
 							</div>
-							<div className="flex flex-col gap-4 pt-4 pb-6 pl-6 rounded-b-lg">
+							<div className="flex flex-col gap-4 rounded-b-lg pb-6 pl-6 pt-4">
 								{Array.from({ length: 4 }, (_, i) => {
 									const disabled =
 										priceModal.isCheckPerTier && i + 1 <= priceModal.cardCount;
@@ -372,7 +370,7 @@ export default function PriceModal({
 													handleChangeTierInput(i, 'price', e.target.value)
 												}
 											/>
-											<span className="mr-4 text-base font-ptRegular text-borderGray">
+											<span className="mr-4 font-ptRegular text-base text-borderGray">
 												원
 											</span>
 											<input
@@ -393,7 +391,7 @@ export default function PriceModal({
 													)
 												}
 											/>
-											<span className="text-base font-ptRegular text-borderGray">
+											<span className="font-ptRegular text-base text-borderGray">
 												% 할인
 											</span>
 										</div>
@@ -404,12 +402,12 @@ export default function PriceModal({
 					</div>
 				</div>
 				{/* 안내 사항 */}
-				<div className="mt-4 text-sm font-ptRegular text-borderGray">
+				<div className="mt-4 font-ptRegular text-sm text-borderGray">
 					*가격 할인은 각 항목의 할인율 %의 합연산으로 계산됩니다.
 				</div>
 				<div className="flex justify-between">
 					{errors && (
-						<div className="text-sm text-red-700 font-ptRegular">
+						<div className="font-ptRegular text-sm text-red-700">
 							{Array.from(
 								new Set([
 									...(Array.isArray(errors.perPersonInputs)

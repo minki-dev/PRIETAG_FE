@@ -29,7 +29,6 @@ export default function FAQ() {
 	// const onChangeAnswer = (e: React.ChangeEvent<HTMLInputElement>) => {
 	// 	setAnswer(e.target.value);
 	// };
-	console.log(faq.isPreview);
 	// 질문 입력
 	// 답변 입력
 	// 초기화 버튼 , 게시하기 버튼

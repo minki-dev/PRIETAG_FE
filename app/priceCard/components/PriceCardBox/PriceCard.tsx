@@ -36,10 +36,11 @@ function PriceCard({
 	const { priceModal, dispatch } = usePriceModal();
 	const { dispatch: featureTableDispatch } = useFeatureTable();
 
+	// priceCard 전체 정보
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
 		priceModal.priceCards[cardIndex],
 	);
-
+	// priceCard의 content부분
 	const [priceCardContentEl, setPriceCardContentEl] = React.useState(
 		priceCardInfoEl.content,
 	);
@@ -88,7 +89,31 @@ function PriceCard({
 		);
 	};
 
-	const discountedPrice = (price: number, discountRate: number) => {
+	const [discountRate, setDiscountRate] = React.useState(
+		priceModal.priceCards[cardIndex].discountRate,
+	);
+
+	const [discountPrice, setDiscountPrice] = React.useState(0);
+
+	useEffect(() => {
+		discountRateCalc();
+	}, [priceModal.monthYearToggle]);
+
+	const discountRateCalc = () => {
+		if (priceModal.isCheckPerYear && priceModal.monthYearToggle) {
+			setDiscountRate(
+				priceCardInfoEl.discountRate + priceModal.yearDiscountRate,
+			);
+			setDiscountPrice(
+				((priceCardInfoEl.price * (100 - discountRate)) / 100) * 12,
+			);
+		} else {
+			setDiscountRate(priceCardInfoEl.discountRate);
+			setDiscountPrice((priceCardInfoEl.price * (100 - discountRate)) / 100);
+		}
+	};
+
+	const discountedPrice = (price: number) => {
 		return ((price * (100 - discountRate)) / 100).toLocaleString('ko-KR');
 	};
 
@@ -121,16 +146,11 @@ function PriceCard({
 				</label>
 				<div className="flex w-[294px] flex-col gap-[12px] pb-[16px] pt-[12px]">
 					<span className={`${textColor.mainColor} text-[32px] font-bold`}>
-						{discountedPrice(
-							priceCardInfoEl.price,
-							priceCardInfoEl.discountRate,
-						)}
-						원 / 년
+						{discountPrice.toLocaleString('ko-KR')}원/
+						{priceModal.monthYearToggle ? '연' : '월'}
 					</span>
 					<div className="flex gap-1">
-						<span className="text-[20px] text-[#FF0000]">
-							-{priceCardInfoEl.discountRate}%
-						</span>
+						<span className="text-[20px] text-[#FF0000]">-{discountRate}%</span>
 						<span className="text-[20px] text-[#747474] line-through">
 							{priceCardInfoEl.price
 								? priceCardInfoEl.price.toLocaleString('ko-KR') + '원'

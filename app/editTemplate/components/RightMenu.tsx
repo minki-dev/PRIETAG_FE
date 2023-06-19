@@ -6,13 +6,14 @@ import { addBox, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import { togglePreview, useConfig } from '@/store/slice/configSlice';
 import { openModal, useModal } from '@/store/slice/modalSlice';
 import { addTable } from '@/store/slice/featureTableSlice';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import {
 	MdOutlineArrowForwardIos,
 	MdOutlineArrowBackIos,
 } from 'react-icons/md';
 import { RxPlus, RxQuestionMarkCircled } from 'react-icons/rx';
+import { addFAQ, useFAQ } from '@/store/slice/faqSlice';
 
 export default function RightMenu() {
 	const [isFontOption, setIsFontOption] = useState(true);
@@ -24,6 +25,7 @@ export default function RightMenu() {
 
 	const { dispatch: dndDispatch, boxState } = useDNDBox();
 	const { dispatch: modalDispatch } = useModal();
+	const { faq, dispatch: faqDispatch } = useFAQ();
 	const { configState, dispatch: configDispatch } = useConfig();
 
 	const handleAddTable = () => {
@@ -40,6 +42,10 @@ export default function RightMenu() {
 
 	const handleTogglePreview = () => {
 		configDispatch(togglePreview());
+	};
+
+	const addNewFAQ = () => {
+		faqDispatch(addFAQ());
 	};
 
 	return (
@@ -155,6 +161,7 @@ export default function RightMenu() {
 									<button
 										type="button"
 										className="group mx-3 flex h-[39px] w-[198px] items-center rounded hover:text-[#00A3FF] hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)]"
+										onClick={() => addNewFAQ()}
 									>
 										<RxPlus />
 										<span className="ml-2 text-sm font-normal not-italic leading-[22px] text-[#747474] group-hover:text-[#00A3FF]">

@@ -296,6 +296,15 @@ export const priceModalSlice = createSlice({
 			// false: month, true: year
 			return Object.assign({}, state, { monthYearToggle: currentChecked });
 		},
+
+		/** 사용자 수 입력 상태 */
+		updateUserCount: (
+			state: PriceModalState,
+			action: PayloadAction<number>,
+		) => {
+			const currentUserCount = action.payload < 1 ? 1 : action.payload;
+			return Object.assign({}, state, { userCount: currentUserCount });
+		},
 	},
 });
 
@@ -321,6 +330,7 @@ export const {
 	deletePriceCard,
 	updatePriceCardAreaPadding,
 	updateMonthYearToggle,
+	updateUserCount,
 } = priceModalSlice.actions;
 
 export function usePriceModal() {

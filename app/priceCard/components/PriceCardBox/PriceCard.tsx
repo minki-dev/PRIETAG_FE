@@ -90,10 +90,12 @@ function PriceCard({
 	};
 
 	const [discountRate, setDiscountRate] = React.useState(
-		priceModal.priceCards[cardIndex].discountRate,
+		priceCardInfoEl.discountRate,
 	);
 
-	const [discountPrice, setDiscountPrice] = React.useState(0);
+	const [discountPrice, setDiscountPrice] = React.useState(
+		priceCardInfoEl.price,
+	);
 
 	useEffect(() => {
 		discountRateCalc();
@@ -113,9 +115,35 @@ function PriceCard({
 		}
 	};
 
-	const discountedPrice = (price: number) => {
-		return ((price * (100 - discountRate)) / 100).toLocaleString('ko-KR');
+	const [currentHeadDiscount, setCurrentHeadDiscount] = React.useState(0);
+
+	useEffect(() => {
+		headDiscountCalc();
+	}, [priceModal.userCount, priceModal.isCheckPerPerson]);
+
+	const headDiscountCalc = () => {
+		if (priceModal.isCheckPerPerson) {
+			const headDiscountArr = [...priceModal.headDiscount].sort(
+				(a, b) => a.headCount - b.headCount,
+			);
+			console.log(headDiscountArr);
+			const headRateCalc = headDiscountArr.filter(
+				(level) => level.headCount > priceModal.userCount,
+			);
+			console.log(headRateCalc);
+			if (headRateCalc.length !== 0) {
+				setCurrentHeadDiscount(headRateCalc[0].discountRate);
+			} else {
+				setCurrentHeadDiscount(
+					headDiscountArr[headDiscountArr.length - 1].discountRate,
+				);
+			}
+		} else {
+			setCurrentHeadDiscount(0);
+		}
 	};
+
+	console.log(currentHeadDiscount);
 
 	const bgColor: colorInfo = {
 		mainColor: `bg-[${color.mainColor}]`,
@@ -128,8 +156,6 @@ function PriceCard({
 		subColor01: `text-[${color.subColor01}]`,
 		subColor02: `text-[${color.subColor02}]`,
 	};
-
-	console.log(cardIndex);
 
 	return (
 		<div className="flex h-full min-h-[665px] w-[342px] flex-col items-center justify-between rounded-lg bg-white shadow-md">

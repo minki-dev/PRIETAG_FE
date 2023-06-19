@@ -15,7 +15,7 @@ import FAQ from './components/FAQ';
 import PriceModal from './components/PriceModal';
 // import { testCard } from './components/Test';
 import RightMenu from './components/RightMenu';
-import { FAQCard, setFAQ, useFAQ } from '@/store/slice/faqSlice';
+import { FAQCard, useFAQ } from '@/store/slice/faqSlice';
 import { set } from 'react-hook-form';
 import DraggableArea from './components/DraggableArea';
 import Table from './components/Table/Table';
@@ -36,7 +36,7 @@ import ColorModal from './components/ColorModal/ColorModal';
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { priceModal, dispatch } = usePriceModal();
-	const { faq, faqDispatch } = useFAQ();
+	const { faq, dispatch: faqDispatch } = useFAQ();
 	const toggleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
@@ -127,7 +127,6 @@ export default function EditTemplate() {
 			}),
 		);
 	};
-	
 
 	return (
 		<>
@@ -135,7 +134,7 @@ export default function EditTemplate() {
 			<GlobalModal />
 
 			<TemplateHeader />
-			<main className="box-content flex flex-col items-center mx-auto mt-36">
+			<main className="mx-auto mt-36 box-content flex flex-col items-center">
 				<RightMenu />
 				{configState.isPriceModalOpen && <PriceModal />}
 				{configState.isColorModalOpen && <ColorModal />}

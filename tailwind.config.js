@@ -22,19 +22,22 @@ module.exports = {
 				priceModal: '832px',
 				tableDataPc: '264px',
 				tableDataTablet: '232px',
-				tableData: '216px'
+				tableData: '216px',
+				87: '328px',
+				74: '296px',
 			},
 			height: {
 				priceModal: '596px',
 				tableDataPc: '32px',
 				tableDataTablet: '26px',
-				tableData: '20px'
+				tableData: '20px',
+				21: '84px',
 			},
 			borderColor: {
 				'gray-700': '#747474',
 			},
 			borderWidth: {
-				'1': '1px',
+				1: '1px',
 			},
 
 			textColor: {

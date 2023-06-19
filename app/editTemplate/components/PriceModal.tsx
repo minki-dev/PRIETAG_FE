@@ -20,6 +20,7 @@ import Dropdown from './DropDown';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { togglePriceModal, useConfig } from '@/store/slice/configSlice';
 
 const schema = yup.object().shape({
 	yearDiscountRate: yup
@@ -57,11 +58,7 @@ const schema = yup.object().shape({
 	),
 });
 
-export default function PriceModal({
-	toggleModal,
-}: {
-	toggleModal: () => void;
-}) {
+export default function PriceModal({}: {}) {
 	const {
 		register,
 		handleSubmit,
@@ -70,6 +67,7 @@ export default function PriceModal({
 		resolver: yupResolver(schema),
 	});
 	const { priceModal, dispatch } = usePriceModal();
+	const { configState, dispatch: configDispatch } = useConfig();
 	const [tierInputValues, setTierInputValues] = React.useState<
 		Array<{ price: string; discountRate: string }>
 	>(() => {
@@ -173,7 +171,7 @@ export default function PriceModal({
 			dispatch(createPriceCard());
 		}
 
-		toggleModal();
+		configDispatch(togglePriceModal());
 	};
 
 	/** 연간 구독 할인율 설정 메소드 */
@@ -183,11 +181,11 @@ export default function PriceModal({
 
 	return (
 		<form
-			className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
+			className="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
 			onSubmit={handleSubmit(handleConfirm)}
 		>
 			<dialog
-				open
+				open={configState.isPriceModalOpen}
 				className="h-priceModal w-priceModal rounded-2xl border border-gray-200 bg-white pl-6 pt-8"
 			>
 				{/* 타이틀 */}

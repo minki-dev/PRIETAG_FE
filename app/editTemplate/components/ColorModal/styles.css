@@ -1,0 +1,30 @@
+.customPicker .react-colorful {
+	width: 408px;
+	height: 406px;
+	border: 20px solid #ffffff;
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+	border-radius: 16px;
+	margin-top: 24px;
+}
+
+.customPicker .react-colorful__hue {
+	margin-top: 16px;
+	height: 16px;
+	border-radius: 8px;
+}
+
+.customPicker .react-colorful__hue-pointer {
+	width: 20px;
+	height: 20px;
+	border: 4px solid #ffffff;
+}
+
+.customPicker .react-colorful__saturation-pointer {
+	width: 20px;
+	height: 20px;
+	border: 4px solid #ffffff;
+}
+
+.customPicker .react-colorful__saturation {
+	border-radius: 16px;
+}

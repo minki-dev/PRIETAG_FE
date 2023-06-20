@@ -89,39 +89,43 @@ function PriceCard({
 		);
 	};
 
-	const [discountRate, setDiscountRate] = React.useState(
-		priceCardInfoEl.discountRate,
-	);
+	// 월간, 연간 할인율
+	const [currentYearDiscount, setCurrentYearDiscount] = React.useState(0);
 
-	const [discountPrice, setDiscountPrice] = React.useState(
+	useEffect(() => {
+		yearDiscountCalc();
+	}, [
+		priceModal.monthYearToggle,
+		priceModal.isCheckPerYear,
+		priceModal.yearDiscountRate,
+	]);
+
+	const yearDiscountCalc = () => {
+		if (priceModal.isCheckPerYear && priceModal.monthYearToggle) {
+			setCurrentYearDiscount(priceModal.yearDiscountRate);
+		} else {
+			setCurrentYearDiscount(0);
+		}
+	};
+	console.log(currentYearDiscount);
+
+	// 사용자 수 별 할인율
+	const [currentHeadDiscount, setCurrentHeadDiscount] = React.useState(0);
+	// 사용자 수 별 가격
+	const [currentHeadPrice, setCurrentHeadPrice] = React.useState(
 		priceCardInfoEl.price,
 	);
 
 	useEffect(() => {
-		discountRateCalc();
-	}, [priceModal.monthYearToggle]);
-
-	const discountRateCalc = () => {
-		if (priceModal.isCheckPerYear && priceModal.monthYearToggle) {
-			setDiscountRate(
-				priceCardInfoEl.discountRate + priceModal.yearDiscountRate,
-			);
-			setDiscountPrice(
-				((priceCardInfoEl.price * (100 - discountRate)) / 100) * 12,
-			);
-		} else {
-			setDiscountRate(priceCardInfoEl.discountRate);
-			setDiscountPrice((priceCardInfoEl.price * (100 - discountRate)) / 100);
-		}
-	};
-
-	const [currentHeadDiscount, setCurrentHeadDiscount] = React.useState(0);
-
-	useEffect(() => {
 		headDiscountCalc();
-	}, [priceModal.userCount, priceModal.isCheckPerPerson]);
+	}, [
+		priceModal.userCount,
+		priceModal.isCheckPerPerson,
+		priceModal.headDiscount,
+	]);
 
 	const headDiscountCalc = () => {
+		//setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
 		if (priceModal.isCheckPerPerson) {
 			const headDiscountArr = [...priceModal.headDiscount].sort(
 				(a, b) => a.headCount - b.headCount,
@@ -138,12 +142,60 @@ function PriceCard({
 					headDiscountArr[headDiscountArr.length - 1].discountRate,
 				);
 			}
+			setCurrentHeadPrice(priceCardInfoEl.price * priceModal.userCount);
 		} else {
 			setCurrentHeadDiscount(0);
+			setCurrentHeadPrice(priceCardInfoEl.price);
 		}
 	};
 
 	console.log(currentHeadDiscount);
+
+	// 가격 별 할인 적용
+	const [currentTierDiscount, setCurrentTierDiscount] = React.useState(0);
+
+	useEffect(() => {
+		tierDiscountCalc();
+	}, [priceModal.isCheckPerTier, priceModal.tierDiscount]);
+
+	const tierDiscountCalc = () => {
+		if (priceModal.isCheckPerTier) {
+			setCurrentTierDiscount(priceCardInfoEl.discountRate);
+		} else {
+			setCurrentTierDiscount(0);
+		}
+	};
+
+	// 전체 할인율
+	const [discountRate, setDiscountRate] = React.useState(
+		priceCardInfoEl.discountRate,
+	);
+	// 모든 할인이 적용된 가격
+	const [discountPrice, setDiscountPrice] = React.useState(
+		priceCardInfoEl.price,
+	);
+
+	useEffect(() => {
+		discountCalc();
+	}, [currentHeadDiscount, currentYearDiscount, currentTierDiscount]);
+
+	const discountCalc = () => {
+		//setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
+		const sumDiscountRate: number =
+			currentTierDiscount + currentYearDiscount + currentHeadDiscount;
+		if (sumDiscountRate > 100) {
+			setDiscountRate(100);
+		} else {
+			setDiscountRate(sumDiscountRate);
+		}
+		const sumDiscountPrice: number =
+			(currentHeadPrice * (100 - discountRate)) / 100;
+		if (priceModal.monthYearToggle) {
+			setDiscountPrice(sumDiscountPrice * 12);
+		} else {
+			setDiscountPrice(sumDiscountPrice);
+		}
+	};
 
 	const bgColor: colorInfo = {
 		mainColor: `bg-[${color.mainColor}]`,
@@ -173,15 +225,33 @@ function PriceCard({
 				<div className="flex w-[294px] flex-col gap-[12px] pb-[16px] pt-[12px]">
 					<span className={`${textColor.mainColor} text-[32px] font-bold`}>
 						{discountPrice.toLocaleString('ko-KR')}원/
-						{priceModal.monthYearToggle ? '연' : '월'}
+						{priceModal.isCheckPerYear && priceModal.monthYearToggle
+							? '연'
+							: '월'}
 					</span>
 					<div className="flex gap-1">
-						<span className="text-[20px] text-[#FF0000]">-{discountRate}%</span>
-						<span className="text-[20px] text-[#747474] line-through">
-							{priceCardInfoEl.price
-								? priceCardInfoEl.price.toLocaleString('ko-KR') + '원'
-								: null}
-						</span>
+						{priceCardInfoEl.price ? ( // 가격 설정 유무
+							<>
+								{discountRate ? ( // 할인 유무
+									<>
+										<span className="text-[20px] text-[#FF0000]">
+											-{discountRate}%
+										</span>
+										<span className="text-[20px] text-[#747474] line-through">
+											{priceModal.isCheckPerYear && priceModal.monthYearToggle // 연간 구독 여부
+												? (currentHeadPrice * 12).toLocaleString('ko-KR')
+												: currentHeadPrice.toLocaleString('ko-KR')}{' '}
+											{/* 연간 구독 X */}원
+										</span>
+									</>
+								) : (
+									// 할인 X
+									<span className="text-[20px] text-[#747474]">
+										할인제도 없음
+									</span>
+								)}
+							</> // 가격 설정 X
+						) : null}
 					</div>
 				</div>
 				<div className="w-[294px] border border-[#989898]"></div>

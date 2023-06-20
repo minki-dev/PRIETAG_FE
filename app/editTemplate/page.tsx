@@ -113,9 +113,8 @@ export default function EditTemplate() {
 	const {} = useModal();
 	return (
 		<>
-			{/* <Header /> */}
-			<TemplateHeader />
 			<main className="mx-auto mt-36 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
+				<Header />
 				<RightMenu />
 				<section
 					className={`${

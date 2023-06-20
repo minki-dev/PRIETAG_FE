@@ -35,7 +35,7 @@ export default function TemplateHeader() {
 				/>{' '}
 			</div>
 			{isClicked ? (
-				<nav className="absolute right-[40px] top-[60px] z-20 h-[160px] w-[200px] rounded-xl bg-white text-base  font-normal leading-[26px] text-black shadow-[0_0_4px_rgba(0,0,0,0.5)] shadow-[#D9D9D9] ">
+				<nav className="absolute right-[74px] top-[28px] z-20 h-[160px] w-[200px] rounded-xl bg-white text-base  font-normal leading-[26px] text-black shadow-[0_0_4px_rgba(0,0,0,0.5)] shadow-[#D9D9D9] ">
 					<ul>
 						<li className="flex h-[40px] w-full cursor-pointer items-center rounded-[12px_12px_0_0] hover:bg-[#00A3FF]  hover:text-white">
 							<span className="absolute left-[16px]">불러오기 </span>

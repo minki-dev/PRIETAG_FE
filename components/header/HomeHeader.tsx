@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 function HomeHeader() {
 	return (
-		<div className="relative h-[72px] w-full">
+		<div className="relative h-[72px] w-full ">
 			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] absolute z-20 flex h-[72px] w-full items-center justify-center bg-[#FFF] shadow">
 				<div className="flex h-full w-[calc(100%-80px)] items-center justify-between">
 					<div className=" min-w-[100px]">

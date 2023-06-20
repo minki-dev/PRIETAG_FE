@@ -14,8 +14,8 @@ export default function TemplateHeader() {
 	const { dispatch: configDispatch } = useConfig();
 
 	return (
-		<div className="relative">
-			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] fixed top-0 z-20 h-[72px] w-full bg-[#FFF] shadow-md">
+		<div className="relative  h-[72px] w-full">
+			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] absolute top-0 z-20 h-[72px] w-full bg-[#FFF] shadow-md">
 				<Image
 					src="/img/ezfee.svg"
 					alt="dd"
@@ -35,7 +35,7 @@ export default function TemplateHeader() {
 				/>{' '}
 			</div>
 			{isClicked ? (
-				<nav className="absolute -top-[68px] right-[40px] z-20 h-[160px] w-[200px] rounded-xl bg-white text-base  font-normal leading-[26px] text-black shadow-[0_0_4px_rgba(0,0,0,0.5)] shadow-[#D9D9D9] ">
+				<nav className="absolute right-[40px] top-[60px] z-20 h-[160px] w-[200px] rounded-xl bg-white text-base  font-normal leading-[26px] text-black shadow-[0_0_4px_rgba(0,0,0,0.5)] shadow-[#D9D9D9] ">
 					<ul>
 						<li className="flex h-[40px] w-full cursor-pointer items-center rounded-[12px_12px_0_0] hover:bg-[#00A3FF]  hover:text-white">
 							<span className="absolute left-[16px]">불러오기 </span>

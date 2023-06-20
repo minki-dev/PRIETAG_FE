@@ -17,7 +17,7 @@ export default function TemplateHeader() {
 		<div className="relative">
 			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] fixed top-0 z-20 h-[72px] w-full bg-[#FFF] shadow-md">
 				<Image
-					src="/ezfee.svg"
+					src="/img/ezfee.svg"
 					alt="dd"
 					width={93.81}
 					height={32}

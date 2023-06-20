@@ -12,6 +12,7 @@ export type DNDBoxState = {
 	priceCardArea: DraggableBox[];
 	tableArea: DraggableBox[];
 	faqArea: DraggableBox[];
+	outerPaddings: string []
 	selectedBox: DraggableBox | null;
 	targetArea:
 		| keyof Pick<DNDBoxState, 'faqArea' | 'tableArea' | 'priceCardArea'>
@@ -19,7 +20,7 @@ export type DNDBoxState = {
 };
 
 type DNDBoxPayload = {
-	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'tableArea' | 'priceCardArea'>
+	areaType: keyof Pick<DNDBoxState, 'faqArea' | 'tableArea' | 'priceCardArea' | 'outerPaddings'>
 	newList: DraggableBox[];
 	boxType: BoxType;
 	id: string;
@@ -45,6 +46,7 @@ const initialState: DNDBoxState = {
 	}),
 	selectedBox: null,
 	targetArea: null,
+	outerPaddings: ['100', '100']
 };
 
 export const DNDBoxSlice = createSlice({
@@ -60,9 +62,8 @@ export const DNDBoxSlice = createSlice({
 		},
 		addBox: (
 			state: DNDBoxState,
-			action: PayloadAction<Pick<DNDBoxPayload, 'boxType'>>,
+			action: PayloadAction<Pick<DNDBoxPayload, 'boxType'>>
 		) => {
-			// @TODO modal 띄워야함
 			if (state.selectedBox === null) return;
 			const { boxType } = action.payload;
 			if (state.targetArea === null) return
@@ -86,6 +87,7 @@ export const DNDBoxSlice = createSlice({
 			action: PayloadAction<Pick<DNDBoxPayload, 'id' | 'areaType'>>,
 		) => {
 			const { id, areaType } = action.payload;
+			if (areaType === 'outerPaddings') return
 			if (state[areaType].length <= 1) return
 			const newList = state[areaType].filter((box) => box.id !== id) 
 			return { ...state, [areaType]: newList };
@@ -95,8 +97,11 @@ export const DNDBoxSlice = createSlice({
 			action: PayloadAction<Pick<DNDBoxPayload, 'index' | 'areaType' | 'content'>>,
 		) => {
 			const { index, areaType, content } = action.payload;
+			if (areaType === 'outerPaddings') {
+				state.outerPaddings[index] = content
+				return state
+			}
 			state[areaType][index].content = content
-			console.log(current(state))
 			return state
 		},
 		updateSelected: (
@@ -105,7 +110,7 @@ export const DNDBoxSlice = createSlice({
 		) => {
 			const { id, areaType } = action.payload;
 
-
+			if (areaType === 'outerPaddings') return
 			if (state.targetArea !== areaType && state.targetArea !== null) {
 		
 

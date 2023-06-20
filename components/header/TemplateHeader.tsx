@@ -3,13 +3,19 @@
 import React, { useState } from 'react';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Image from 'next/image';
+import {
+	toggleColorModal,
+	togglePriceModal,
+	useConfig,
+} from '@/store/slice/configSlice';
 
 export default function TemplateHeader() {
 	const [isClicked, setIsClicked] = useState(false);
+	const { dispatch: configDispatch } = useConfig();
 
 	return (
 		<div className="relative">
-			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] fixed z-20  h-[72px] w-full bg-[#FFF] shadow">
+			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] fixed top-0 z-20 h-[72px] w-full bg-[#FFF] shadow-md">
 				<Image
 					src="/img/ezfee.svg"
 					alt="dd"
@@ -34,12 +40,18 @@ export default function TemplateHeader() {
 						<li className="flex h-[40px] w-full cursor-pointer items-center rounded-[12px_12px_0_0] hover:bg-[#00A3FF]  hover:text-white">
 							<span className="absolute left-[16px]">불러오기 </span>
 						</li>
-						<li className="flex h-[40px]  cursor-pointer items-center hover:bg-[#00A3FF]  hover:text-white">
+						<li
+							className="flex h-[40px]  cursor-pointer items-center hover:bg-[#00A3FF]  hover:text-white"
+							onClick={() => configDispatch(togglePriceModal())}
+						>
 							<span className="absolute left-[16px]">
 								가격 할인 정책 재설정
 							</span>
 						</li>
-						<li className="flex h-[40px] cursor-pointer items-center hover:bg-[#00A3FF] hover:text-white">
+						<li
+							className="flex h-[40px] cursor-pointer items-center hover:bg-[#00A3FF] hover:text-white"
+							onClick={() => configDispatch(toggleColorModal())}
+						>
 							<span className="absolute left-[16px]">컬러 테마 재설정</span>
 						</li>
 						<li className="flex h-[40px] cursor-pointer items-center rounded-[0_0_12px_12px] hover:bg-[#00A3FF]  hover:text-white">

@@ -3,27 +3,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '..';
 
 type ConfigState = {
+	isColorModalOpen: boolean;
+	isPriceModalOpen: boolean;
 	isPreview: boolean;
 	color: Colors;
 	font: string;
 };
 
-type Colors = {
+export type Colors = {
 	mainColor: string;
 	subColor01: string;
 	subColor02: string;
+	fontColor: string;
 };
 
 type ConfigPayload = {
-	
+	color: Colors;
+	font: String;
 };
 
 const initialState: ConfigState = {
+	isColorModalOpen: false,
+	isPriceModalOpen: false,
 	isPreview: false,
 	color: {
 		mainColor: '#00A3FF',
 		subColor01: '#60C8FF',
 		subColor02: '#EAF8FF',
+		fontColor: '#000000',
 	},
 	font: '',
 };
@@ -32,35 +39,44 @@ export const configSlice = createSlice({
 	name: 'config',
 	initialState,
 	reducers: {
-		togglePreview: (
-			state: ConfigState
-		) => {
+		togglePreview: (state: ConfigState) => {
 			return { ...state, isPreview: !state.isPreview };
 		},
-
+		togglePriceModal: (state: ConfigState) => {
+			return { ...state, isPriceModalOpen: !state.isPriceModalOpen };
+		},
+		toggleColorModal: (state: ConfigState) => {
+			console.log('toggleColorModal');
+			return { ...state, isColorModalOpen: !state.isColorModalOpen };
+		},
 		save: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return { ...state };
+			return state;
 		},
 		autoSave: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return { ...state };
+			return state;
 		},
 
 		setFont: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return { ...state };
+			return state;
 		},
 
-		setColor: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return { ...state };
+		setColor: (
+			state: ConfigState,
+			action: PayloadAction<Pick<ConfigPayload, 'color'>>,
+		) => {
+			const { color } = action.payload;
+			state.color = color;
+			return state;
 		},
 		publish: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return { ...state };
+			return state;
 		},
 
 		restore: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return { ...state };
+			return state;
 		},
 		forward: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return { ...state };
+			return state;
 		},
 	},
 });
@@ -74,6 +90,8 @@ export const {
 	publish,
 	restore,
 	forward,
+	togglePriceModal,
+	toggleColorModal,
 } = configSlice.actions;
 
 export function useConfig() {

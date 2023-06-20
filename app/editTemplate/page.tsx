@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	PriceCard,
 	setPriceCard,
@@ -15,22 +15,28 @@ import FAQ from './components/FAQ';
 import PriceModal from './components/PriceModal';
 // import { testCard } from './components/Test';
 import RightMenu from './components/RightMenu';
-import { FAQCard, setFAQ, useFAQ } from '@/store/slice/faqSlice';
+import { FAQCard, useFAQ } from '@/store/slice/faqSlice';
 import { set } from 'react-hook-form';
 import DraggableArea from './components/DraggableArea';
 import Table from './components/Table/Table';
-import { useConfig } from '@/store/slice/configSlice';
+import { togglePriceModal, useConfig } from '@/store/slice/configSlice';
 import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
 import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
 import TableContainer from './components/Table/TableContainer';
 import { useModal } from '@/store/slice/modalSlice';
 import Header from '@/components/header/Header';
 import TemplateHeader from '@/components/header/TemplateHeader';
+import PaddingBox from './components/DraggableArea/PaddingBox';
+import ResizablePaddingWithHandle from '@/components/ResizablePaddingWithHandle';
+import { updateHeight, useDNDBox } from '@/store/slice/DNDBoxSlice';
+import debounce from 'lodash.debounce';
+import { GlobalModal } from '@/components/modal/GlobalModal';
+import ColorModal from './components/ColorModal/ColorModal';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { priceModal, dispatch } = usePriceModal();
-	const { faq, faqDispatch } = useFAQ();
+	const { faq, dispatch: faqDispatch } = useFAQ();
 	const toggleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
@@ -107,29 +113,54 @@ export default function EditTemplate() {
 		dispatch(setPriceCard(testCard));
 	}, []);
 
-	const { configState } = useConfig();
+	const { configState, dispatch: configDispatch } = useConfig();
 	const { isPreview } = configState;
 
-	const {} = useModal();
+	const { boxState, dispatch: dndDispatch } = useDNDBox();
+
+	const handleHeightUpdate = (index: number, height: number) => {
+		dndDispatch(
+			updateHeight({
+				areaType: 'outerPaddings',
+				index,
+				content: height.toString(),
+			}),
+		);
+	};
+
 	return (
 		<>
 			<main className="mx-auto mt-36 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
 				<Header />
 				<RightMenu />
+				{configState.isPriceModalOpen && <PriceModal />}
+				{configState.isColorModalOpen && <ColorModal />}
 				<section
 					className={`${
 						isPreview ? 'editable-outer-preview' : 'editable-outer '
-					}`}
+					} w-full`}
 				>
 					<DraggableArea areaType="priceCardArea" />
 					<DiscountOptionBox />
 					<PriceCardBox />
 				</section>
+				<ResizablePaddingWithHandle
+					type="outer"
+					onAction={(height) => {
+						handleHeightUpdate(0, height);
+					}}
+				/>
 				<TableContainer />
+				<ResizablePaddingWithHandle
+					type="outer"
+					onAction={(height) => {
+						handleHeightUpdate(1, height);
+					}}
+				/>
 				<section
 					className={`${
 						isPreview ? 'editable-outer-preview' : 'editable-outer '
-					}`}
+					} w-full`}
 				>
 					<DraggableArea areaType="faqArea" />
 					<FAQ />

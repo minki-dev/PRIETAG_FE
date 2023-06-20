@@ -15,9 +15,18 @@ export interface PriceCard {
 	feature: string;
 	content: string[];
 }
+// updatePriceCard 리듀서에서
+// 카드 정보 업데이트 할 때 사용
 interface PriceCardIndex {
 	index: number;
 	card: PriceCard;
+}
+// getTierInput 리듀서에서
+// 가격 설정 모달에서 티어 별 가격, 할인율 입력 값 가져오기 할 때 사용
+interface TierInput {
+	index: number;
+	price: number;
+	discountRate: number;
 }
 
 type PriceModalState = {
@@ -217,6 +226,23 @@ export const priceModalSlice = createSlice({
 					content: [''],
 				};
 			});
+		},
+
+		/** 가격 설정 모달에서 티어 별 가격, 할인율 입력 값 가져오기 */
+		getTierInput: (
+			state: PriceModalState,
+			action: PayloadAction<TierInput>,
+		) => {
+			const newPriceCards = [...state.priceCards];
+			newPriceCards[action.payload.index] = Object.assign(
+				{},
+				newPriceCards[action.payload.index],
+				{
+					price: action.payload.price,
+					discountRate: action.payload.discountRate,
+				},
+			);
+			return Object.assign({}, state, { priceCards: newPriceCards });
 		},
 
 		/** 가격 카드 추가하기 */

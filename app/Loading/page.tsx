@@ -1,10 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
+import Header from '@/components/header/Header'
+import Footer from '@/components/footer/Footer'
 
 export default function Loading() {
   return (
     <>
-      <div className='relative flex top-[78px] w-[1920px] h-[808px] justify-between'>
+      <Header />
+      <div className='relative flex w-[1920px] h-[808px] justify-between'>
         <div className='flex'>
           <div className='w-[240px] h-[808px] bg-[#F9E8E8]' />
           <div className=' w-[80px] h-[808px] left-[240px] bg-[#FEEEEE]' />
@@ -12,7 +15,7 @@ export default function Loading() {
         </div>
         <div className='flex flex-col min-w-[375px] justify-center items-center'>
           <Image
-            src='/loading.svg'
+            src='/img/loading.svg'
             alt='Loading...'
             width={144}
             height={144}
@@ -31,6 +34,7 @@ export default function Loading() {
           <div className=' w-[240px] h-[808px] right-0 bg-[#F9E8E8]' />
         </div>
       </div>
+      <Footer />
     </>
   )
 }

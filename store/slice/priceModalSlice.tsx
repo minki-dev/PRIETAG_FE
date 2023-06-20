@@ -220,10 +220,7 @@ export const priceModalSlice = createSlice({
 		},
 
 		/** 가격 카드 추가하기 */
-		addPriceCard: (
-			state: PriceModalState,
-			action: PayloadAction<void>, // 카드 아이디(선택된 1개)
-		) => {
+		addPriceCard: (state: PriceModalState, action: PayloadAction<void>) => {
 			const { v4: uuidv4 } = require('uuid');
 			const initialPriceCard: PriceCard = {
 				id: uuidv4(),
@@ -237,7 +234,11 @@ export const priceModalSlice = createSlice({
 			};
 			const currentPriceCards = [...state.priceCards];
 			currentPriceCards.push(initialPriceCard);
-			return Object.assign({}, state, { priceCards: currentPriceCards });
+			const currentCardCount = currentPriceCards.length;
+			return Object.assign({}, state, {
+				cardCount: currentCardCount,
+				priceCards: currentPriceCards,
+			});
 		},
 
 		/** 가격 카드 순서 변경하기 */
@@ -274,7 +275,9 @@ export const priceModalSlice = createSlice({
 		) => {
 			const newPriceCards = [...state.priceCards];
 			const spliceCards = newPriceCards.splice(action.payload, 1);
+			const currentCardCount = newPriceCards.length;
 			return Object.assign({}, state, {
+				cardCount: currentCardCount,
 				priceCards: newPriceCards,
 			});
 		},

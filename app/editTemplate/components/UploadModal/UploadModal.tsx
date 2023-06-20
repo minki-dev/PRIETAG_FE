@@ -2,23 +2,23 @@
 
 'use client';
 
-import Image from 'next/image';
 import React from 'react';
+import Dropzone from './Dropzone';
 
 export default function UploadModal() {
 	return (
 		<form
-			className="fixed top-0 left-0 z-30 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+			className="fixed left-0 top-0 z-30 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
 			// onSubmit={handleSubmit(handleConfirm)}
 		>
 			<dialog
 				open
-				className="flex flex-col p-8 bg-white border border-gray-200 h-priceModal w-priceModal rounded-2xl"
+				className="flex h-priceModal w-priceModal flex-col rounded-2xl border border-gray-200 bg-white p-8"
 			>
-				<section className="flex flex-row justify-between mb-10">
+				<section className="mb-10 flex flex-row justify-between">
 					{' '}
 					{/* 타이틀 */}
-					<div className="text-xl font-medium font-ptBold">
+					<div className="font-ptBold text-xl font-medium">
 						로고 또는 심벌을 업로드 합니다
 					</div>
 					<div className="t font-ptRegular text-base font-normal leading-[25.6px] text-borderGray ">
@@ -26,7 +26,7 @@ export default function UploadModal() {
 					</div>
 				</section>
 				{/* 업로드 섹션 */}
-				<section className="flex h-[370px] w-[768px] flex-col items-center  rounded-2xl border border-dashed  border-gray-700 py-5 pb-14 pl-14 pr-14 ">
+				{/* <section className="flex h-[370px] w-[768px] flex-col items-center  rounded-2xl border border-dashed  border-gray-700 py-5 pb-14 pl-14 pr-14 ">
 					<div className="mb-10">
 						<Image
 							width={200}
@@ -43,9 +43,10 @@ export default function UploadModal() {
 							또는 위의 아이콘을 클릭하여 업로드 해주세요
 						</p>
 					</div>
-				</section>
+				</section> */}
+				<Dropzone className="flex h-[370px] w-[768px] flex-col items-center  rounded-2xl border border-dashed  border-gray-700 py-5 pb-14 pl-14 pr-14 " />
 				{/* 버튼 섹션 */}
-				<section className="flex flex-row justify-between mt-6">
+				<section className="mt-6 flex flex-row justify-between">
 					<div className="flex flex-col items-start justify-center">
 						<p className="font-ptRegular text-sm  leading-[22.4px] text-borderGray">
 							로고파일의 확장자는 jpg,png,gif 만 가능합니다.

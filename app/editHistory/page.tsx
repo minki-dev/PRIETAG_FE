@@ -68,20 +68,13 @@ function EidtHistory() {
 						직접 디자인한 가격 정책을 관리하고{' '}
 					</div>
 					<div className="min-w-[602px]"> 편집해 보세요 </div>
-
-					<Image
-						src="/page_pre.svg"
-						alt="이전으로 가기"
-						width={20}
-						height={20}
-					/>
 				</div>
 			</div>
-			<div className="h-full min-h-[1331px] w-full  px-[240px]  pt-[80px]">
+			<div className="h-full  w-full  px-[240px]  pb-[240px] pt-[80px]">
 				<div className="relative flex h-[56px]  w-full min-w-[900px] items-center justify-between">
 					<div className="absolute left-0">
 						<Image
-							src="/page_pre.svg"
+							src="/img/page_pre.svg"
 							alt="이전으로 가기"
 							width={40}
 							height={40}
@@ -100,7 +93,7 @@ function EidtHistory() {
 							/>
 							<div className="absolute right-[16px] top-[20px]">
 								<Image
-									src="/search.svg"
+									src="/img/search.svg"
 									alt="검색하기"
 									width={20}
 									height={20}

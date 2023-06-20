@@ -130,12 +130,11 @@ export default function EditTemplate() {
 
 	return (
 		<>
-			{/* <Header /> */}
-			<GlobalModal />
 
-			<TemplateHeader />
-			<main className="mx-auto mt-36 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
-				<Header />
+			{' '}
+			<Header />
+			<main className="mx-auto mt-36 	 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
+
 				<RightMenu />
 				{configState.isPriceModalOpen && <PriceModal />}
 				{configState.isColorModalOpen && <ColorModal />}

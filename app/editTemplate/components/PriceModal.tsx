@@ -130,7 +130,7 @@ export default function PriceModal({}: {}) {
 	/** 버튼 클릭 핸들러 */
 	const handleConfirm = () => {
 		// 가격 카드 설정
-		const updatedCard = priceModal.priceCard.map((card, index) => {
+		const updatedCard = priceModal.priceCards.map((card, index) => {
 			return {
 				...card,
 				price: Number(tierInputValues[index].price),

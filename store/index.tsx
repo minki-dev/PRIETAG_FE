@@ -8,8 +8,10 @@ import featureTableReducer from './slice/featureTableSlice';
 import DNDBoxReducer from './slice/DNDBoxSlice';
 import priceModalReducer from './slice/priceModalSlice';
 import faqSliceReducer from './slice/faqSlice';
+import monthYearToggleReducer from './slice/monthYearToggleSlice';
 import configReducer from './slice/configSlice';
 import priceCardReducer from './slice/priceCardSlice';
+
 // const logger = createLogger();
 
 const rootReducer = combineReducers({

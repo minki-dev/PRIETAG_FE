@@ -12,10 +12,7 @@ type ValidatorFunction = (file: File) => null | FileError | FileError[];
 
 export default function Dropzone({ className }: { className: string }) {
 	const [files, setFiles] = useState<FileWithPreview[]>([]);
-	const { uploadModal, dispatch: uploadDispatch } = useUploadModal();
-	console.log(typeof uploadModal.formData.get('file'));
-	const file = uploadModal.formData.get('file');
-	const imageUrl = file instanceof Blob ? URL.createObjectURL(file) : '';
+	const { dispatch: uploadDispatch } = useUploadModal();
 
 	const onDrop = useCallback((acceptedFiles: File[]) => {
 		const filesWithPreview = acceptedFiles.map((file) =>
@@ -58,7 +55,7 @@ export default function Dropzone({ className }: { className: string }) {
 			},
 			validator: customValidator,
 		});
-
+	console.log('fileRejections', fileRejections);
 	// drag and drop 으로 업로드한 파일을 filReader로  FormData로 변경하는 코드
 
 	return (
@@ -107,9 +104,11 @@ export default function Dropzone({ className }: { className: string }) {
 					<div key={file.name}>
 						<p
 							className="font-ptRegular text-sm text-red-700"
-							key={errors[1].code}
+							key={errors[0].code}
 						>
-							{errors[1].message}
+							{errors[0].code === 'file-invalid-type'
+								? errors[1].message
+								: errors[0].message}
 						</p>
 					</div>
 				))}

@@ -6,12 +6,12 @@ import { stat } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface PriceCard {
-	id: string;
+	id: string; // id값 추가 -> uuid로 설정하여 key 값으로 사용
 	title: string;
 	price: number;
 	discountRate: number;
 	detail: string;
-	detailHeight: number;
+	detailHeight: number; // 가격표 설명 부분 카드별 높이 저장 필요
 	feature: string;
 	content: string[];
 }
@@ -31,10 +31,10 @@ interface TierInput {
 
 type PriceModalState = {
 	isCardSet: boolean;
-	priceCards: PriceCard[];
+	priceCards: PriceCard[]; // priceCard -> priceCards로 변경(끝에 's' 추가)
 	//priceCardOrder: string[];
-	priceCardAreaPadding: number;
-	detailMaxHeight: number;
+	priceCardAreaPadding: number; // 가격 카드 영역에서 패딩 높이 저장 필요
+	detailMaxHeight: number; // 가격 카드 별 설명 부분 높이 중 가장 큰 값 저장
 	cardCount: number;
 	isCheckPerYear: boolean;
 	yearDiscountRate: number;
@@ -42,7 +42,11 @@ type PriceModalState = {
 	isCheckPerTier: boolean;
 	headDiscount: HeadDiscountItem[];
 	tierDiscount: TierDiscountItem[];
+	// 월간/연간 토글 버튼 상태 저장 필요
+	// 월간/연간에 따라 가격, 할인율 표시 위함
 	monthYearToggle: boolean; // false: month, true: year
+	// 사용자 수 입력 값 저장 필요
+	// 가격 카드에서 사용자 수에 따라 가격, 할인율 표시 위함
 	userCount: number;
 };
 type HeadDiscountItem = {
@@ -53,11 +57,10 @@ type TierDiscountItem = {
 	tierPrice: number;
 	discountRate: number;
 };
-
+// 위에 추가된 타입들에 대해 initialState 추가했습니다.
 const initialState: PriceModalState = {
 	isCardSet: false,
 	priceCards: [],
-	//priceCardOrder: [],
 	priceCardAreaPadding: 10,
 	detailMaxHeight: 30,
 	cardCount: 0,
@@ -215,6 +218,7 @@ export const priceModalSlice = createSlice({
 			state.priceCards = Array.from({ length: state.cardCount }, (_, index) => {
 				const tier = state.tierDiscount[index];
 				const { v4: uuidv4 } = require('uuid');
+				// 가격 카드에서 id 값 uuid를 통해 추가 -> key로 사용
 				return {
 					id: uuidv4(),
 					title: '',
@@ -227,7 +231,7 @@ export const priceModalSlice = createSlice({
 				};
 			});
 		},
-
+		// 티어별 price, discountRate를 priceCards에 직접 입력하기 위한 리듀서
 		/** 가격 설정 모달에서 티어 별 가격, 할인율 입력 값 가져오기 */
 		getTierInput: (
 			state: PriceModalState,

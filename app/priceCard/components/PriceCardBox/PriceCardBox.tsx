@@ -64,7 +64,7 @@ function PriceCardBox() {
 		priceModalDispatch(addPriceCard());
 		featureTableDispatch(addColumn());
 	};
-	console.log(priceModal.priceCards);
+	// console.log(priceModal.priceCards);
 	return (
 		<div className="flex min-h-[665px] items-center justify-center gap-10">
 			<DragDropContext onDragEnd={handleOnDragEnd}>

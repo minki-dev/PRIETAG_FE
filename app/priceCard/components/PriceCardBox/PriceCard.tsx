@@ -107,7 +107,7 @@ function PriceCard({
 			setCurrentYearDiscount(0);
 		}
 	};
-	console.log(currentYearDiscount);
+	// console.log(currentYearDiscount);
 
 	// 사용자 수 별 할인율
 	const [currentHeadDiscount, setCurrentHeadDiscount] = React.useState(0);
@@ -130,11 +130,11 @@ function PriceCard({
 			const headDiscountArr = [...priceModal.headDiscount].sort(
 				(a, b) => a.headCount - b.headCount,
 			);
-			console.log(headDiscountArr);
+			// console.log(headDiscountArr);
 			const headRateCalc = headDiscountArr.filter(
 				(level) => level.headCount > priceModal.userCount,
 			);
-			console.log(headRateCalc);
+			// console.log(headRateCalc);
 			if (headRateCalc.length !== 0) {
 				setCurrentHeadDiscount(headRateCalc[0].discountRate);
 			} else {
@@ -149,7 +149,7 @@ function PriceCard({
 		}
 	};
 
-	console.log(currentHeadDiscount);
+	// console.log(currentHeadDiscount);
 
 	// 가격 별 할인 적용
 	const [currentTierDiscount, setCurrentTierDiscount] = React.useState(0);

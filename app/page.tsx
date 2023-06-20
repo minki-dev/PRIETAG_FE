@@ -1,6 +1,6 @@
 'use client';
 
-import UploadModal from './editTemplate/components/UploadModal';
+import UploadModal from './editTemplate/components/UploadModal/UploadModal';
 
 export default function Home() {
 	return (

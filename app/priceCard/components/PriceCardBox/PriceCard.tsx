@@ -240,7 +240,7 @@ function PriceCard({
 										<span className="text-[20px] text-[#747474] line-through">
 											{priceModal.isCheckPerYear && priceModal.monthYearToggle // 연간 구독 여부
 												? (currentHeadPrice * 12).toLocaleString('ko-KR')
-												: currentHeadPrice.toLocaleString('ko-KR')}{' '}
+												: currentHeadPrice.toLocaleString('ko-KR')}
 											{/* 연간 구독 X */}원
 										</span>
 									</>

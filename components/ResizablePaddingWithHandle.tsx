@@ -7,14 +7,14 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 type PropsType = {
-	type: PaddingType
+	type: PaddingType;
 	onAction: (height: number) => void;
 };
 
 function ResizablePaddingWithHandle({ onAction, type }: PropsType) {
 	const { configState } = useConfig();
-	const { isPreview } = configState
-	const { minHeight } = BOX_PROPERTY.PADDING[type]
+	const { isPreview } = configState;
+	const { minHeight } = BOX_PROPERTY.PADDING[type];
 
 	const heightState = useState<number>(minHeight);
 	return (
@@ -30,12 +30,14 @@ function ResizablePaddingWithHandle({ onAction, type }: PropsType) {
 					<div className="absolute -top-5 right-[50%] w-9 translate-x-[50%] text-center text-xs shadow-md">
 						{Math.floor(heightState[0])}px
 					</div>
-					<Image
-						width={24}
-						height={24}
-						src={'/icons/drag_vert.svg'}
-						alt="drag handle svg image"
-					/>
+					{type === 'inner' && (
+						<Image
+							width={24}
+							height={24}
+							src={'/icons/drag_vert.svg'}
+							alt="drag handle svg image"
+						/>
+					)}
 				</div>
 			</div>
 

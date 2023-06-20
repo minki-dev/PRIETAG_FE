@@ -14,7 +14,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <main className="min-h-screen w-screen bg-gray-100">
-            <main className="m-auto max-w-screen-2xl bg-white">{children}</main>
+            <main className="m-auto max-w-[1920px] min-w-[1536px] bg-white">{children}</main>
           </main>
         </ReduxProvider>
       </body>

@@ -4,143 +4,205 @@ import DeleteButton from '@/components/DeleteButton';
 import { ModalTypes } from '@/components/modal/ModalState';
 import { useConfig } from '@/store/slice/configSlice';
 import { openModal, useModal } from '@/store/slice/modalSlice';
-import { addRow, removeRow, removeTable, useTable } from '@/store/slice/tableSlice';
-import React, { useRef, useState } from 'react';
+import {
+	addRow,
+	removeRow,
+	removeTable,
+	updateTableData,
+	toggleFeatureHeader,
+	updateFeatureName,
+	useFeatureTable,
+	toggleFeatureName,
+} from '@/store/slice/featureTableSlice';
+import React from 'react';
 import { HiOutlinePlus } from 'react-icons/hi';
-import { HiOutlineXCircle } from 'react-icons/hi2';
 import { v4 as uuid } from 'uuid';
+import TableRow from './TableRow';
+import { usePriceCard } from '@/store/slice/priceCardSlice';
 
-export default function Table({ tableIndex }: { tableIndex: number }) {
-	const [cards] = useState(['card1', 'card2', 'card3', 'card4']);
-	const [cardIds] = useState([0, 1, 2, 3]);
+type TablePropsType = {
+	featureTableIndex: number;
+	featureHeader: boolean;
+	featureName: boolean;
+	featureNameValue: string;
+	table: string[][];
+};
 
-	const refArray = useRef([]);
-	const featureNameRef = useRef([]);
-	const headRef = useRef(null);
+export default function Table({
+	featureTableIndex,
+	featureHeader,
+	featureName,
+	featureNameValue,
+	table,
+}: TablePropsType) {
+	// @Redux priceCard
+	const { priceCard: priceCardState } = usePriceCard();
 
-	const { tableState, dispatch:tableDispatch } = useTable();
+	// @Redux featureTable
+	const { featureTableState, dispatch: tableDispatch } = useFeatureTable();
+
+	// @Redux modal
 	const { dispatch: modalDispatch } = useModal();
 
-	const tableByRow = tableState.tableList[tableIndex];
-
+	// @Redux config
 	const { configState } = useConfig();
 	const { isPreview } = configState;
 
-	const [withHead, setWithHead] = useState<boolean>(true);
-	const [featureName, setFeatureName] = useState<boolean>(true);
+	//	toggle state's featureHeader boolean by featureTableIndex
+	const toggleHeader = () => {
+		tableDispatch(toggleFeatureHeader({ featureTableIndex }));
+	};
 
+	//	toggle state's featureName boolean by featureTableIndex
+	const toggleName = () => {
+		tableDispatch(toggleFeatureName({ featureTableIndex }));
+	};
+
+	//	set(update) state's featureName by featureTableIndex
+	const setFeatureName = (featureNameValue: string) => {
+		tableDispatch(updateFeatureName({ featureTableIndex, featureNameValue }));
+	};
+
+	//	add row on current table
 	const handleAddRow = () => {
-		tableDispatch(addRow({ tableIndex }));
+		tableDispatch(addRow({ featureTableIndex }));
 	};
 
+	// remove row on current table
 	const handleDeleteRow = (idx: number) => {
-		tableDispatch(removeRow({ tableIndex, rowIndex: idx }));
+		tableDispatch(removeRow({ featureTableIndex, rowIndex: idx }));
 	};
 
+	//	remove this component, resets after modal confirm click
 	const handleTableRemove = () => {
-		if (tableState.tableList.length <= 1) {
-			modalDispatch(openModal(ModalTypes.DetailedFunctionContainerDelModal))
-			return
+		if (featureTableState.featureTableList.length <= 1) {
+			modalDispatch(openModal(ModalTypes.DetailedFunctionContainerDelModal));
+			return;
 		}
-		tableDispatch(removeTable({ tableIndex }))
-	}
+		tableDispatch(removeTable({ featureTableIndex }));
+	};
+
+	//	update target data to state by rowIndex, colIndex, featureTableIndex
+	const handleDataChange = (
+		value: string,
+		colIndex: number,
+		rowIndex: number,
+	) => {
+		tableDispatch(
+			updateTableData({
+				featureTableIndex,
+				rowIndex,
+				colIndex,
+				tableData: value,
+			}),
+		);
+	};
+
 
 	return (
 		<div
 			className={`${
 				isPreview
-					? 'editable-inner-preview'
-					: 'editable-inner  border-[#ebf2ff] hover:border-black'
-			} relative group border-2`}
+					? 'editable-inner-preview border-transparent'
+					: 'group/table editable-inner hover:border-black'
+			} flex justify-center  relative w-full border-2`}
 		>
-			<DeleteButton onClick={handleTableRemove} />
-			{withHead && (
-				<div
-					className={`relative grid grid-cols-5 gap-x-5 border-2  border-transparent  ${
-						!isPreview && 'group hover:border-black'
-					}`}
-				>
-					<DeleteButton onClick={() => setWithHead(!withHead)} />
-					{cardIds.map((cardId, index) => {
-						return (
-							<div
-								key={uuid()}
-								className={`h-10 flex-grow border border-solid p-2 focus:outline-none ${
-									!isPreview
-										? 'border-transparent bg-gray-300 text-white'
-										: 'border-black'
-								} ${index === 0 && 'col-start-2'} text-center`}
-							>
-								{cards[cardId]}
-							</div>
-						);
-					})}
-					<div className="col-span-5 mt-6 border-b-2 border-gray">{}</div>
-				</div>
-			)}
-			{featureName && (
-				<div className="grid grid-cols-5 gap-x-5">
+			<DeleteButton
+				className="group-hover/table:block"
+				onClick={handleTableRemove}
+			/>
+
+			<div className="">
+				{featureHeader && (
 					<div
-						className={`relative  mb-4 ml-[1.5px] mt-4 h-12 border-2 border-dashed border-gray-500 ${
-							!isPreview
-								? 'group hover:border-solid hover:border-black'
-								: 'border-transparent'
-						}`}
+						className={`${
+							!isPreview && 'group/header hover:border-black'
+						} relative flex items-center justify-end border-2  border-transparent`}
 					>
-						<DeleteButton onClick={() => setFeatureName(!featureName)} />
-						<input
-							placeholder={`${!isPreview ? '포함된 기능' : ''}`}
-							disabled={isPreview}
-							className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
+						<DeleteButton
+							className="group-hover/header:block"
+							onClick={toggleHeader}
 						/>
+						{priceCardState.priceCards.map((card) => {
+							return (
+								<div
+									key={uuid()}
+									className={`${
+										!isPreview ? ' bg-gray-300 text-white' : ''
+									} prevent-text-overflow h-10 w-tableData p-2 pl-6 text-center xl:w-tableDataTablet 2xl:w-tableDataPc`}
+								>
+									{card.title}
+								</div>
+							);
+						})}
+						<div className="col-span-5 mt-6 border-b-2 border-gray">{}</div>
 					</div>
-				</div>
-			)}
-			{tableByRow.map((col, rowIndex) => {
-				return (
-					<div
-						key={uuid()}
-						className={` h-16 py-2 ${
-							(rowIndex + 1) % 2 === 0 ? 'bg-[#EAF8FF]' : ''
-						}`}
-					>
+				)}
+				{featureName && (
+					<div className="grid grid-cols-5 gap-x-5">
 						<div
-							className={`relative grid grid-cols-5 gap-x-5 border-2 border-transparent ${
-								!isPreview && 'group hover:border-black'
+							className={`relative  mb-4 ml-[1.5px] mt-4 h-12 border-2 border-dashed border-gray-500 ${
+								!isPreview
+									? 'group/featureName hover:border-solid hover:border-black'
+									: 'border-transparent'
 							}`}
 						>
-							<DeleteButton onClick={() => handleDeleteRow(rowIndex)} />
-							{col.map((col, colIndex) => {
-								return (
-									<input
-										// defaultValue={col}
-										key={uuid()}
-										placeholder={`${
-											!isPreview
-												? '값을 입력해주세요' +
-												  (colIndex !== 0 ? '(공란 가능)' : '')
-												: ''
-										}`}
-										disabled={false}
-										className={`h-10 flex-grow border-2 border-dashed p-2 focus:outline-none disabled:bg-transparent ${
-											!isPreview ? 'border-gray-500' : 'border-transparent'
-										} ${colIndex === 0 ? '' : 'text-center'}`}
-									/>
-								);
-							})}
+							<DeleteButton
+								className="group-hover/featureName:block"
+								onClick={toggleName}
+							/>
+							<input
+								defaultValue={featureNameValue}
+								placeholder={`${!isPreview ? '포함된 기능' : ''}`}
+								disabled={isPreview}
+								onBlur={(e) => setFeatureName(e.target.value)}
+								className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
+							/>
 						</div>
 					</div>
-				);
-			})}
-			{!isPreview && (
-				<button
-					type="button"
-					className="flex items-center justify-center w-full h-16 col-span-5 border"
-					onClick={handleAddRow}
-				>
-					<HiOutlinePlus />
-				</button>
-			)}
+				)}
+				{table.map((row, rowIndex) => {
+					return (
+						<div
+							key={uuid()}
+							className={` h-16 py-2 ${
+								(rowIndex + 1) % 2 === 0 ? 'bg-[#EAF8FF]' : ''
+							}`}
+						>
+							<div
+								className={`relative grid grid-cols-5 gap-x-5 border-2 border-transparent ${
+									!isPreview && 'group/row hover:border-black'
+								}`}
+							>
+								<DeleteButton
+									className="group-hover/row:block"
+									onClick={() => handleDeleteRow(rowIndex)}
+								/>
+								{row.map((data, dataColIndex) => {
+									return (
+										<TableRow
+											defaultValue={data}
+											rowIndex={rowIndex}
+											isPreview={isPreview}
+											colIndex={dataColIndex}
+											handleChange={handleDataChange}
+										/>
+									);
+								})}
+							</div>
+						</div>
+					);
+				})}
+				{!isPreview && (
+					<button
+						type="button"
+						className="flex items-center justify-center w-full h-16 col-span-5 border"
+						onClick={handleAddRow}
+					>
+						<HiOutlinePlus />
+					</button>
+				)}
+			</div>
 			<div className="col-span-5 mt-3 mb-4 border-b-2 border-gray">{}</div>
 		</div>
 	);

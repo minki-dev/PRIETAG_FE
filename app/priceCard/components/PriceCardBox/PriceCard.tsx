@@ -210,7 +210,7 @@ function PriceCard({
 	};
 
 	return (
-		<div className="flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-md">
+		<div className="flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]">
 			<div className="flex w-full flex-col items-center">
 				<label
 					className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}

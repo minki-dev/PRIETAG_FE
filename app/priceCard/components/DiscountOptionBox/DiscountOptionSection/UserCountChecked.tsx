@@ -1,5 +1,6 @@
 'use client';
-import React from 'react';
+import { updateUserCount, usePriceModal } from '@/store/slice/priceModalSlice';
+import React, { useEffect } from 'react';
 
 interface colorInfo {
 	mainColor: string;
@@ -14,6 +15,14 @@ function UserCountChecked({ color }: { color: colorInfo }) {
 		subColor02: `text-[${color.subColor02}]`,
 	};
 
+	const { priceModal, dispatch } = usePriceModal();
+
+	const [currentUserCount, setCurrentUserCount] = React.useState(1);
+
+	useEffect(() => {
+		dispatch(updateUserCount(currentUserCount));
+	}, [currentUserCount]);
+
 	return (
 		<label className="flex h-[48px] w-[280px] items-center justify-end gap-[10px] rounded-[24px] bg-[#F6F6F6] pr-[4px] shadow-md">
 			<span>사용자 수</span>
@@ -24,6 +33,7 @@ function UserCountChecked({ color }: { color: colorInfo }) {
 					min="1"
 					name="userCount"
 					placeholder="0"
+					onChange={(e) => setCurrentUserCount(Number(e.target.value))}
 				/>
 				<span>명</span>
 			</div>

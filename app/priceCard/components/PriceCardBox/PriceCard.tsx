@@ -40,18 +40,25 @@ function PriceCard({
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
 		priceModal.priceCards[cardIndex],
 	);
+	useEffect(() => {
+		setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
+	}, [
+		priceModal.priceCards[cardIndex].price,
+		priceModal.priceCards[cardIndex].discountRate,
+	]);
+
 	// priceCard의 content부분
 	const [priceCardContentEl, setPriceCardContentEl] = React.useState(
 		priceCardInfoEl.content,
 	);
 
+	// detail 부분의 높이
 	const detailRef = React.useRef<HTMLTextAreaElement>(null);
-
 	useEffect(() => {
 		if (detailRef.current) {
 			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
 		}
-	});
+	}, [priceModal.detailMaxHeight]);
 
 	const inputHandle = (
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -177,7 +184,12 @@ function PriceCard({
 
 	useEffect(() => {
 		discountCalc();
-	}, [currentHeadDiscount, currentYearDiscount, currentTierDiscount]);
+	}, [
+		currentHeadDiscount,
+		currentYearDiscount,
+		currentTierDiscount,
+		discountRate,
+	]);
 
 	const discountCalc = () => {
 		//setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
@@ -189,8 +201,8 @@ function PriceCard({
 			setDiscountRate(sumDiscountRate);
 		}
 		const sumDiscountPrice: number =
-			(currentHeadPrice * (100 - discountRate)) / 100;
-		if (priceModal.monthYearToggle) {
+			currentHeadPrice * (1 - discountRate / 100);
+		if (priceModal.isCheckPerYear && priceModal.monthYearToggle) {
 			setDiscountPrice(sumDiscountPrice * 12);
 		} else {
 			setDiscountPrice(sumDiscountPrice);
@@ -221,6 +233,7 @@ function PriceCard({
 						maxLength={12}
 						placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
 						onChange={(event) => inputHandle(event, 'title', 0)}
+						value={priceCardInfoEl.title}
 					/>
 				</label>
 				<div className="mb-[16px] mt-[24px] flex h-[96px] w-[256px] flex-col justify-between">
@@ -262,6 +275,7 @@ function PriceCard({
 						placeholder="요금제 설명"
 						ref={detailRef}
 						onChange={(event) => inputHandle(event, 'detail', 0)}
+						value={priceCardInfoEl.detail}
 					/>
 					<div className="w-[256px] border border-[#989898]"></div>
 				</div>
@@ -273,6 +287,7 @@ function PriceCard({
 						placeholder="포함된 기능"
 						maxLength={17}
 						onChange={(event) => inputHandle(event, 'feature', 0)}
+						value={priceCardInfoEl.feature}
 					/>
 					{priceCardContentEl.map((data, index) => (
 						<input

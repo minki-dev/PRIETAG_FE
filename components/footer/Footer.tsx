@@ -3,8 +3,8 @@ import Image from 'next/image';
 
 function Footer() {
 	return (
-		<div className="shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] flex h-[326px] min-w-[1440px]  max-w-full justify-between bg-white px-[240px] shadow">
-			<div className=" mb-[64px]  mt-[48px] h-[216px] w-[350px] min-w-[340px] ">
+		<div className=" shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] relative  h-[740px] w-full  justify-between  bg-white px-[20px] py-[40px] text-[14px] shadow sm:flex sm:h-[316px] sm:flex-row   sm:px-[120px] xl:px-[240px] xl:text-[16px]">
+			<div className=" w-full min-w-[300px] sm:h-[216px] sm:w-[281px] xl:w-[341px] ">
 				<Image
 					src="/img/ezfee.svg"
 					alt="로고 이미지"
@@ -12,17 +12,17 @@ function Footer() {
 					height={48}
 					className="mb-[38px]"
 				/>{' '}
-				<div className="flex  h-[128px] w-full min-w-full flex-col justify-between">
+				<div className="flex h-[85px] w-full flex-col justify-between xl:h-[94px]">
 					<div className="font-bold">주식회사 질링스</div>
 					<div>서울특별시 관악구 청룡 5길 55, 질링스 빌딩 505호</div>
 					<div>사업자 번호 101-00-1123456</div>
-					<div className="font-medium">
-						Copyright {new Date().getFullYear()}. Zillinks all reserved.
-					</div>
 				</div>
 			</div>
-			<div className="  flex w-[763px] items-center text-[rgb(116,116,116)]">
-				<ul className=" mr-[130px] flex h-[128px] min-w-max flex-col justify-between">
+			<div className="absolute bottom-[30px] font-medium sm:bottom-[70px] ">
+				Copyright {new Date().getFullYear()}. Zillinks all reserved.
+			</div>
+			<div className="my-[32px]  flex w-full flex-col justify-between text-[rgb(116,116,116)]  sm:h-[316px] sm:w-[630px] sm:min-w-[480px] sm:flex-row  xl:h-[326px] xl:min-w-[800px] xl:max-w-[60%]">
+				<ul className="flex h-[116px] w-full flex-col justify-between sm:mt-[32px] sm:w-[121px] sm:min-w-[121px] xl:w-[138px] xl:min-w-[138px]">
 					<div className=" font-bold text-black">Policy</div>
 					<a>
 						{' '}
@@ -37,8 +37,8 @@ function Footer() {
 						<li>FAQ</li>{' '}
 					</a>
 				</ul>
-				<ul className="mr-[130px] flex h-[128px] min-w-max flex-col justify-between">
-					<div className="  font-bold text-black">Contact</div>
+				<ul className="mt-[32px] flex h-[116px] w-full flex-col justify-between sm:w-[180px] sm:min-w-[180px] xl:w-[200px] xl:min-w-[200px]">
+					<div className="font-bold text-black">Contact</div>
 					<a>
 						{' '}
 						<li>https://zillinks.com/contact/</li>{' '}
@@ -52,7 +52,7 @@ function Footer() {
 						<li>+82.1234.5678.</li>{' '}
 					</a>
 				</ul>
-				<ul className="flex h-[128px] min-w-max flex-col justify-between">
+				<ul className=" mt-[32px] flex h-[116px] w-full flex-col justify-between sm:w-[153px] sm:min-w-[153px] xl:w-[184px] xl:min-w-[184px]">
 					<div className=" font-bold text-black">Family Site</div>
 					<a>
 						{' '}
@@ -73,3 +73,7 @@ function Footer() {
 }
 
 export default Footer;
+
+{
+	/* <div className="shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] flex h-[740px] w-full justify-between bg-white px-[20px] shadow"> */
+}

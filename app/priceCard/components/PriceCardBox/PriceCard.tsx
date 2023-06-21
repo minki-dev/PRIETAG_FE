@@ -210,20 +210,21 @@ function PriceCard({
 	};
 
 	return (
-		<div className="flex h-full min-h-[665px] w-[342px] flex-col items-center justify-between rounded-lg bg-white shadow-md">
+		<div className="flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-md">
 			<div className="flex w-full flex-col items-center">
 				<label
-					className={`flex h-[79px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
+					className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
 				>
 					<input
-						className={`h-[47px] w-[310px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
+						className={`h-[47px] w-[272px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
 						type="text"
-						placeholder="요금제 명을 입력해 주세요"
+						maxLength={12}
+						placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
 						onChange={(event) => inputHandle(event, 'title', 0)}
 					/>
 				</label>
-				<div className="flex w-[294px] flex-col gap-[12px] pb-[16px] pt-[12px]">
-					<span className={`${textColor.mainColor} text-[32px] font-bold`}>
+				<div className="mb-[16px] mt-[24px] flex h-[96px] w-[256px] flex-col justify-between">
+					<span className="text-[32px] font-bold">
 						{discountPrice.toLocaleString('ko-KR')}원/
 						{priceModal.isCheckPerYear && priceModal.monthYearToggle
 							? '연'
@@ -254,35 +255,37 @@ function PriceCard({
 						) : null}
 					</div>
 				</div>
-				<div className="w-[294px] border border-[#989898]"></div>
-				<div className="min-h-[30px] w-[310px] py-[16px]">
+				<div className="w-[256px] border border-[#989898]"></div>
+				<div className="mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center">
 					<textarea
-						className="w-[310px] overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+						className="mb-[16px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 						placeholder="요금제 설명"
 						ref={detailRef}
 						onChange={(event) => inputHandle(event, 'detail', 0)}
 					/>
+					<div className="w-[256px] border border-[#989898]"></div>
 				</div>
-				<div className="w-[294px] border border-[#989898]"></div>
 
-				<div className="flex min-h-[302px] w-[310px] flex-col gap-[2px] py-[24px]">
+				<div className="flex flex-col gap-[2px]">
 					<input
-						className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
+						className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
 						type="text"
 						placeholder="포함된 기능"
+						maxLength={17}
 						onChange={(event) => inputHandle(event, 'feature', 0)}
 					/>
 					{priceCardContentEl.map((data, index) => (
 						<input
-							className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+							className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 							type="text"
 							placeholder="세부 기능을 입력해 주세요"
+							maxLength={17}
 							value={data}
 							onChange={(event) => inputHandle(event, 'content', index)}
 						/>
 					))}
 					<button
-						className="w-[310px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px]"
+						className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC]"
 						type="button"
 						onClick={() =>
 							setPriceCardContentEl([
@@ -296,7 +299,7 @@ function PriceCard({
 				</div>
 			</div>
 			<a
-				className={`mb-[24px] flex h-[48px] w-[310px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
+				className={`my-[40px] flex h-[48px] w-[256px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
 				type="button"
 				onClick={() => {
 					dispatch(deletePriceCard(cardIndex));

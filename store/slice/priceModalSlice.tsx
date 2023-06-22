@@ -2,7 +2,6 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '..';
-import { stat } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface PriceCard {
@@ -37,17 +36,19 @@ interface ContentData {
 
 type PriceModalState = {
 	isCardSet: boolean;
+	highLightIndex: number;
+	pricing: string;
 	priceCards: PriceCard[]; // priceCard -> priceCards로 변경(끝에 's' 추가)
 	//priceCardOrder: string[];
 	priceCardAreaPadding: number; // 가격 카드 영역에서 패딩 높이 저장 필요
 	detailMaxHeight: number; // 가격 카드 별 설명 부분 높이 중 가장 큰 값 저장
 	cardCount: number;
 	isCheckPerYear: boolean;
+	isCardHighLight: boolean;
 	yearDiscountRate: number;
 	isCheckPerPerson: boolean;
-	isCheckPerTier: boolean;
 	headDiscount: HeadDiscountItem[];
-	tierDiscount: TierDiscountItem[];
+
 	// 월간/연간 토글 버튼 상태 저장 필요
 	// 월간/연간에 따라 가격, 할인율 표시 위함
 	monthYearToggle: boolean; // false: month, true: year
@@ -66,26 +67,23 @@ type TierDiscountItem = {
 // 위에 추가된 타입들에 대해 initialState 추가했습니다.
 const initialState: PriceModalState = {
 	isCardSet: false,
+	pricing: '정액제',
 	priceCards: [],
 	priceCardAreaPadding: 10,
 	detailMaxHeight: 30,
+	highLightIndex: 0,
 	cardCount: 0,
-	isCheckPerYear: true,
+	isCheckPerYear: false,
+	isCardHighLight: false,
 	yearDiscountRate: 0,
-	isCheckPerPerson: true,
-	isCheckPerTier: true,
+	isCheckPerPerson: false,
 	headDiscount: [
 		{ headCount: 0, discountRate: 0 },
 		{ headCount: 0, discountRate: 0 },
 		{ headCount: 0, discountRate: 0 },
 		{ headCount: 0, discountRate: 0 },
 	],
-	tierDiscount: [
-		{ tierPrice: 0, discountRate: 0 },
-		{ tierPrice: 0, discountRate: 0 },
-		{ tierPrice: 0, discountRate: 0 },
-		{ tierPrice: 0, discountRate: 0 },
-	],
+
 	monthYearToggle: false, // false: month, true: year
 	userCount: 1,
 };
@@ -96,12 +94,25 @@ export const priceModalSlice = createSlice({
 	name: 'priceModal',
 	initialState,
 	reducers: {
+		/** 요금책정 방식 설정 */
+		setPricing: (state, action) => {
+			state.pricing = action.payload;
+		},
 		/** 연간 할인율 설정 */
 		setYearDiscount: (
 			state: PriceModalState,
 			action: PayloadAction<number>,
 		) => {
-			return { ...state, yearDiscountRate: action.payload };
+			state.yearDiscountRate = action.payload;
+		},
+		/** 특정 강조 카드 활성화 토글 */
+		toggleHighLight: (state: PriceModalState) => {
+			state.isCardHighLight = !state.isCardHighLight;
+			return state;
+		},
+		/** 특정 강조 카드 인덱스 갱신 */
+		updateHighLightIndex: (state, action) => {
+			state.highLightIndex = action.payload;
 		},
 		updateYearDiscount: (
 			state: PriceModalState,
@@ -121,31 +132,7 @@ export const priceModalSlice = createSlice({
 		) => {
 			return { ...state, cardCount: action.payload };
 		},
-		/** 티어별 가격,할인율 업데이트  */
-		updateTierDiscount: (
-			state: PriceModalState,
-			action: PayloadAction<{
-				index: number;
-				tierPrice: number;
-				discountRate: number;
-			}>,
-		) => {
-			if (state.isCheckPerTier) {
-				const { index, tierPrice, discountRate } = action.payload;
 
-				if (index >= 0 && index < state.tierDiscount.length) {
-					const updatedTierDiscount = [...state.tierDiscount];
-					updatedTierDiscount[index] = {
-						tierPrice,
-						discountRate,
-					};
-
-					return { ...state, tierDiscount: updatedTierDiscount };
-				}
-
-				return state;
-			}
-		},
 		/** 인원별 할인율 업데이트 */
 		updateHeadDiscount: (
 			state: PriceModalState,
@@ -188,19 +175,15 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<boolean>,
 		) => {
-			return { ...state, isCheckPerPerson: action.payload };
+			if (state.pricing === '정액제') {
+				state.isCheckPerPerson = action.payload;
+			} else {
+				state.isCheckPerPerson = !action.payload;
+			}
+
+			return state;
 		},
-		/** 티어별 할인율 활성화 토글 */
-		toggleIsCheckPerTier: (state: PriceModalState) => {
-			return { ...state, isCheckPerTier: !state.isCheckPerTier };
-		},
-		/** 티어별 할인율 활성화 여부 로드 */
-		getIsCheckPerTier: (
-			state: PriceModalState,
-			action: PayloadAction<boolean>,
-		) => {
-			return { ...state, isCheckPerTier: action.payload };
-		},
+
 		/** 가격 카드 설정 */
 		setPriceCard: (
 			state: PriceModalState,
@@ -219,24 +202,6 @@ export const priceModalSlice = createSlice({
 			return { ...state, isCardSet: action.payload };
 		},
 
-		/** 설정한 수만큼 카드 생성  */
-		createPriceCard: (state: PriceModalState) => {
-			state.priceCards = Array.from({ length: state.cardCount }, (_, index) => {
-				const tier = state.tierDiscount[index];
-				const { v4: uuidv4 } = require('uuid');
-				// 가격 카드에서 id 값 uuid를 통해 추가 -> key로 사용
-				return {
-					id: uuidv4(),
-					title: '',
-					price: tier.tierPrice,
-					discountRate: tier.discountRate,
-					detail: '',
-					detailHeight: 30,
-					feature: '',
-					content: [''],
-				};
-			});
-		},
 		// 티어별 price, discountRate를 priceCards에 직접 입력하기 위한 리듀서
 		/** 가격 설정 모달에서 티어 별 가격, 할인율 입력 값 가져오기 */
 		getTierInput: (
@@ -366,21 +331,18 @@ export const priceModalSlice = createSlice({
 });
 
 export const {
+	setPricing,
 	updateYearDiscount,
 	toggleIsCheckPerPerson,
-	toggleIsCheckPerTier,
 	toggleIsCheckPerYear,
 	updateCardCount,
-	updateTierDiscount,
 	updateHeadDiscount,
 	setYearDiscount,
 	getIsCheckPerPerson,
-	getIsCheckPerTier,
 	getIsCheckPerYear,
 	setPriceCard,
 	toggleIsCardSet,
 	getIsCardSet,
-	createPriceCard,
 	addPriceCard,
 	changeOrderPriceCard,
 	updatePriceCard,
@@ -388,6 +350,8 @@ export const {
 	updatePriceCardAreaPadding,
 	updateMonthYearToggle,
 	updateUserCount,
+	updateHighLightIndex,
+	toggleHighLight,
 	addContent,
 	updateContent,
 } = priceModalSlice.actions;

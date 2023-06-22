@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '..';
 
 interface UploadModalState {
-	formData: FormData;
+	formData: FormData | null;
 }
 
 const initialState: UploadModalState = {
-	formData: new FormData(),
+	formData: null,
 };
 
 export const uploadModalSlice = createSlice({

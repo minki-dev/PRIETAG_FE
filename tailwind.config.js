@@ -33,6 +33,11 @@ module.exports = {
 				tableData: '20px',
 				21: '84px',
 			},
+			backgroundColor: {
+				mainColor: '#00A3FF',
+				optionColor: '#DDF3FF',
+				disabledGray: '#BCBCBC',
+			},
 			borderColor: {
 				'gray-700': '#747474',
 			},
@@ -44,9 +49,9 @@ module.exports = {
 				borderGray: '#747474',
 			},
 			boxShadow: {
-        'outer': 'inset 0 0 1px 16px #DCFBD9',
-        'inner': 'inset 0 0 1px 16px #ebf2ff',
-      }
+				outer: 'inset 0 0 1px 16px #DCFBD9',
+				inner: 'inset 0 0 1px 16px #ebf2ff',
+			},
 		},
 	},
 	plugins: [],

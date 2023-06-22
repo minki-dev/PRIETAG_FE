@@ -3,13 +3,12 @@
 'use client';
 
 import React from 'react';
+import PriceModalForm from './PriceModalForm';
 
-import UploadModalForm from './UploadModalForm';
-
-export default function UploadModal() {
+export default function PriceModal() {
 	return (
 		<div className="fixed top-0 left-0 z-30 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
-			<UploadModalForm />
+			<PriceModalForm />
 		</div>
 	);
 }

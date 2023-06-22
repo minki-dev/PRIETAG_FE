@@ -5,6 +5,8 @@ import { RootState } from '..';
 type ConfigState = {
 	isColorModalOpen: boolean;
 	isPriceModalOpen: boolean;
+	isUploadModalOpen: boolean;
+	isOnboardingModalOpen: boolean;
 	isPreview: boolean;
 	color: Colors;
 	font: string;
@@ -25,6 +27,8 @@ type ConfigPayload = {
 const initialState: ConfigState = {
 	isColorModalOpen: false,
 	isPriceModalOpen: false,
+	isUploadModalOpen: false,
+	isOnboardingModalOpen: false,
 	isPreview: false,
 	color: {
 		mainColor: '#00A3FF',
@@ -49,6 +53,12 @@ export const configSlice = createSlice({
 			console.log('toggleColorModal');
 			return { ...state, isColorModalOpen: !state.isColorModalOpen };
 		},
+		toggleOnBoardingModal: (state: ConfigState) => {
+			// PriceModal UploadModal ColorModal의 isOpen값을 모두 변경
+			state.isOnboardingModalOpen = !state.isOnboardingModalOpen;
+			return state;
+		},
+
 		save: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
 			return state;
 		},
@@ -92,6 +102,7 @@ export const {
 	forward,
 	togglePriceModal,
 	toggleColorModal,
+	toggleOnBoardingModal,
 } = configSlice.actions;
 
 export function useConfig() {

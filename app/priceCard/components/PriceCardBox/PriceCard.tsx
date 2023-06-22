@@ -170,16 +170,8 @@ function PriceCard({
 	const [currentTierDiscount, setCurrentTierDiscount] = React.useState(0);
 
 	useEffect(() => {
-		tierDiscountCalc();
-	}, [priceModal.isCheckPerTier, priceModal.tierDiscount]);
-
-	const tierDiscountCalc = () => {
-		if (priceModal.isCheckPerTier) {
-			setCurrentTierDiscount(priceCardInfoEl.discountRate);
-		} else {
-			setCurrentTierDiscount(0);
-		}
-	};
+		setCurrentTierDiscount(priceCardInfoEl.discountRate);
+	}, [priceCardInfoEl.discountRate]);
 
 	// 전체 할인율
 	const [discountRate, setDiscountRate] = React.useState(

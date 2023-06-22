@@ -48,6 +48,7 @@ function PriceCard({
 		priceModal.priceCards[cardIndex].price,
 		priceModal.priceCards[cardIndex].discountRate,
 		priceModal.priceCards[cardIndex].content,
+		priceModal.pricing,
 	]);
 
 	// priceCard의 content부분
@@ -137,30 +138,37 @@ function PriceCard({
 		priceModal.userCount,
 		priceModal.isCheckPerPerson,
 		priceModal.headDiscount,
+		priceModal.pricing,
+		priceCardInfoEl,
 	]);
 
 	const headDiscountCalc = () => {
 		//setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
-		if (priceModal.isCheckPerPerson) {
-			const headDiscountArr = [...priceModal.headDiscount].sort(
-				(a, b) => a.headCount - b.headCount,
-			);
-			// console.log(headDiscountArr);
-			const headRateCalc = headDiscountArr.filter(
-				(level) => level.headCount > priceModal.userCount,
-			);
-			// console.log(headRateCalc);
-			if (headRateCalc.length !== 0) {
-				setCurrentHeadDiscount(headRateCalc[0].discountRate);
-			} else {
-				setCurrentHeadDiscount(
-					headDiscountArr[headDiscountArr.length - 1].discountRate,
+		if (priceModal.pricing === '정량제') {
+			// 정량제일 경우 사용자 수 할인 여부와 관계없이 사용자 수 카운트
+			if (priceModal.isCheckPerPerson) {
+				const headDiscountArr = [...priceModal.headDiscount].sort(
+					(a, b) => a.headCount - b.headCount,
 				);
+				// console.log(headDiscountArr);	// 현재 사용자 수가 level당 설정된 수 미만인 경우만 저장
+				const headRateCalc = headDiscountArr.filter(
+					(level) => level.headCount > priceModal.userCount,
+				);
+				// console.log(headRateCalc);	// 조건에 맞는 사용자 수당 할인율이 하나라도 있다면
+				if (headRateCalc.length !== 0) {
+					setCurrentHeadDiscount(headRateCalc[0].discountRate);
+				} else {
+					setCurrentHeadDiscount(
+						headDiscountArr[headDiscountArr.length - 1].discountRate,
+					);
+				}
+			} else {
+				setCurrentHeadDiscount(0);
 			}
 			setCurrentHeadPrice(priceCardInfoEl.price * priceModal.userCount);
 		} else {
-			setCurrentHeadDiscount(0);
 			setCurrentHeadPrice(priceCardInfoEl.price);
+			setCurrentHeadDiscount(0);
 		}
 	};
 
@@ -173,11 +181,11 @@ function PriceCard({
 		setCurrentTierDiscount(priceCardInfoEl.discountRate);
 	}, [priceCardInfoEl.discountRate]);
 
-	// 전체 할인율
+	// 전체 할인율 (초기화는 티어별 할인율로)
 	const [discountRate, setDiscountRate] = React.useState(
 		priceCardInfoEl.discountRate,
 	);
-	// 모든 할인이 적용된 가격
+	// 모든 할인이 적용된 가격 (초기화는 티어별 가격으로)
 	const [discountPrice, setDiscountPrice] = React.useState(
 		priceCardInfoEl.price,
 	);
@@ -186,9 +194,15 @@ function PriceCard({
 		discountCalc();
 	}, [
 		currentHeadDiscount,
+		currentHeadPrice,
 		currentYearDiscount,
 		currentTierDiscount,
 		discountRate,
+		priceModal.pricing,
+		priceModal.monthYearToggle,
+		priceModal.userCount,
+		priceModal.isCheckPerPerson,
+		priceModal.isCheckPerYear,
 	]);
 
 	const discountCalc = () => {

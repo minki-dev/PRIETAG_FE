@@ -28,6 +28,12 @@ interface TierInput {
 	price: number;
 	discountRate: number;
 }
+// priceCard의 content[]수정할 때 사용
+interface ContentData {
+	cardIndex: number;
+	contentIndex: number;
+	contentData: string;
+}
 
 type PriceModalState = {
 	isCardSet: boolean;
@@ -298,6 +304,24 @@ export const priceModalSlice = createSlice({
 			});
 		},
 
+		/** 가격 카드 content 부분 추가하기 */
+		addContent: (
+			state: PriceModalState,
+			action: PayloadAction<number>, // 카드의 인덱스: number 넘겨받음
+		) => {
+			state.priceCards[action.payload].content.push('');
+		},
+
+		/** 가격 카드 content 부분 업데이트하기 */
+		updateContent: (
+			state: PriceModalState,
+			action: PayloadAction<ContentData>,
+		) => {
+			state.priceCards[action.payload.cardIndex].content[
+				action.payload.contentIndex
+			] = action.payload.contentData;
+		},
+
 		/** 가격 카드 삭제하기 */
 		deletePriceCard: (
 			state: PriceModalState,
@@ -364,6 +388,8 @@ export const {
 	updatePriceCardAreaPadding,
 	updateMonthYearToggle,
 	updateUserCount,
+	addContent,
+	updateContent,
 } = priceModalSlice.actions;
 
 export function usePriceModal() {

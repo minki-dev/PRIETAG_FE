@@ -4,8 +4,10 @@ import {
 	deletePriceCard,
 	updatePriceCard,
 	usePriceModal,
+	addContent,
 } from '@/store/slice/priceModalSlice';
 import React, { useEffect } from 'react';
+import PriceCardContent from './PriceCardContent';
 
 interface priceCardInfo {
 	id: string;
@@ -45,6 +47,7 @@ function PriceCard({
 	}, [
 		priceModal.priceCards[cardIndex].price,
 		priceModal.priceCards[cardIndex].discountRate,
+		priceModal.priceCards[cardIndex].content,
 	]);
 
 	// priceCard의 content부분
@@ -56,23 +59,24 @@ function PriceCard({
 	const detailRef = React.useRef<HTMLTextAreaElement>(null);
 	useEffect(() => {
 		if (detailRef.current) {
+			detailRef.current.style.height = '30px';
 			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
 		}
 	}, [priceModal.detailMaxHeight]);
 
+	// feature 부분의 높이
+	const featureRef = React.useRef<HTMLTextAreaElement>(null);
+	useEffect(() => {
+		if (featureRef.current) {
+			featureRef.current.style.height = '30px';
+		}
+	}, []);
+
 	const inputHandle = (
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 		name: string,
-		index: number,
 	) => {
-		if (name === 'content') {
-			const newPriceCardContentEl = Array.from(priceCardContentEl);
-			newPriceCardContentEl[index] = event.target.value;
-			setPriceCardContentEl(newPriceCardContentEl);
-			setPriceCardInfoEl(
-				Object.assign({}, priceCardInfoEl, { content: priceCardContentEl }),
-			);
-		} else if (name === 'detail') {
+		if (name === 'detail') {
 			if (detailRef.current) {
 				detailRef.current.style.height = '30px';
 				detailRef.current.style.height = detailRef.current.scrollHeight + 'px';
@@ -87,6 +91,10 @@ function PriceCard({
 			setPriceCardInfoEl(
 				Object.assign({}, priceCardInfoEl, { [name]: event.target.value }),
 			);
+		}
+		if (featureRef.current) {
+			featureRef.current.style.height = '30px';
+			featureRef.current.style.height = featureRef.current.scrollHeight + 'px';
 		}
 		dispatch(
 			updatePriceCard({
@@ -232,7 +240,7 @@ function PriceCard({
 						type="text"
 						maxLength={12}
 						placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
-						onChange={(event) => inputHandle(event, 'title', 0)}
+						onChange={(event) => inputHandle(event, 'title')}
 						value={priceCardInfoEl.title}
 					/>
 				</label>
@@ -271,43 +279,30 @@ function PriceCard({
 				<div className="w-[256px] border border-[#989898]"></div>
 				<div className="mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center">
 					<textarea
-						className="mb-[16px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+						className="mb-[16px] min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 						placeholder="요금제 설명"
 						ref={detailRef}
-						onChange={(event) => inputHandle(event, 'detail', 0)}
+						onChange={(event) => inputHandle(event, 'detail')}
 						value={priceCardInfoEl.detail}
 					/>
 					<div className="w-[256px] border border-[#989898]"></div>
 				</div>
 
 				<div className="flex flex-col gap-[2px]">
-					<input
-						className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
-						type="text"
+					<textarea
+						className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
 						placeholder="포함된 기능"
-						maxLength={17}
-						onChange={(event) => inputHandle(event, 'feature', 0)}
+						onChange={(event) => inputHandle(event, 'feature')}
 						value={priceCardInfoEl.feature}
+						ref={featureRef}
 					/>
-					{priceCardContentEl.map((data, index) => (
-						<input
-							className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
-							type="text"
-							placeholder="세부 기능을 입력해 주세요"
-							maxLength={17}
-							value={data}
-							onChange={(event) => inputHandle(event, 'content', index)}
-						/>
+					{priceModal.priceCards[cardIndex].content.map((data, index) => (
+						<PriceCardContent cardIndex={cardIndex} contentIndex={index} />
 					))}
 					<button
 						className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC]"
 						type="button"
-						onClick={() =>
-							setPriceCardContentEl([
-								...Array.from(priceCardContentEl),
-								...[''],
-							])
-						}
+						onClick={() => dispatch(addContent(cardIndex))}
 					>
 						+
 					</button>

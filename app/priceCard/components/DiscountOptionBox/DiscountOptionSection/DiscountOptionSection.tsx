@@ -2,6 +2,7 @@
 import React from 'react';
 import MonthYearChecked from './MonthYearChecked';
 import UserCountChecked from './UserCountChecked';
+import { usePriceModal } from '@/store/slice/priceModalSlice';
 
 interface colorInfo {
 	mainColor: string;
@@ -15,11 +16,16 @@ function DiscountOptionSection() {
 		subColor01: '#60C8FF',
 		subColor02: '#EAF8FF',
 	};
+	const { priceModal, dispatch } = usePriceModal();
 
 	return (
 		<div className="flex justify-center gap-10">
-			<MonthYearChecked color={colorInfoEl} />
-			<UserCountChecked color={colorInfoEl} />
+			{priceModal.isCheckPerYear ? (
+				<MonthYearChecked color={colorInfoEl} />
+			) : null}
+			{priceModal.isCheckPerPerson && priceModal.pricing === '정량제' ? (
+				<UserCountChecked color={colorInfoEl} />
+			) : null}
 		</div>
 	);
 }

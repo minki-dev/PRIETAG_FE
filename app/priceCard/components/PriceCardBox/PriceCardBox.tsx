@@ -1,16 +1,20 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AddCardButton from './AddCardButton';
 import PriceCard from './PriceCard';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 import { StrictModeDroppable as Droppable } from '@/app/helpers/StrictModeDroppable';
 import { v4 as uuidv4 } from 'uuid';
 import {
-	createPriceCard,
+	addPriceCard,
 	changeOrderPriceCard,
-	usePriceCard,
-} from '@/store/slice/priceCardSlice';
-import { addColumn, swapColumns, useFeatureTable } from '@/store/slice/featureTableSlice';
+	usePriceModal,
+} from '@/store/slice/priceModalSlice';
+import {
+	addColumn,
+	swapColumns,
+	useFeatureTable,
+} from '@/store/slice/featureTableSlice';
 
 interface priceCardid {
 	id: string;
@@ -29,8 +33,8 @@ interface colorInfo {
 // });
 
 function PriceCardBox() {
-	const { priceCard, dispatch: priceCardDispatch } = usePriceCard();
-	const { dispatch: featureTableDispatch } = useFeatureTable()
+	const { priceModal, dispatch: priceModalDispatch } = usePriceModal();
+	const { dispatch: featureTableDispatch } = useFeatureTable();
 
 	const colorInfoEl: colorInfo = {
 		mainColor: '#00A3FF',
@@ -39,28 +43,28 @@ function PriceCardBox() {
 	};
 
 	const reorder = (startIndex: number, endIndex: number) => {
-		const result = Array.from(priceCard.priceCardOrder);
+		const result = Array.from(priceModal.priceCards);
 		const [removed] = result.splice(startIndex, 1);
 		result.splice(endIndex, 0, removed);
 
-		priceCardDispatch(changeOrderPriceCard(result));
-		featureTableDispatch(swapColumns({ colIndex: startIndex, to: endIndex }))
+		priceModalDispatch(changeOrderPriceCard(result));
+		featureTableDispatch(swapColumns({ colIndex: startIndex, to: endIndex }));
 	};
-	
+
 	const handleOnDragEnd = (result: DropResult) => {
 		if (!result.destination) return;
-		
+
 		reorder(result.source.index, result.destination.index);
 	};
 	const { v4: uuidv4 } = require('uuid');
 
 	const handleAddCard = () => {
-		if (priceCard.priceCardOrder.length > 3) return;
+		if (priceModal.priceCards.length > 3) return;
 
-		priceCardDispatch(createPriceCard(uuidv4()));
-		featureTableDispatch(addColumn())
+		priceModalDispatch(addPriceCard());
+		featureTableDispatch(addColumn());
 	};
-
+	// console.log(priceModal.priceCards);
 	return (
 		<div className="flex min-h-[665px] items-center justify-center gap-10">
 			<DragDropContext onDragEnd={handleOnDragEnd}>
@@ -70,11 +74,11 @@ function PriceCardBox() {
 							{...provided.droppableProps}
 							ref={provided.innerRef}
 							//style={getListStyle(snapshot.isDraggingOver)}
-							className="flex justify-center gap-10 flex-nowrap"
+							className="flex flex-nowrap justify-center gap-10"
 						>
-							{!priceCard.priceCardOrder[0]
+							{!priceModal.priceCards
 								? null
-								: priceCard.priceCards.map((card, index) => (
+								: priceModal.priceCards.map((card, index) => (
 										<Draggable
 											key={card.id}
 											draggableId={card.id}
@@ -86,7 +90,7 @@ function PriceCardBox() {
 													{...provided.dragHandleProps}
 													ref={provided.innerRef}
 												>
-													<PriceCard cardIndex={index} cardId={card.id} color={colorInfoEl} />
+													<PriceCard cardIndex={index} color={colorInfoEl} />
 												</div>
 											)}
 										</Draggable>
@@ -96,7 +100,7 @@ function PriceCardBox() {
 					)}
 				</Droppable>
 			</DragDropContext>
-			{priceCard.priceCardOrder.length > 3 ? null : (
+			{priceModal.priceCards.length > 3 ? null : (
 				<button type="button" onClick={handleAddCard}>
 					<AddCardButton color={colorInfoEl} />
 				</button>

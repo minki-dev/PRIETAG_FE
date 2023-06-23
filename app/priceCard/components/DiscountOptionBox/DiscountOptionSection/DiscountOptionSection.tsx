@@ -23,7 +23,7 @@ function DiscountOptionSection() {
 			{priceModal.isCheckPerYear ? (
 				<MonthYearChecked color={colorInfoEl} />
 			) : null}
-			{priceModal.isCheckPerPerson ? (
+			{priceModal.pricing === '정량제' ? (
 				<UserCountChecked color={colorInfoEl} />
 			) : null}
 		</div>

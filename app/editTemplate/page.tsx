@@ -7,19 +7,22 @@ import {
 	setYearDiscount,
 	updateCardCount,
 	updateHeadDiscount,
-	updateTierDiscount,
 	usePriceModal,
 } from '@/store/slice/priceModalSlice';
 import Counter from '@/components/Counter';
 import FAQ from './components/FAQ';
-import PriceModal from './components/PriceModal';
+import PriceModal from './components/PriceModal/PriceModal';
 // import { testCard } from './components/Test';
 import RightMenu from './components/RightMenu';
 import { FAQCard, useFAQ } from '@/store/slice/faqSlice';
 import { set } from 'react-hook-form';
 import DraggableArea from './components/DraggableArea';
 import Table from './components/Table/Table';
-import { togglePriceModal, useConfig } from '@/store/slice/configSlice';
+import {
+	toggleOnBoardingModal,
+	togglePriceModal,
+	useConfig,
+} from '@/store/slice/configSlice';
 import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
 import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
 import TableContainer from './components/Table/TableContainer';
@@ -33,6 +36,7 @@ import debounce from 'lodash.debounce';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
 import Footer from '@/components/footer/Footer';
+import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -114,6 +118,12 @@ export default function EditTemplate() {
 	// 	dispatch(setPriceCard(testCard));
 	// }, []);
 
+	useEffect(() => {
+		if (priceModal.isCardSet === false) {
+			configDispatch(toggleOnBoardingModal());
+		}
+	}, []);
+
 	const { configState, dispatch: configDispatch } = useConfig();
 	const { isPreview } = configState;
 
@@ -132,6 +142,7 @@ export default function EditTemplate() {
 	return (
 		<>
 			{' '}
+			{configState.isOnboardingModalOpen && <OnBoardingModal />}
 			<Header />
 			<main className="mx-auto mt-36 	 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
 				<RightMenu />

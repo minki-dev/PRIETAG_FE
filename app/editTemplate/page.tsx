@@ -32,6 +32,7 @@ import { updateHeight, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import debounce from 'lodash.debounce';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
+import Footer from '@/components/footer/Footer';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -130,11 +131,9 @@ export default function EditTemplate() {
 
 	return (
 		<>
-
 			{' '}
 			<Header />
 			<main className="mx-auto mt-36 	 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
-
 				<RightMenu />
 				{configState.isPriceModalOpen && <PriceModal />}
 				{configState.isColorModalOpen && <ColorModal />}
@@ -168,6 +167,7 @@ export default function EditTemplate() {
 					<DraggableArea areaType="faqArea" />
 					<FAQ />
 				</section>
+				<Footer />
 			</main>
 		</>
 	);

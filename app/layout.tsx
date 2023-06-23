@@ -23,5 +23,3 @@ export default function RootLayout({
 		</html>
 	);
 }
-
-// className="m-auto max-w-screen-2xl bg-white"

@@ -6,8 +6,9 @@ import {
 	usePriceModal,
 	addContent,
 } from '@/store/slice/priceModalSlice';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PriceCardContent from './PriceCardContent';
+import Image from 'next/image';
 
 interface priceCardInfo {
 	id: string;
@@ -235,20 +236,108 @@ function PriceCard({
 		subColor02: `text-[${color.subColor02}]`,
 	};
 
+	const cardRef = useRef<HTMLDivElement>(null);
+	const [isCardHovering, setIsCardHovering] = useState(false);
+	const titleRef = useRef<HTMLDivElement>(null);
+	const [isTitleHovering, setIsTitleHovering] = useState(false);
+	const detailHoverRef = useRef<HTMLDivElement>(null);
+	const [isDetailHovering, setIsDetailHovering] = useState(false);
+	const featureHoverRef = useRef<HTMLDivElement>(null);
+	const [isFeatureHovering, setIsFeatureHovering] = useState(false);
+
+	// card
+	const cardOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsCardHovering(true);
+		if (cardRef.current) cardRef.current.style.border = '2px solid #000000';
+	};
+	const cardOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsCardHovering(false);
+		if (cardRef.current)
+			cardRef.current.style.border = '2px solid rgba(0, 0, 0, 0.15)';
+	};
+
+	// title
+	const titleOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsTitleHovering(true);
+		if (titleRef.current) titleRef.current.style.border = '2px solid #000000';
+	};
+	const titleOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsTitleHovering(false);
+		if (titleRef.current)
+			titleRef.current.style.border = '2px solid rgba(0, 0, 0, 0)';
+	};
+
+	// detail
+	const detailOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsDetailHovering(true);
+		if (detailHoverRef.current)
+			detailHoverRef.current.style.border = '2px solid #000000';
+	};
+	const detailOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsDetailHovering(false);
+		if (detailHoverRef.current)
+			detailHoverRef.current.style.border = '2px solid rgba(0, 0, 0, 0)';
+	};
+
+	// feature
+	const featureOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsFeatureHovering(true);
+		if (featureHoverRef.current)
+			featureHoverRef.current.style.border = '2px solid #000000';
+	};
+	const featureOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+		setIsFeatureHovering(false);
+		if (featureHoverRef.current)
+			featureHoverRef.current.style.border = '2px solid rgba(0, 0, 0, 0)';
+	};
+
 	return (
-		<div className="flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]">
+		<div
+			onMouseOver={cardOverHoverHandler}
+			onMouseOut={cardOutHoverHandler}
+			ref={cardRef}
+			className="relative flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]"
+		>
+			{isCardHovering ? (
+				<div className="absolute right-[-11px] top-[-11px] flex cursor-pointer items-center justify-center rounded-full border-2 border-solid border-black bg-white p-[8px]">
+					<Image
+						src="/icons/close_small.svg"
+						alt="close_button"
+						width={14}
+						height={14}
+					/>
+				</div>
+			) : null}
+
 			<div className="flex w-full flex-col items-center">
 				<label
 					className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
 				>
-					<input
-						className={`h-[47px] w-[272px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
-						type="text"
-						maxLength={12}
-						placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
-						onChange={(event) => inputHandle(event, 'title')}
-						value={priceCardInfoEl.title}
-					/>
+					<div
+						className="relative"
+						onMouseOver={titleOverHoverHandler}
+						onMouseOut={titleOutHoverHandler}
+						ref={titleRef}
+					>
+						{isTitleHovering ? (
+							<div className="absolute right-[-11px] top-[-11px] flex cursor-pointer items-center justify-center rounded-full border-2 border-solid border-black bg-white p-[8px]">
+								<Image
+									src="/icons/close_small.svg"
+									alt="close_button"
+									width={14}
+									height={14}
+								/>
+							</div>
+						) : null}
+						<input
+							className={`h-[47px] w-[272px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
+							type="text"
+							maxLength={12}
+							placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
+							onChange={(event) => inputHandle(event, 'title')}
+							value={priceCardInfoEl.title}
+						/>
+					</div>
 				</label>
 				<div className="mb-[16px] mt-[24px] flex h-[96px] w-[256px] flex-col justify-between">
 					<span className="text-[32px] font-bold">
@@ -283,7 +372,12 @@ function PriceCard({
 					</div>
 				</div>
 				<div className="w-[256px] border border-[#989898]"></div>
-				<div className="mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center">
+				<div
+					onMouseOver={detailOverHoverHandler}
+					onMouseOut={detailOutHoverHandler}
+					ref={detailHoverRef}
+					className="mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center"
+				>
 					<textarea
 						className="mb-[16px] min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 						placeholder="요금제 설명"
@@ -293,7 +387,6 @@ function PriceCard({
 					/>
 					<div className="w-[256px] border border-[#989898]"></div>
 				</div>
-
 				<div className="flex flex-col gap-[2px]">
 					<textarea
 						className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"

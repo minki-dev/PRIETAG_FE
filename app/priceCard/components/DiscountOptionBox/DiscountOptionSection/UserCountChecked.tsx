@@ -24,7 +24,7 @@ function UserCountChecked({ color }: { color: colorInfo }) {
 	}, [currentUserCount]);
 
 	return (
-		<label className="flex h-[48px] w-[280px] items-center justify-end gap-[10px] rounded-[24px] bg-[#F6F6F6] pr-[4px] shadow-md">
+		<label className="flex h-[48px] w-[280px] items-center justify-end gap-[10px] rounded-[24px] bg-[#F6F6F6] pr-[4px] shadow-[inset_0_0_1px_1px_rgba(0,0,0,0.15)]">
 			<span>사용자 수</span>
 			<div className="flex h-[40px] w-[174px] items-center justify-center gap-[8px] rounded-l-[4px] rounded-r-[22px] bg-white">
 				<input

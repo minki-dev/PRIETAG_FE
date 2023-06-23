@@ -297,7 +297,7 @@ function PriceCard({
 				<div className="flex flex-col gap-[2px]">
 					<textarea
 						className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
-						placeholder="포함된 기능"
+						placeholder="타이틀을 입력해 주세요"
 						onChange={(event) => inputHandle(event, 'feature')}
 						value={priceCardInfoEl.feature}
 						ref={featureRef}

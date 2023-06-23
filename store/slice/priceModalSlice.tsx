@@ -231,7 +231,7 @@ export const priceModalSlice = createSlice({
 				detail: '',
 				detailHeight: 30,
 				feature: '',
-				content: [''],
+				content: [],
 			};
 			const currentPriceCards = [...state.priceCards];
 			currentPriceCards.push(initialPriceCard);

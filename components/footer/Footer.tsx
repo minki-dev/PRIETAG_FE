@@ -5,13 +5,14 @@ function Footer() {
 	return (
 		<div className=" shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] relative  h-[740px] w-full  justify-between  bg-white px-[20px] py-[40px] text-[14px] shadow sm:flex sm:h-[316px] sm:flex-row   sm:px-[120px] xl:px-[240px] xl:text-[16px]">
 			<div className=" w-full min-w-[300px] sm:h-[216px] sm:w-[281px] xl:w-[341px] ">
-				<Image
-					src="/img/ezfee.svg"
-					alt="로고 이미지"
-					width={140.72}
-					height={48}
-					className="mb-[38px]"
-				/>{' '}
+				<div className="relative h-[36px] w-[106px] sm:h-[48px] sm:w-[142px]">
+					<Image
+						src="/img/ezfee.svg"
+						alt="로고 이미지"
+						fill
+						className="mb-[38px]"
+					/>{' '}
+				</div>
 				<div className="flex h-[85px] w-full flex-col justify-between xl:h-[94px]">
 					<div className="font-bold">주식회사 질링스</div>
 					<div>서울특별시 관악구 청룡 5길 55, 질링스 빌딩 505호</div>
@@ -73,7 +74,3 @@ function Footer() {
 }
 
 export default Footer;
-
-{
-	/* <div className="shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] flex h-[740px] w-full justify-between bg-white px-[20px] shadow"> */
-}

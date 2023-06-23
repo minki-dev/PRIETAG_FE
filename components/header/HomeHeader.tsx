@@ -16,13 +16,14 @@ function HomeHeader() {
 			</div>
 			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] absolute z-20 flex h-[72px] w-full items-center justify-center bg-[#FFF] shadow">
 				<div className="flex h-full w-full items-center justify-between px-[20px] sm:w-[calc(100%-240px)] sm:px-0 xl:w-[calc(100%-80px)]  ">
-					<div className=" min-w-[100px]">
+					<div className=" relative h-[18px] w-[53px] sm:h-[32px] sm:w-[93px] xl:h-[32px] xl:w-[94px]  ">
 						{' '}
 						<Image
 							src="/img/ezfee.svg"
 							alt="로고 이미지"
-							width={93.81}
-							height={32}
+							// width={93.81}
+							// height={32}
+							fill={true}
 						/>{' '}
 					</div>
 					<div className=" h-[72px] min-w-[240px] shrink-0">

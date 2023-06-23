@@ -22,7 +22,7 @@ function Footer() {
 			<div className="absolute bottom-[30px] font-medium sm:bottom-[70px] ">
 				Copyright {new Date().getFullYear()}. Zillinks all reserved.
 			</div>
-			<div className="my-[32px]  flex w-full flex-col justify-between text-[rgb(116,116,116)]  sm:h-[316px] sm:w-[630px] sm:min-w-[480px] sm:flex-row  xl:h-[326px] xl:min-w-[800px] xl:max-w-[60%]">
+			<div className=" flex w-full flex-col items-center justify-evenly text-[rgb(116,116,116)]  sm:w-[630px]  sm:min-w-[480px] sm:flex-row   xl:min-w-[800px] xl:max-w-[60%]">
 				<ul className="flex h-[116px] w-full flex-col justify-between sm:mt-[32px] sm:w-[121px] sm:min-w-[121px] xl:w-[138px] xl:min-w-[138px]">
 					<div className=" font-bold text-black">Policy</div>
 					<a>

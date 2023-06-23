@@ -8,12 +8,12 @@ export default function error() {
   return (
     <>
       <Header />
-      <div className='relative flex w-[1920px] h-[808px]  justify-between'>
+      <div className='relative flex w-[1920px] h-[808px] justify-between sm:w-[144px]'>
         <div className='w-[240px] h-[808px] bg-[#F9E8E8]' />
         <div className='w-[100%] justify-center items-center bg-[#F7F8FC]'>
           <div className='w-[640px] h-[373px] mt-[180px] ml-[400px] mr-[400px]'>
             <Image
-              src='/img/loading.svg'
+              src='/img/publishing.svg'
               alt='Loading...'
               width={144}
               height={144}

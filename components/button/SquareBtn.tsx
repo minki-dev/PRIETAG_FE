@@ -8,6 +8,7 @@ interface SquareBtnProps {
 	textContent: string;
 	width?: string;
 	bg?: string;
+	onClick: (() => void) | null;
 }
 
 const SquareBtn: React.FC<SquareBtnProps> = ({
@@ -16,6 +17,7 @@ const SquareBtn: React.FC<SquareBtnProps> = ({
 	textContent,
 	width = '120px',
 	bg = '#00A3FF',
+	onClick,
 }) => {
 	return (
 		<button
@@ -27,6 +29,7 @@ const SquareBtn: React.FC<SquareBtnProps> = ({
 				color: textColor,
 				background: bg,
 			}}
+			onClick={onClick}
 		>
 			{textContent}
 		</button>

@@ -238,7 +238,7 @@ function PriceCard({
 
 	const cardRef = useRef<HTMLDivElement>(null);
 	const [isCardHovering, setIsCardHovering] = useState(false);
-	const titleRef = useRef<HTMLDivElement>(null);
+	const titleRef = useRef<HTMLInputElement>(null);
 	const [isTitleHovering, setIsTitleHovering] = useState(false);
 	const detailHoverRef = useRef<HTMLDivElement>(null);
 	const [isDetailHovering, setIsDetailHovering] = useState(false);
@@ -248,47 +248,47 @@ function PriceCard({
 	// card
 	const cardOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
 		setIsCardHovering(true);
-		if (cardRef.current) cardRef.current.style.border = '2px solid #000000';
+		if (cardRef.current) cardRef.current.style.outline = '1px solid #000000';
 	};
 	const cardOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
 		setIsCardHovering(false);
-		if (cardRef.current)
-			cardRef.current.style.border = '2px solid rgba(0, 0, 0, 0.15)';
+		if (cardRef.current) cardRef.current.style.outline = 'none';
 	};
 
 	// title
 	const titleOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
 		setIsTitleHovering(true);
-		if (titleRef.current) titleRef.current.style.border = '2px solid #000000';
+		if (titleRef.current) titleRef.current.style.border = '1px solid #000000';
 	};
 	const titleOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
 		setIsTitleHovering(false);
-		if (titleRef.current)
-			titleRef.current.style.border = '2px solid rgba(0, 0, 0, 0)';
+		if (titleRef.current) titleRef.current.style.border = '1px dashed #BCBCBC';
 	};
 
 	// detail
 	const detailOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
 		setIsDetailHovering(true);
 		if (detailHoverRef.current)
-			detailHoverRef.current.style.border = '2px solid #000000';
+			detailHoverRef.current.style.outline = '1px solid #000000';
 	};
 	const detailOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
 		setIsDetailHovering(false);
-		if (detailHoverRef.current)
-			detailHoverRef.current.style.border = '2px solid rgba(0, 0, 0, 0)';
+		if (detailHoverRef.current) detailHoverRef.current.style.outline = 'none';
 	};
 
 	// feature
-	const featureOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+	const featureOverHoverHandler = (
+		e: React.MouseEvent<HTMLTextAreaElement | HTMLImageElement>,
+	) => {
 		setIsFeatureHovering(true);
 		if (featureHoverRef.current)
-			featureHoverRef.current.style.border = '2px solid #000000';
+			featureHoverRef.current.style.outline = '1px solid #000000';
 	};
-	const featureOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+	const featureOutHoverHandler = (
+		e: React.MouseEvent<HTMLTextAreaElement | HTMLImageElement>,
+	) => {
 		setIsFeatureHovering(false);
-		if (featureHoverRef.current)
-			featureHoverRef.current.style.border = '2px solid rgba(0, 0, 0, 0)';
+		if (featureHoverRef.current) featureHoverRef.current.style.outline = 'none';
 	};
 
 	return (
@@ -299,14 +299,22 @@ function PriceCard({
 			className="relative flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]"
 		>
 			{isCardHovering ? (
-				<div className="absolute right-[-11px] top-[-11px] flex cursor-pointer items-center justify-center rounded-full border-2 border-solid border-black bg-white p-[8px]">
+				<>
 					<Image
-						src="/icons/close_small.svg"
+						src="/icons/hover_delete.svg"
 						alt="close_button"
-						width={14}
-						height={14}
+						width={26}
+						height={26}
+						className="absolute right-[-13px] top-[-13px] cursor-pointer"
 					/>
-				</div>
+					<Image
+						src="/icons/drag_hori.svg"
+						alt="close_button"
+						width={26}
+						height={26}
+						className="absolute left-[-13px] top-[-13px] cursor-pointer"
+					/>
+				</>
 			) : null}
 
 			<div className="flex w-full flex-col items-center">
@@ -317,22 +325,21 @@ function PriceCard({
 						className="relative"
 						onMouseOver={titleOverHoverHandler}
 						onMouseOut={titleOutHoverHandler}
-						ref={titleRef}
 					>
 						{isTitleHovering ? (
-							<div className="absolute right-[-11px] top-[-11px] flex cursor-pointer items-center justify-center rounded-full border-2 border-solid border-black bg-white p-[8px]">
-								<Image
-									src="/icons/close_small.svg"
-									alt="close_button"
-									width={14}
-									height={14}
-								/>
-							</div>
+							<Image
+								src="/icons/hover_delete.svg"
+								alt="close_button"
+								width={26}
+								height={26}
+								className="absolute right-[-13px] top-[-13px] cursor-pointer"
+							/>
 						) : null}
 						<input
 							className={`h-[47px] w-[272px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
 							type="text"
 							maxLength={12}
+							ref={titleRef}
 							placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
 							onChange={(event) => inputHandle(event, 'title')}
 							value={priceCardInfoEl.title}
@@ -376,8 +383,17 @@ function PriceCard({
 					onMouseOver={detailOverHoverHandler}
 					onMouseOut={detailOutHoverHandler}
 					ref={detailHoverRef}
-					className="mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center"
+					className="relative mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center"
 				>
+					{isDetailHovering ? (
+						<Image
+							src="/icons/hover_delete.svg"
+							alt="close_button"
+							width={26}
+							height={26}
+							className="absolute right-[-13px] top-[-13px] cursor-pointer"
+						/>
+					) : null}
 					<textarea
 						className="mb-[16px] min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 						placeholder="요금제 설명"
@@ -387,8 +403,24 @@ function PriceCard({
 					/>
 					<div className="w-[256px] border border-[#989898]"></div>
 				</div>
-				<div className="flex flex-col gap-[2px]">
+				<div
+					ref={featureHoverRef}
+					className="relative flex flex-col items-center gap-[4px]"
+				>
+					{isFeatureHovering ? (
+						<Image
+							src="/icons/hover_delete.svg"
+							alt="close_button"
+							width={26}
+							height={26}
+							className="absolute right-[-13px] top-[-13px] cursor-pointer"
+							onMouseOver={featureOverHoverHandler}
+							onMouseOut={featureOutHoverHandler}
+						/>
+					) : null}
 					<textarea
+						onMouseOver={featureOverHoverHandler}
+						onMouseOut={featureOutHoverHandler}
 						className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
 						placeholder="타이틀을 입력해 주세요"
 						onChange={(event) => inputHandle(event, 'feature')}

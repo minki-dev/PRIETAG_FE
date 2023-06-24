@@ -35,6 +35,7 @@ import { updateHeight, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import debounce from 'lodash.debounce';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
+import Footer from '@/components/footer/Footer';
 import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
 
 export default function EditTemplate() {
@@ -177,6 +178,7 @@ export default function EditTemplate() {
 					<DraggableArea areaType="faqArea" />
 					<FAQ />
 				</section>
+				<Footer />
 			</main>
 		</>
 	);

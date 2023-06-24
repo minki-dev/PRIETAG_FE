@@ -6,43 +6,37 @@ import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import { useRouter } from 'next/navigation';
 
-export default function loginRequest() {
+export default function notfound() {
 	const router = useRouter();
 
 	return (
-		<>
+		<div className=" flex h-full w-[375px] flex-col items-center justify-center bg-transparent px-[20px] sm:w-[1280px] sm:px-[120px] xl:w-[1920px]  xl:bg-[#F9E8E9] xl:px-[240px]">
 			<Header />
 			<div className=" flex h-full w-full flex-col items-center justify-center bg-[#F7F8FC] pt-[72px] text-center xl:h-[808px]">
 				<div className=" h-[120px] w-[120px] sm:h-[144px] sm:w-[144px]">
 					<img
-						src="/img/loginOrregister.svg"
+						src="/img/error_404.svg"
 						className=" object-cover "
-						alt="로그인요청 이미지"
+						alt="Loading"
 					/>
 				</div>
 				<div className="my-[48px] leading-[51px]">
 					<div className=" text-[20px] font-bold sm:text-[32px]">
-						로그인이 필요한 페이지에요.
+						페이지에 연결할 수 없어요.
 					</div>
 					<div className="text-base font-medium text-[#989898]  sm:text-2xl">
-						로그인을 하시면 모든 기능을 이용하실 수 있어요.
+						올바른 주소 또는 경로를 확인해 주세요.
 					</div>
 				</div>
 				<button
-					className="h-[34px] w-[104px] rounded border-[1px] border-[#00A3FF] bg-[#00A3FF] px-[18px] py-[5.5px] text-sm font-medium text-white"
+					className="h-[34px] w-[104px] rounded border-[1px] border-[#747474] px-[18px] py-[5.5px] text-sm font-medium"
 					type="button"
+					onClick={() => router.back()}
 				>
-					로그인
-				</button>
-				<button
-					className="h-[34px] w-[120px] rounded px-[18px] py-[5.5px] text-[14px] font-medium text-[#BCBCBC]"
-					type="button"
-				>
-					회원가입하기
+					다시 시도
 				</button>
 			</div>
-			;
 			<Footer />
-		</>
+		</div>
 	);
 }

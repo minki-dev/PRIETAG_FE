@@ -46,7 +46,7 @@ export default function Table({
 
 	// @Redux config
 	const { configState } = useConfig();
-	const { isPreview } = configState;
+	const { isPreview, previewMode } = configState;
 
 	//	toggle state's featureHeader boolean by featureTableIndex
 	const toggleHeader = () => {
@@ -98,14 +98,20 @@ export default function Table({
 		);
 	};
 
-
 	return (
 		<div
 			className={`${
 				isPreview
 					? 'editable-inner-preview border-transparent'
 					: 'group/table editable-inner hover:border-black'
-			} flex justify-center  relative w-full border-2`}
+			}  relative  flex w-[1656px] ${
+				previewMode === 'tablet'
+					? 'justify-start'
+					: previewMode === 'mobile'
+					? 'justify-start'
+					: 'justify-center'
+			} 
+			 mobile-xl:justify-start border-2 max-xl:justify-start `}
 		>
 			<DeleteButton
 				className="group-hover/table:block"
@@ -135,11 +141,11 @@ export default function Table({
 								</div>
 							);
 						})}
-						<div className="col-span-5 mt-6 border-b-2 border-gray">{}</div>
+						<div className="border-gray col-span-5 mt-6 border-b-2">{}</div>
 					</div>
 				)}
 				{featureName && (
-					<div className="grid grid-cols-5 gap-x-5">
+					<div className="grid grid-cols-5 gap-x-5 ">
 						<div
 							className={`relative  mb-4 ml-[1.5px] mt-4 h-12 border-2 border-dashed border-gray-500 ${
 								!isPreview
@@ -156,7 +162,7 @@ export default function Table({
 								placeholder={`${!isPreview ? '포함된 기능' : ''}`}
 								disabled={isPreview}
 								onBlur={(e) => setFeatureName(e.target.value)}
-								className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
+								className="h-full w-full p-2 focus:outline-none disabled:bg-transparent"
 							/>
 						</div>
 					</div>
@@ -196,14 +202,14 @@ export default function Table({
 				{!isPreview && (
 					<button
 						type="button"
-						className="flex items-center justify-center w-full h-16 col-span-5 border"
+						className="col-span-5 flex h-16 w-full items-center justify-center border"
 						onClick={handleAddRow}
 					>
 						<HiOutlinePlus />
 					</button>
 				)}
 			</div>
-			<div className="col-span-5 mt-3 mb-4 border-b-2 border-gray">{}</div>
+			<div className="border-gray col-span-5 mb-4 mt-3 border-b-2">{}</div>
 		</div>
 	);
 }

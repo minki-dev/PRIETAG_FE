@@ -10,6 +10,13 @@ type ConfigState = {
 	isPreview: boolean;
 	color: Colors;
 	font: string;
+	previewMode: string;
+};
+
+const PreviewMode = {
+	Desktop: 'desktop',
+	Tablet: 'tablet',
+	Mobile: 'mobile',
 };
 
 export type Colors = {
@@ -30,6 +37,7 @@ const initialState: ConfigState = {
 	isUploadModalOpen: false,
 	isOnboardingModalOpen: false,
 	isPreview: false,
+	previewMode: PreviewMode.Desktop,
 	color: {
 		mainColor: '#00A3FF',
 		subColor01: '#60C8FF',
@@ -59,6 +67,11 @@ export const configSlice = createSlice({
 			return state;
 		},
 
+		// 미리보기 모드 변경
+		setPreviewMode: (state: ConfigState, action: PayloadAction<string>) => {
+			state.previewMode = action.payload;
+			return state;
+		},
 		save: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
 			return state;
 		},
@@ -93,6 +106,7 @@ export const configSlice = createSlice({
 
 export const {
 	togglePreview,
+	setPreviewMode,
 	save,
 	autoSave,
 	setFont,

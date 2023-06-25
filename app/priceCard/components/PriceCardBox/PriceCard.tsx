@@ -49,13 +49,19 @@ function PriceCard({
 		priceModal.priceCards[cardIndex].price,
 		priceModal.priceCards[cardIndex].discountRate,
 		priceModal.priceCards[cardIndex].content,
+		// priceModal.priceCards[cardIndex].title,
+		// priceModal.priceCards[cardIndex].detail,
+		// priceModal.priceCards[cardIndex].feature,
 		priceModal.pricing,
 	]);
 
 	// priceCard의 content부분
 	const [priceCardContentEl, setPriceCardContentEl] = React.useState(
-		priceCardInfoEl.content,
+		priceModal.priceCards[cardIndex].content,
 	);
+	useEffect(() => {
+		setPriceCardContentEl(priceModal.priceCards[cardIndex].content);
+	}, [priceModal.priceCards[cardIndex].content]);
 
 	// detail 부분의 높이
 	const detailRef = React.useRef<HTMLTextAreaElement>(null);
@@ -98,13 +104,53 @@ function PriceCard({
 			featureRef.current.style.height = '30px';
 			featureRef.current.style.height = featureRef.current.scrollHeight + 'px';
 		}
+		if (detailRef.current)
+			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
+	};
+
+	const deleteTitleHandle = () => {
+		setPriceCardInfoEl(Object.assign({}, priceCardInfoEl, { title: '' }));
 		dispatch(
 			updatePriceCard({
-				...{ card: priceCardInfoEl },
-				...{ index: cardIndex },
+				index: cardIndex,
+				card: priceCardInfoEl,
 			}),
 		);
 	};
+
+	const deleteDetailHandle = () => {
+		setPriceCardInfoEl(
+			Object.assign({}, priceCardInfoEl, {
+				detail: '',
+				detailHeight: 30,
+			}),
+		);
+		if (detailRef.current) {
+			detailRef.current.style.height = '30px';
+			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
+		}
+	};
+
+	const deleteFeatureContent = () => {
+		setPriceCardInfoEl(
+			Object.assign({}, priceCardInfoEl, {
+				feature: '',
+				content: [],
+			}),
+		);
+		if (featureRef.current) {
+			featureRef.current.style.height = '30px';
+		}
+	};
+
+	useEffect(() => {
+		dispatch(
+			updatePriceCard({
+				index: cardIndex,
+				card: priceCardInfoEl,
+			}),
+		);
+	}, [priceCardInfoEl]);
 
 	// 월간, 연간 할인율
 	const [currentYearDiscount, setCurrentYearDiscount] = React.useState(0);
@@ -306,6 +352,10 @@ function PriceCard({
 						width={26}
 						height={26}
 						className="absolute right-[-13px] top-[-13px] cursor-pointer"
+						onClick={() => {
+							dispatch(deletePriceCard(cardIndex));
+							featureTableDispatch(removeColumn({ colIndex: cardIndex }));
+						}}
 					/>
 					<Image
 						src="/icons/drag_hori.svg"
@@ -333,6 +383,7 @@ function PriceCard({
 								width={26}
 								height={26}
 								className="absolute right-[-13px] top-[-13px] cursor-pointer"
+								onClick={deleteTitleHandle}
 							/>
 						) : null}
 						<input
@@ -392,6 +443,7 @@ function PriceCard({
 							width={26}
 							height={26}
 							className="absolute right-[-13px] top-[-13px] cursor-pointer"
+							onClick={deleteDetailHandle}
 						/>
 					) : null}
 					<textarea
@@ -416,6 +468,7 @@ function PriceCard({
 							className="absolute right-[-13px] top-[-13px] cursor-pointer"
 							onMouseOver={featureOverHoverHandler}
 							onMouseOut={featureOutHoverHandler}
+							onClick={deleteFeatureContent}
 						/>
 					) : null}
 					<textarea
@@ -442,10 +495,6 @@ function PriceCard({
 			<a
 				className={`my-[40px] flex h-[48px] w-[256px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
 				type="button"
-				onClick={() => {
-					dispatch(deletePriceCard(cardIndex));
-					featureTableDispatch(removeColumn({ colIndex: cardIndex }));
-				}}
 			>
 				구독하기
 			</a>

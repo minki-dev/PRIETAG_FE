@@ -350,7 +350,7 @@ function PriceCard({
 
 	return (
 		<div
-			className="p-4"
+			className="p-1"
 			onMouseOver={cardOverHoverHandler}
 			onMouseOut={cardOutHoverHandler}
 		>

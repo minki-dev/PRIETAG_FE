@@ -53,9 +53,6 @@ function PriceCard({
 		priceModal.priceCards[cardIndex].price,
 		priceModal.priceCards[cardIndex].discountRate,
 		priceModal.priceCards[cardIndex].content,
-		// priceModal.priceCards[cardIndex].title,
-		// priceModal.priceCards[cardIndex].detail,
-		// priceModal.priceCards[cardIndex].feature,
 		priceModal.pricing,
 	]);
 
@@ -296,13 +293,21 @@ function PriceCard({
 	const [isFeatureHovering, setIsFeatureHovering] = useState(false);
 
 	// card
-	const cardOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsCardHovering(true);
-		if (cardRef.current) cardRef.current.style.outline = '1px solid #000000';
+	const cardOverHoverHandler = (
+		e: React.MouseEvent<HTMLDivElement | HTMLLabelElement>,
+	) => {
+		if (e.target === e.currentTarget) {
+			setIsCardHovering(true);
+			if (cardRef.current) cardRef.current.style.outline = '1px solid #000000';
+		}
 	};
-	const cardOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsCardHovering(false);
-		if (cardRef.current) cardRef.current.style.outline = 'none';
+	const cardOutHoverHandler = (
+		e: React.MouseEvent<HTMLDivElement | HTMLLabelElement>,
+	) => {
+		if (e.target === e.currentTarget) {
+			setIsCardHovering(false);
+			if (cardRef.current) cardRef.current.style.outline = 'none';
+		}
 	};
 
 	// title
@@ -345,170 +350,182 @@ function PriceCard({
 
 	return (
 		<div
+			className="p-4"
 			onMouseOver={cardOverHoverHandler}
 			onMouseOut={cardOutHoverHandler}
-			ref={cardRef}
-			className="relative flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]"
 		>
-			{isCardHovering ? (
-				<>
-					<Image
-						src="/icons/hover_delete.svg"
-						alt="close_button"
-						width={26}
-						height={26}
-						className="absolute right-[-13px] top-[-13px] cursor-pointer"
-						onClick={() => {
-							dispatch(deletePriceCard(cardIndex));
-							featureTableDispatch(removeColumn({ colIndex: cardIndex }));
-						}}
-					/>
-					<Image
-						src="/icons/drag_hori.svg"
-						alt="close_button"
-						width={26}
-						height={26}
-						className="absolute left-[-13px] top-[-13px] cursor-pointer"
-						{...provided.dragHandleProps}
-					/>
-				</>
-			) : null}
+			<div
+				onMouseOver={cardOverHoverHandler}
+				onMouseOut={cardOutHoverHandler}
+				ref={cardRef}
+				className="relative flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]"
+			>
+				{isCardHovering ? (
+					<>
+						<Image
+							src="/icons/hover_delete.svg"
+							alt="close_button"
+							width={26}
+							height={26}
+							className="absolute right-[-13px] top-[-13px] cursor-pointer"
+							onClick={() => {
+								dispatch(deletePriceCard(cardIndex));
+								featureTableDispatch(removeColumn({ colIndex: cardIndex }));
+							}}
+						/>
+						<Image
+							src="/icons/drag_hori.svg"
+							alt="close_button"
+							width={26}
+							height={26}
+							className="absolute left-[-13px] top-[-13px] cursor-pointer"
+							{...provided.dragHandleProps}
+						/>
+					</>
+				) : null}
 
-			<div className="flex w-full flex-col items-center">
-				<label
-					className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
+				<div
+					onMouseOver={cardOverHoverHandler}
+					onMouseOut={cardOutHoverHandler}
+					className="flex w-full flex-col items-center"
 				>
-					<div
-						className="relative"
-						onMouseOver={titleOverHoverHandler}
-						onMouseOut={titleOutHoverHandler}
+					<label
+						onMouseOver={cardOverHoverHandler}
+						//onMouseOut={cardOutHoverHandler}
+						className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
 					>
-						{isTitleHovering ? (
+						<div
+							className="relative"
+							onMouseOver={titleOverHoverHandler}
+							onMouseOut={titleOutHoverHandler}
+						>
+							{isTitleHovering ? (
+								<Image
+									src="/icons/hover_delete.svg"
+									alt="close_button"
+									width={26}
+									height={26}
+									className="absolute right-[-13px] top-[-13px] cursor-pointer"
+									onClick={deleteTitleHandle}
+								/>
+							) : null}
+							<input
+								className={`h-[47px] w-[272px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
+								type="text"
+								maxLength={12}
+								ref={titleRef}
+								placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
+								onChange={(event) => inputHandle(event, 'title')}
+								value={priceCardInfoEl.title}
+							/>
+						</div>
+					</label>
+					<div className="mb-[16px] mt-[24px] flex h-[96px] w-[256px] flex-col justify-between">
+						<span className="text-[32px] font-bold">
+							{discountPrice.toLocaleString('ko-KR')}원/
+							{priceModal.isCheckPerYear && priceModal.monthYearToggle
+								? '연'
+								: '월'}
+						</span>
+						<div className="flex gap-1">
+							{priceCardInfoEl.price ? ( // 가격 설정 유무
+								<>
+									{discountRate ? ( // 할인 유무
+										<>
+											<span className="text-[20px] text-[#FF0000]">
+												-{discountRate}%
+											</span>
+											<span className="text-[20px] text-[#747474] line-through">
+												{priceModal.isCheckPerYear && priceModal.monthYearToggle // 연간 구독 여부
+													? (currentHeadPrice * 12).toLocaleString('ko-KR')
+													: currentHeadPrice.toLocaleString('ko-KR')}
+												{/* 연간 구독 X */}원
+											</span>
+										</>
+									) : (
+										// 할인 X
+										<span className="text-[20px] text-[#747474]">
+											할인제도 없음
+										</span>
+									)}
+								</> // 가격 설정 X
+							) : null}
+						</div>
+					</div>
+					<div className="w-[256px] border border-[#989898]"></div>
+					<div
+						onMouseOver={detailOverHoverHandler}
+						onMouseOut={detailOutHoverHandler}
+						ref={detailHoverRef}
+						className="relative mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center"
+					>
+						{isDetailHovering ? (
 							<Image
 								src="/icons/hover_delete.svg"
 								alt="close_button"
 								width={26}
 								height={26}
 								className="absolute right-[-13px] top-[-13px] cursor-pointer"
-								onClick={deleteTitleHandle}
+								onClick={deleteDetailHandle}
 							/>
 						) : null}
-						<input
-							className={`h-[47px] w-[272px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
-							type="text"
-							maxLength={12}
-							ref={titleRef}
-							placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
-							onChange={(event) => inputHandle(event, 'title')}
-							value={priceCardInfoEl.title}
+						<textarea
+							className="mb-[16px] min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+							placeholder="요금제 설명"
+							ref={detailRef}
+							onChange={(event) => inputHandle(event, 'detail')}
+							value={priceCardInfoEl.detail}
 						/>
+						<div className="w-[256px] border border-[#989898]"></div>
 					</div>
-				</label>
-				<div className="mb-[16px] mt-[24px] flex h-[96px] w-[256px] flex-col justify-between">
-					<span className="text-[32px] font-bold">
-						{discountPrice.toLocaleString('ko-KR')}원/
-						{priceModal.isCheckPerYear && priceModal.monthYearToggle
-							? '연'
-							: '월'}
-					</span>
-					<div className="flex gap-1">
-						{priceCardInfoEl.price ? ( // 가격 설정 유무
-							<>
-								{discountRate ? ( // 할인 유무
-									<>
-										<span className="text-[20px] text-[#FF0000]">
-											-{discountRate}%
-										</span>
-										<span className="text-[20px] text-[#747474] line-through">
-											{priceModal.isCheckPerYear && priceModal.monthYearToggle // 연간 구독 여부
-												? (currentHeadPrice * 12).toLocaleString('ko-KR')
-												: currentHeadPrice.toLocaleString('ko-KR')}
-											{/* 연간 구독 X */}원
-										</span>
-									</>
-								) : (
-									// 할인 X
-									<span className="text-[20px] text-[#747474]">
-										할인제도 없음
-									</span>
-								)}
-							</> // 가격 설정 X
+					<div
+						ref={featureHoverRef}
+						className="relative flex flex-col items-center gap-[4px]"
+					>
+						{isFeatureHovering ? (
+							<Image
+								src="/icons/hover_delete.svg"
+								alt="close_button"
+								width={26}
+								height={26}
+								className="absolute right-[-13px] top-[-13px] cursor-pointer"
+								onMouseOver={featureOverHoverHandler}
+								onMouseOut={featureOutHoverHandler}
+								onClick={deleteFeatureContent}
+							/>
 						) : null}
-					</div>
-				</div>
-				<div className="w-[256px] border border-[#989898]"></div>
-				<div
-					onMouseOver={detailOverHoverHandler}
-					onMouseOut={detailOutHoverHandler}
-					ref={detailHoverRef}
-					className="relative mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center"
-				>
-					{isDetailHovering ? (
-						<Image
-							src="/icons/hover_delete.svg"
-							alt="close_button"
-							width={26}
-							height={26}
-							className="absolute right-[-13px] top-[-13px] cursor-pointer"
-							onClick={deleteDetailHandle}
-						/>
-					) : null}
-					<textarea
-						className="mb-[16px] min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
-						placeholder="요금제 설명"
-						ref={detailRef}
-						onChange={(event) => inputHandle(event, 'detail')}
-						value={priceCardInfoEl.detail}
-					/>
-					<div className="w-[256px] border border-[#989898]"></div>
-				</div>
-				<div
-					ref={featureHoverRef}
-					className="relative flex flex-col items-center gap-[4px]"
-				>
-					{isFeatureHovering ? (
-						<Image
-							src="/icons/hover_delete.svg"
-							alt="close_button"
-							width={26}
-							height={26}
-							className="absolute right-[-13px] top-[-13px] cursor-pointer"
+						<textarea
 							onMouseOver={featureOverHoverHandler}
 							onMouseOut={featureOutHoverHandler}
-							onClick={deleteFeatureContent}
+							className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
+							placeholder="타이틀을 입력해 주세요"
+							onChange={(event) => inputHandle(event, 'feature')}
+							value={priceCardInfoEl.feature}
+							ref={featureRef}
 						/>
-					) : null}
-					<textarea
-						onMouseOver={featureOverHoverHandler}
-						onMouseOut={featureOutHoverHandler}
-						className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
-						placeholder="타이틀을 입력해 주세요"
-						onChange={(event) => inputHandle(event, 'feature')}
-						value={priceCardInfoEl.feature}
-						ref={featureRef}
-					/>
-					{priceModal.priceCards[cardIndex].content.map((data, index) => (
-						<PriceCardContent
-							key={uuidv4()}
-							cardIndex={cardIndex}
-							contentIndex={index}
-						/>
-					))}
-					<button
-						className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC]"
-						type="button"
-						onClick={() => dispatch(addContent(cardIndex))}
-					>
-						+
-					</button>
+						{priceModal.priceCards[cardIndex].content.map((data, index) => (
+							<PriceCardContent
+								key={uuidv4()}
+								cardIndex={cardIndex}
+								contentIndex={index}
+							/>
+						))}
+						<button
+							className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC]"
+							type="button"
+							onClick={() => dispatch(addContent(cardIndex))}
+						>
+							+
+						</button>
+					</div>
 				</div>
+				<a
+					className={`my-[40px] flex h-[48px] w-[256px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
+					type="button"
+				>
+					구독하기
+				</a>
 			</div>
-			<a
-				className={`my-[40px] flex h-[48px] w-[256px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
-				type="button"
-			>
-				구독하기
-			</a>
 		</div>
 	);
 }

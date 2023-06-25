@@ -85,10 +85,13 @@ function PriceCardBox() {
 											{(provided) => (
 												<div
 													{...provided.draggableProps}
-													{...provided.dragHandleProps}
 													ref={provided.innerRef}
 												>
-													<PriceCard cardIndex={index} color={colorInfoEl} />
+													<PriceCard
+														cardIndex={index}
+														color={colorInfoEl}
+														provided={provided}
+													/>
 												</div>
 											)}
 										</Draggable>

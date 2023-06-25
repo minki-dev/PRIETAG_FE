@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PriceCardContent from './PriceCardContent';
 import Image from 'next/image';
 import { v4 as uuidv4 } from 'uuid';
+import { DraggableProvided } from 'react-beautiful-dnd';
 
 interface priceCardInfo {
 	id: string;
@@ -33,9 +34,11 @@ interface colorInfo {
 function PriceCard({
 	cardIndex,
 	color,
+	provided,
 }: {
 	cardIndex: number;
 	color: colorInfo;
+	provided: DraggableProvided;
 }) {
 	const { priceModal, dispatch } = usePriceModal();
 	const { dispatch: featureTableDispatch } = useFeatureTable();
@@ -366,6 +369,7 @@ function PriceCard({
 						width={26}
 						height={26}
 						className="absolute left-[-13px] top-[-13px] cursor-pointer"
+						{...provided.dragHandleProps}
 					/>
 				</>
 			) : null}

@@ -1,5 +1,9 @@
 'use client';
-import { updateContent, usePriceModal } from '@/store/slice/priceModalSlice';
+import {
+	deletePriceCardContent,
+	updateContent,
+	usePriceModal,
+} from '@/store/slice/priceModalSlice';
 import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 
@@ -14,12 +18,18 @@ function PriceCardContent({
 	const contentRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
-		if (contentRef.current) {
+		if (contentHoverRef.current && contentRef.current) {
+			contentHoverRef.current.style.height = '30px';
 			contentRef.current.style.height = '30px';
 		}
-		if (contentHoverRef.current && contentRef.current)
-			contentHoverRef.current.style.height = contentRef.current.style.height;
 	}, []);
+
+	const [contentEl, setContentEl] = useState(
+		priceModal.priceCards[cardIndex].content[contentIndex],
+	);
+	useEffect(() => {
+		setContentEl(priceModal.priceCards[cardIndex].content[contentIndex]);
+	}, [priceModal.priceCards[cardIndex].content[contentIndex]]);
 
 	const inputHandle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		if (contentRef.current) {
@@ -28,13 +38,27 @@ function PriceCardContent({
 		}
 		if (contentHoverRef.current && contentRef.current)
 			contentHoverRef.current.style.height = contentRef.current.style.height;
+		setContentEl(event.target.value);
+	};
+
+	useEffect(() => {
 		dispatch(
 			updateContent({
 				cardIndex,
 				contentIndex,
-				contentData: event.target.value,
+				contentData: contentEl,
 			}),
 		);
+	}, [contentEl]);
+
+	const deleteHandle = () => {
+		//setContentEl('');
+		if (contentRef.current) {
+			contentRef.current.style.height = '30px';
+		}
+		if (contentHoverRef.current && contentRef.current)
+			contentHoverRef.current.style.height = contentRef.current.style.height;
+		dispatch(deletePriceCardContent({ cardIndex, contentIndex }));
 	};
 
 	const contentHoverRef = useRef<HTMLDivElement>(null);
@@ -66,13 +90,14 @@ function PriceCardContent({
 					width={26}
 					height={26}
 					className="absolute right-[-13px] top-[-13px] cursor-pointer"
+					onClick={deleteHandle}
 				/>
 			) : null}
 			<textarea
 				className="min-h-[30px] w-[272px] resize-none overflow-hidden border-[1px] border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 				placeholder="세부 기능을 입력해 주세요"
 				ref={contentRef}
-				value={priceModal.priceCards[cardIndex].content[contentIndex]}
+				value={contentEl}
 				onChange={(event) => inputHandle(event)}
 			/>
 		</div>

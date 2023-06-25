@@ -19,7 +19,7 @@ function DiscountOptionSection() {
 	const { priceModal, dispatch } = usePriceModal();
 
 	return (
-		<div className="flex justify-center gap-10">
+		<div className="editable-inner flex justify-center gap-10">
 			{priceModal.isCheckPerYear ? (
 				<MonthYearChecked color={colorInfoEl} />
 			) : null}

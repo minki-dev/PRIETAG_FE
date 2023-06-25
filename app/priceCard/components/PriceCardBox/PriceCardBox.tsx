@@ -64,7 +64,7 @@ function PriceCardBox() {
 	};
 	// console.log(priceModal.priceCards);
 	return (
-		<div className="flex min-h-[553px] items-center justify-center gap-10">
+		<div className="editable-inner flex min-h-[547px] items-center justify-center gap-10">
 			<DragDropContext onDragEnd={handleOnDragEnd}>
 				<Droppable droppableId="priceCard" direction="horizontal">
 					{(provided, snapshot) => (

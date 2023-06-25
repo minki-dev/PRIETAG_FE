@@ -143,15 +143,18 @@ export default function EditTemplate() {
 		<>
 			{' '}
 			{configState.isOnboardingModalOpen && <OnBoardingModal />}
-			<Header />
-			<main className="mx-auto mt-36 	 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
-				<RightMenu />
-				{configState.isPriceModalOpen && <PriceModal />}
-				{configState.isColorModalOpen && <ColorModal />}
-				<section
-					className={`${
-						isPreview ? 'editable-outer-preview' : 'editable-outer '
-					} w-full`}
+			<div>
+				<Header />
+				<main
+					className={` responsiveLayout mx-auto mt-36 box-content flex  flex-col justify-center
+					${
+						configState.previewMode === 'tablet'
+							? 'w-[1020px] border-x-[120px] border-[#E0E0E0]'
+							: configState.previewMode === 'mobile'
+							? 'border-x-[20]x w-[335px]'
+							: 'w-[calc(100vw-14.5rem)]'
+					}
+					`}
 				>
 					<DraggableArea areaType="priceCardArea" />
 					<DiscountOptionBox />

@@ -33,6 +33,11 @@ interface ContentData {
 	contentIndex: number;
 	contentData: string;
 }
+// priceCard의 content 항목 삭제할 때 사용
+interface ContentDelete {
+	cardIndex: number;
+	contentIndex: number;
+}
 
 type PriceModalState = {
 	isCardSet: boolean;
@@ -269,7 +274,7 @@ export const priceModalSlice = createSlice({
 			});
 		},
 
-		/** 가격 카드 content 부분 추가하기 */
+		/** 가격 카드 content 부분 항목 추가하기 */
 		addContent: (
 			state: PriceModalState,
 			action: PayloadAction<number>, // 카드의 인덱스: number 넘겨받음
@@ -299,6 +304,21 @@ export const priceModalSlice = createSlice({
 				cardCount: currentCardCount,
 				priceCards: newPriceCards,
 			});
+		},
+
+		/** 가격 카드-콘텐츠 항목 1개 삭제하기 */
+		deletePriceCardContent: (
+			state: PriceModalState,
+			action: PayloadAction<ContentDelete>,
+		) => {
+			const contentArr = Array.from(
+				state.priceCards[action.payload.cardIndex].content,
+			);
+			const spliceContentArr = contentArr.splice(
+				action.payload.contentIndex,
+				1,
+			);
+			state.priceCards[action.payload.cardIndex].content = contentArr;
 		},
 
 		/** 가격 카드 영역 패딩 값 업데이트하기 */
@@ -354,6 +374,7 @@ export const {
 	toggleHighLight,
 	addContent,
 	updateContent,
+	deletePriceCardContent,
 } = priceModalSlice.actions;
 
 export function usePriceModal() {

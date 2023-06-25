@@ -4,7 +4,6 @@ import AddCardButton from './AddCardButton';
 import PriceCard from './PriceCard';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 import { StrictModeDroppable as Droppable } from '@/app/helpers/StrictModeDroppable';
-import { v4 as uuidv4 } from 'uuid';
 import {
 	addPriceCard,
 	changeOrderPriceCard,
@@ -56,7 +55,6 @@ function PriceCardBox() {
 
 		reorder(result.source.index, result.destination.index);
 	};
-	const { v4: uuidv4 } = require('uuid');
 
 	const handleAddCard = () => {
 		if (priceModal.priceCards.length > 3) return;

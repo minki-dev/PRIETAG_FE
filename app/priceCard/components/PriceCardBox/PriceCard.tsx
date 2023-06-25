@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import PriceCardContent from './PriceCardContent';
 import Image from 'next/image';
+import { v4 as uuidv4 } from 'uuid';
 
 interface priceCardInfo {
 	id: string;
@@ -337,6 +338,8 @@ function PriceCard({
 		if (featureHoverRef.current) featureHoverRef.current.style.outline = 'none';
 	};
 
+	const { v4: uuidv4 } = require('uuid');
+
 	return (
 		<div
 			onMouseOver={cardOverHoverHandler}
@@ -481,7 +484,11 @@ function PriceCard({
 						ref={featureRef}
 					/>
 					{priceModal.priceCards[cardIndex].content.map((data, index) => (
-						<PriceCardContent cardIndex={cardIndex} contentIndex={index} />
+						<PriceCardContent
+							key={uuidv4()}
+							cardIndex={cardIndex}
+							contentIndex={index}
+						/>
 					))}
 					<button
 						className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC]"

@@ -143,10 +143,9 @@ export default function EditTemplate() {
 		<>
 			{' '}
 			{configState.isOnboardingModalOpen && <OnBoardingModal />}
-			<div>
-				<Header />
-				<main
-					className={` responsiveLayout mx-auto mt-36 box-content flex  flex-col justify-center
+			<Header />
+			<main
+				className={` responsiveLayout mx-auto mt-36 box-content flex  flex-col justify-center
 					${
 						configState.previewMode === 'tablet'
 							? 'w-[1020px] border-x-[120px] border-[#E0E0E0]'
@@ -155,6 +154,14 @@ export default function EditTemplate() {
 							: 'w-[calc(100vw-14.5rem)]'
 					}
 					`}
+			>
+				<RightMenu />
+				{configState.isPriceModalOpen && <PriceModal />}
+				{configState.isColorModalOpen && <ColorModal />}
+				<section
+					className={`${
+						isPreview ? 'editable-outer-preview' : 'editable-outer '
+					} w-full`}
 				>
 					<DraggableArea areaType="priceCardArea" />
 					<DiscountOptionBox />

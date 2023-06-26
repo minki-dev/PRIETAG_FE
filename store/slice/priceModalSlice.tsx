@@ -68,7 +68,18 @@ type TierDiscountItem = {
 const initialState: PriceModalState = {
 	isCardSet: false,
 	pricing: '정액제',
-	priceCards: [],
+	priceCards: [
+		{
+			id: uuidv4(),
+			title: '가격제 이름',
+			price: 100000,
+			discountRate: 20,
+			detail: '',
+			detailHeight: 30,
+			feature: '',
+			content: [],
+		},
+	],
 	priceCardAreaPadding: 10,
 	detailMaxHeight: 30,
 	highLightIndex: 0,

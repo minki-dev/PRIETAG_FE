@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import PriceCardContent from './PriceCardContent';
 import Image from 'next/image';
+import { useConfig } from '@/store/slice/configSlice';
 
 interface priceCardInfo {
 	id: string;
@@ -38,6 +39,9 @@ function PriceCard({
 }) {
 	const { priceModal, dispatch } = usePriceModal();
 	const { dispatch: featureTableDispatch } = useFeatureTable();
+	const { configState } = useConfig();
+
+	const { previewMode } = configState;
 
 	// priceCard 전체 정보
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
@@ -296,10 +300,17 @@ function PriceCard({
 			onMouseOver={cardOverHoverHandler}
 			onMouseOut={cardOutHoverHandler}
 			ref={cardRef}
-			className="relative flex h-full w-[336px] flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]"
+			className={`responsiveContainer ${
+				previewMode === 'tablet'
+					? 'w-[239px]'
+					: previewMode === 'mobile'
+					? 'w-[335px]'
+					: 'w-[336px]'
+			}
+			relative flex h-full flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]`}
 		>
 			{isCardHovering ? (
-				<div className="absolute right-[-11px] top-[-11px] flex cursor-pointer items-center justify-center rounded-full border-2 border-solid border-black bg-white p-[8px]">
+				<div className="absolute right-[-11px] top-[-11px] flex cursor-pointer items-center justify-center rounded-full border-2 border-solid border-black bg-white p-[8px] ">
 					<Image
 						src="/icons/close_small.svg"
 						alt="close_button"
@@ -330,7 +341,15 @@ function PriceCard({
 							</div>
 						) : null}
 						<input
-							className={`h-[47px] w-[272px] ${bgColor.subColor02} border border-dashed border-[#BCBCBC] px-2 py-1 text-2xl font-medium outline-none`}
+							className={` ${
+								previewMode === 'tablet'
+									? 'h-[32px] w-[191px] text-xl'
+									: previewMode === 'mobile'
+									? 'w-[255px] text-2xl'
+									: 'h-[47px] w-[272px] text-2xl'
+							}  ${
+								bgColor.subColor02
+							} responsiveInput border border-dashed border-[#BCBCBC] px-2 py-1  font-medium  outline-none`}
 							type="text"
 							maxLength={12}
 							placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
@@ -339,14 +358,31 @@ function PriceCard({
 						/>
 					</div>
 				</label>
-				<div className="mb-[16px] mt-[24px] flex h-[96px] w-[256px] flex-col justify-between">
-					<span className="text-[32px] font-bold">
+				<div
+					className={`responsivePriceTag ${
+						previewMode === 'tablet'
+							? 'h-[73px] w-[191px] '
+							: previewMode === 'mobile'
+							? 'h-[55px] w-[255px] '
+							: 'h-[96px] w-[256px]'
+					} mb-[16px] mt-[24px] flex  flex-col justify-between`}
+				>
+					<span
+						className={` 
+${
+	previewMode === 'tablet'
+		? 'text-2xl'
+		: previewMode === 'mobile'
+		? 'text-xl'
+		: 'text-[32px]'
+} font-bold`}
+					>
 						{discountPrice.toLocaleString('ko-KR')}원/
 						{priceModal.isCheckPerYear && priceModal.monthYearToggle
 							? '연'
 							: '월'}
 					</span>
-					<div className="flex gap-1">
+					<div className="flex gap-1 ">
 						{priceCardInfoEl.price ? ( // 가격 설정 유무
 							<>
 								{discountRate ? ( // 할인 유무
@@ -371,7 +407,15 @@ function PriceCard({
 						) : null}
 					</div>
 				</div>
-				<div className="w-[256px] border border-[#989898]"></div>
+				<div
+					className={`responsiveDivider ${
+						previewMode === 'tablet'
+							? 'w-[191px]'
+							: previewMode === 'mobile'
+							? 'w-[255px]'
+							: 'w-[256px]'
+					}  border border-[#989898]`}
+				></div>
 				<div
 					onMouseOver={detailOverHoverHandler}
 					onMouseOut={detailOutHoverHandler}
@@ -379,17 +423,45 @@ function PriceCard({
 					className="mb-[24px] mt-[16px] flex min-h-[47px] flex-col items-center"
 				>
 					<textarea
-						className="mb-[16px] min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+						className={`responsiveDescription ${
+							previewMode === 'tablet'
+								? 'w-[191px] text-sm'
+								: previewMode === 'mobile'
+								? 'w-[255px]'
+								: 'w-[272px]'
+						}  mb-[16px] min-h-[30px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none`}
 						placeholder="요금제 설명"
 						ref={detailRef}
 						onChange={(event) => inputHandle(event, 'detail')}
 						value={priceCardInfoEl.detail}
 					/>
-					<div className="w-[256px] border border-[#989898]"></div>
+					<div
+						className={`responsiveDivider ${
+							previewMode === 'tablet'
+								? 'w-[191px]'
+								: previewMode === 'mobile'
+								? 'w-[255px]'
+								: 'w-[256px]'
+						} border border-[#989898]`}
+					></div>
 				</div>
-				<div className="flex flex-col gap-[2px]">
+				<div
+					className={`responsiveDescription ${
+						previewMode === 'tablet'
+							? 'w-[191px] text-sm'
+							: previewMode === 'mobile'
+							? 'w-[255px]'
+							: 'w-[256px]'
+					} flex  flex-col items-center justify-center gap-[2px]`}
+				>
 					<textarea
-						className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none"
+						className={`responsiveFeature ${
+							previewMode === 'tablet'
+								? 'w-[191px] text-sm'
+								: previewMode === 'mobile'
+								? 'w-[255px] text-xs'
+								: 'w-[272px]'
+						} min-h-[30px]  resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold  outline-none`}
 						placeholder="타이틀을 입력해 주세요"
 						onChange={(event) => inputHandle(event, 'feature')}
 						value={priceCardInfoEl.feature}
@@ -399,7 +471,13 @@ function PriceCard({
 						<PriceCardContent cardIndex={cardIndex} contentIndex={index} />
 					))}
 					<button
-						className="h-[30px] w-[272px] border border-dashed border-[#BCBCBC]"
+						className={`responsiveButton  ${
+							previewMode === 'tablet'
+								? 'w-[191px]'
+								: previewMode === 'mobile'
+								? 'w-[255px] text-sm'
+								: 'w-[272px]'
+						} h-[30px]  border border-dashed border-[#BCBCBC]`}
 						type="button"
 						onClick={() => dispatch(addContent(cardIndex))}
 					>
@@ -408,7 +486,15 @@ function PriceCard({
 				</div>
 			</div>
 			<a
-				className={`my-[40px] flex h-[48px] w-[256px] cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${bgColor.mainColor}`}
+				className={` responsiveSubscribeButton ${
+					previewMode === 'tablet'
+						? 'h-[40px] w-[191px]'
+						: previewMode === 'mobile'
+						? 'h-[40px] w-[255px] text-sm'
+						: 'h-[48px] w-[256px]'
+				} my-[40px] flex  cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${
+					bgColor.mainColor
+				} `}
 				type="button"
 				onClick={() => {
 					dispatch(deletePriceCard(cardIndex));

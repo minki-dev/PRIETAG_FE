@@ -35,6 +35,7 @@ import { updateHeight, useDNDBox } from '@/store/slice/DNDBoxSlice';
 import debounce from 'lodash.debounce';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
+import Footer from '@/components/footer/Footer';
 import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
 
 export default function EditTemplate() {
@@ -143,7 +144,17 @@ export default function EditTemplate() {
 			{' '}
 			{configState.isOnboardingModalOpen && <OnBoardingModal />}
 			<Header />
-			<main className="mx-auto mt-36 	 box-content flex w-[calc(100vw-14.5rem)] flex-col justify-center">
+			<main
+				className={` responsiveLayout mx-auto mt-36 box-content flex  flex-col justify-center
+					${
+						configState.previewMode === 'tablet'
+							? 'w-[1020px] border-x-[120px] border-[#E0E0E0]'
+							: configState.previewMode === 'mobile'
+							? 'border-x-[20]x w-[335px]'
+							: 'w-[calc(100vw-14.5rem)]'
+					}
+					`}
+			>
 				<RightMenu />
 				{configState.isPriceModalOpen && <PriceModal />}
 				{configState.isColorModalOpen && <ColorModal />}
@@ -177,6 +188,7 @@ export default function EditTemplate() {
 					<DraggableArea areaType="faqArea" />
 					<FAQ />
 				</section>
+				<Footer />
 			</main>
 		</>
 	);

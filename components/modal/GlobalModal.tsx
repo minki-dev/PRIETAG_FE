@@ -20,6 +20,9 @@ export const GlobalModal = () => {
 			tabIndex={-1}
 			aria-hidden="true"
 			className="fixed left-0 right-0 top-0 z-50  h-full w-full bg-black bg-opacity-30"
+			onClick={() => {
+				dispatch(closeModal());
+			}}
 		>
 			<div className="absolute left-1/2 top-1/2 h-[240px] w-[480px] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-2xl bg-white !opacity-100 shadow-md">
 				<div className="absolute left-[32px] top-[21px] h-[32px] ">

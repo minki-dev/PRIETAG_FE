@@ -52,6 +52,9 @@ module.exports = {
 				outer: 'inset 0 0 1px 16px #DCFBD9',
 				inner: 'inset 0 0 1px 16px #ebf2ff',
 			},
+			screens: {
+				mobile: '376px',
+			},
 		},
 	},
 	plugins: [],

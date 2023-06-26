@@ -35,7 +35,7 @@ function PriceCardContent({
 	return (
 		<>
 			<textarea
-				className="min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+				className="responsiveContent min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 				placeholder="세부 기능을 입력해 주세요"
 				ref={contentRef}
 				value={priceModal.priceCards[cardIndex].content[contentIndex]}

@@ -21,8 +21,6 @@ export default function TemplateHeader() {
 						<Image
 							src="/img/upload_logo.svg"
 							alt="로고 이미지"
-							// width={93.81}
-							// height={32}
 							fill
 							className="absolute left-[40px] top-[20px]"
 						/>

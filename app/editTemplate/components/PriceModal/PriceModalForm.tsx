@@ -10,7 +10,6 @@ import {
 	toggleHighLight,
 	toggleIsCardSet,
 	toggleIsCheckPerPerson,
-	toggleIsCheckPerTier,
 	toggleIsCheckPerYear,
 	updateHeadDiscount,
 	usePriceModal,

@@ -22,7 +22,7 @@ function TableTopRow({
 					checked={isAllChecked}
 					onChange={handleAllCheck}
 					className="h-[24px] w-[24px]"
-					// value={false || ''}
+					value={'off' || ''}
 				/>
 			</div>
 

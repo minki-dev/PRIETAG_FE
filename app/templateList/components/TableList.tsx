@@ -28,7 +28,7 @@ function TableList({
 							onChange={(e) => handleSingleCheck(e, post.id)}
 							className="h-[24px] w-[24px]"
 							// value={post.id.toString() || ''}
-							// value={false || ''}
+							value={'off' || ''}
 						/>
 					</div>
 					<div className="flex w-[127px] min-w-[127px] ">어쩌구저ㅉ꾸</div>

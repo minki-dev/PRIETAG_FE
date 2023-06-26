@@ -2,8 +2,12 @@ import React from 'react';
 import Image from 'next/image';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 function HomeHeader() {
+	const pathname = usePathname();
+	const underline = 'border-opacity-1 border-b-2 border-b-black';
+	const noUnderline = 'border-opacity-0';
 	return (
 		<div className="relative h-[72px] w-full">
 			<div className="h-[44px] w-full sm:hidden">
@@ -24,18 +28,30 @@ function HomeHeader() {
 					<div className=" h-[72px] min-w-[240px] shrink-0">
 						<nav className="h-full">
 							<ul className="flex h-full cursor-pointer  justify-between text-[16px]">
-								<div className="hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black sm:flex">
+								<div
+									className={`hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center  hover:border-b-2 hover:border-b-black sm:flex ${
+										pathname === '/' ? underline : noUnderline
+									}`}
+								>
 									<Link href="/">
 										{' '}
 										<li className=" hover:font-medium">홈</li>
 									</Link>
 								</div>
-								<div className="hover:border-opacity-1 hidden  h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black xl:mx-[67px]  xl:flex">
+								<div
+									className={`hover:border-opacity-1 hidden  h-full w-[92px] items-center justify-center hover:border-b-2 hover:border-b-black xl:mx-[67px]  xl:flex ${
+										pathname === '/templateList' ? underline : noUnderline
+									}`}
+								>
 									<Link href="/templateList">
 										<li className=" hover:font-medium">템플릿 편집</li>
 									</Link>
 								</div>
-								<div className="hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black sm:flex">
+								<div
+									className={`hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center hover:border-b-2 hover:border-b-black sm:flex ${
+										pathname === '/dashboard' ? underline : noUnderline
+									}`}
+								>
 									<Link href="/dashboard">
 										<li className=" hover:font-medium">대시 보드</li>
 									</Link>

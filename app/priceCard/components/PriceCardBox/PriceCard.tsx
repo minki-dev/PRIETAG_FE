@@ -406,6 +406,8 @@ function PriceCard({
 								dispatch(deletePriceCard(cardIndex));
 								featureTableDispatch(removeColumn({ colIndex: cardIndex }));
 							}}
+							onMouseOver={cardOverHoverHandler}
+							onMouseOut={cardOutHoverHandler}
 						/>
 						<Image
 							src="/icons/drag_hori.svg"
@@ -414,6 +416,8 @@ function PriceCard({
 							height={26}
 							className="absolute left-[-13px] top-[-13px] cursor-pointer"
 							{...provided.dragHandleProps}
+							onMouseOver={cardOverHoverHandler}
+							onMouseOut={cardOutHoverHandler}
 						/>
 					</>
 				) : null}
@@ -424,7 +428,7 @@ function PriceCard({
 				>
 					<label
 						onMouseOver={cardOverHoverHandler}
-						// onMouseOut={cardOutHoverHandler}
+						onMouseOut={cardOutHoverHandler}
 						className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
 					>
 						<div
@@ -564,7 +568,7 @@ function PriceCard({
 								? 'w-[191px] text-sm'
 								: previewMode === 'mobile'
 								? 'w-[255px]'
-								: 'w-[256px]'
+								: 'w-[272px]'
 						} relative  flex flex-col items-center justify-center gap-[2px]`}
 						ref={featureHoverRef}
 					>
@@ -575,9 +579,9 @@ function PriceCard({
 								width={26}
 								height={26}
 								className="absolute right-[-13px] top-[-13px] cursor-pointer"
+								onClick={deleteFeatureContent}
 								onMouseOver={featureOverHoverHandler}
 								onMouseOut={featureOutHoverHandler}
-								onClick={deleteFeatureContent}
 							/>
 						) : null}
 						<textarea
@@ -592,6 +596,8 @@ function PriceCard({
 							onChange={(event) => inputHandle(event, 'feature')}
 							value={priceCardInfoEl.feature}
 							ref={featureRef}
+							onMouseOver={featureOverHoverHandler}
+							onMouseOut={featureOutHoverHandler}
 						/>
 						{priceModal.priceCards[cardIndex].content.map((data, index) => (
 							<PriceCardContent

@@ -43,13 +43,14 @@ function PriceCardContent({
 		}
 		if (contentHoverRef.current && contentRef.current)
 			contentHoverRef.current.style.height = contentRef.current.style.height;
-		setContentEl(event.target.value);
+		const value = event.target.value;
+		setContentEl(value);
 		console.log(contentEl);
 		dispatch(
 			updateContent({
 				cardIndex,
 				contentIndex,
-				contentData: event.target.value,
+				contentData: value,
 			}),
 		);
 	};

@@ -472,13 +472,13 @@ function PriceCard({
 					>
 						<span
 							className={` 
-${
-	previewMode === 'tablet'
-		? 'text-2xl'
-		: previewMode === 'mobile'
-		? 'text-xl'
-		: 'text-[32px]'
-} font-bold`}
+								${
+									previewMode === 'tablet'
+										? 'text-2xl'
+										: previewMode === 'mobile'
+										? 'text-xl'
+										: 'text-[32px]'
+								} font-bold`}
 						>
 							{discountPrice.toLocaleString('ko-KR')}원/
 							{priceModal.isCheckPerYear && priceModal.monthYearToggle

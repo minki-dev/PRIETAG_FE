@@ -94,6 +94,7 @@ function PriceCardBox() {
 											{(provided) => (
 												<div
 													{...provided.draggableProps}
+													//{...provided.dragHandleProps}
 													ref={provided.innerRef}
 												>
 													<PriceCard

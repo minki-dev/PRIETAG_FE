@@ -13,24 +13,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { DraggableProvided } from 'react-beautiful-dnd';
 import { useConfig } from '@/store/slice/configSlice';
 
-interface priceCardInfo {
-	id: string;
-	title: string;
-	price: number;
-	discountRate: number;
-	detail: string;
-	feature: string;
-	content: string[];
-}
-
 interface colorInfo {
 	mainColor: string;
 	subColor01: string;
 	subColor02: string;
+	fontColor: string;
 }
-
-// 여기서 가격을 계산해야 한다면
-// 월, 연 할인율 / 인원별 할인율 데이터 필요해보임.
 
 function PriceCard({
 	cardIndex,
@@ -124,15 +112,6 @@ function PriceCard({
 		if (detailRef.current)
 			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
 	};
-
-	// useEffect(() => {
-	// 	dispatch(
-	// 		updatePriceCard({
-	// 			index: cardIndex,
-	// 			card: priceCardInfoEl,
-	// 		}),
-	// 	);
-	// }, [priceCardInfoEl]);
 
 	const deleteTitleHandle = () => {
 		const newValue = Object.assign({}, priceCardInfoEl, { title: '' });
@@ -298,18 +277,6 @@ function PriceCard({
 		}
 	};
 
-	const bgColor: colorInfo = {
-		mainColor: `bg-[${color.mainColor}]`,
-		subColor01: `bg-[${color.subColor01}]`,
-		subColor02: `bg-[${color.subColor02}]`,
-	};
-
-	const textColor: colorInfo = {
-		mainColor: `text-[${color.mainColor}]`,
-		subColor01: `text-[${color.subColor01}]`,
-		subColor02: `text-[${color.subColor02}]`,
-	};
-
 	const cardRef = useRef<HTMLDivElement>(null);
 	const [isCardHovering, setIsCardHovering] = useState(false);
 	const titleRef = useRef<HTMLInputElement>(null);
@@ -375,6 +342,61 @@ function PriceCard({
 
 	const { v4: uuidv4 } = require('uuid');
 
+	const bgColor: colorInfo = {
+		mainColor: `bg-[${color.mainColor}]`,
+		subColor01: `bg-[${color.subColor01}]`,
+		subColor02: `bg-[${color.subColor02}]`,
+		fontColor: 'text-[#000000]',
+	};
+
+	const textColor: colorInfo = {
+		mainColor: `text-[${color.mainColor}]`,
+		subColor01: `text-[${color.subColor01}]`,
+		subColor02: `text-[${color.subColor02}]`,
+		fontColor: 'text-[#000000]',
+	};
+
+	const titleLabelRef = useRef<HTMLLabelElement>(null);
+	const priceRef = useRef<HTMLSpanElement>(null);
+	const subscribeButtonRef = useRef<HTMLAnchorElement>(null);
+
+	useEffect(() => {
+		// 특정 카드 강조
+		if (priceModal.isCardHighLight && priceModal.highLightIndex === cardIndex) {
+			if (titleLabelRef.current && titleRef.current) {
+				titleLabelRef.current.style.backgroundColor = color.mainColor;
+				titleRef.current.style.backgroundColor = color.mainColor;
+			}
+			if (cardRef.current) {
+				cardRef.current.style.border = `4px solid ${color.mainColor}`;
+				cardRef.current.style.borderRadius = '16px';
+			}
+			if (priceRef.current) {
+				priceRef.current.style.color = color.subColor01;
+			}
+		} else {
+			// 특정 카드 강조 X
+			if (titleLabelRef.current && titleRef.current) {
+				titleLabelRef.current.style.backgroundColor = color.subColor02;
+				titleRef.current.style.backgroundColor = color.subColor02;
+			}
+			if (cardRef.current) {
+				cardRef.current.style.border = 'none';
+			}
+			if (priceRef.current) {
+				priceRef.current.style.color = '#000000';
+			}
+		}
+		// 공통
+		if (titleRef.current) {
+			titleRef.current.style.color = color.fontColor;
+		}
+		if (subscribeButtonRef.current) {
+			subscribeButtonRef.current.style.backgroundColor = color.mainColor;
+			subscribeButtonRef.current.style.color = color.fontColor;
+		}
+	}, [color, priceModal.isCardHighLight, priceModal.highLightIndex, cardIndex]);
+
 	return (
 		<div
 			className="h-full p-1"
@@ -430,6 +452,7 @@ function PriceCard({
 						onMouseOver={cardOverHoverHandler}
 						onMouseOut={cardOutHoverHandler}
 						className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
+						ref={titleLabelRef}
 					>
 						<div
 							className="relative"
@@ -457,7 +480,7 @@ function PriceCard({
 									bgColor.subColor02
 								} responsiveInput border border-dashed border-[#BCBCBC] px-2 py-1  font-medium  outline-none`}
 								type="text"
-								maxLength={12}
+								maxLength={11}
 								placeholder={`(${cardIndex + 1}번 카드) 요금제 명`}
 								onChange={(event) => inputHandle(event, 'title')}
 								ref={titleRef}
@@ -475,6 +498,7 @@ function PriceCard({
 						} mb-[16px] mt-[24px] flex  flex-col justify-between`}
 					>
 						<span
+							ref={priceRef}
 							className={` 
 								${
 									previewMode === 'tablet'
@@ -482,7 +506,7 @@ function PriceCard({
 										: previewMode === 'mobile'
 										? 'text-xl'
 										: 'text-[32px]'
-								} font-bold`}
+								} font-bold ${textColor.mainColor}`}
 						>
 							{discountPrice.toLocaleString('ko-KR')}원/
 							{priceModal.isCheckPerYear && priceModal.monthYearToggle
@@ -632,6 +656,7 @@ function PriceCard({
 						bgColor.mainColor
 					} `}
 					type="button"
+					ref={subscribeButtonRef}
 				>
 					구독하기
 				</a>

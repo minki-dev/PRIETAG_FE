@@ -16,15 +16,6 @@ import {
 } from '@/store/slice/featureTableSlice';
 import { useConfig } from '@/store/slice/configSlice';
 
-interface priceCardid {
-	id: string;
-}
-interface colorInfo {
-	mainColor: string;
-	subColor01: string;
-	subColor02: string;
-}
-
 /* 테스트용 스타일 */
 // const getListStyle = (isDraggingOver: any) => ({
 // 	background: isDraggingOver ? 'lightblue' : 'white',
@@ -36,12 +27,7 @@ function PriceCardBox() {
 	const { priceModal, dispatch: priceModalDispatch } = usePriceModal();
 	const { dispatch: featureTableDispatch } = useFeatureTable();
 	const { configState } = useConfig();
-	const { previewMode } = configState;
-	const colorInfoEl: colorInfo = {
-		mainColor: '#00A3FF',
-		subColor01: '#60C8FF',
-		subColor02: '#EAF8FF',
-	};
+	const { previewMode, color } = configState;
 
 	const reorder = (startIndex: number, endIndex: number) => {
 		const result = Array.from(priceModal.priceCards);
@@ -99,7 +85,7 @@ function PriceCardBox() {
 												>
 													<PriceCard
 														cardIndex={index}
-														color={colorInfoEl}
+														color={color}
 														provided={provided}
 													/>
 												</div>
@@ -113,7 +99,7 @@ function PriceCardBox() {
 			</DragDropContext>
 			{priceModal.priceCards.length > 3 ? null : (
 				<button type="button" onClick={handleAddCard}>
-					<AddCardButton color={colorInfoEl} />
+					<AddCardButton />
 				</button>
 			)}
 		</div>

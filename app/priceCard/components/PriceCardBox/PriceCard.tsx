@@ -52,17 +52,17 @@ function PriceCard({
 	}, [
 		priceModal.priceCards[cardIndex].price,
 		priceModal.priceCards[cardIndex].discountRate,
-		priceModal.priceCards[cardIndex].content,
+		//priceModal.priceCards[cardIndex].content,
 		priceModal.pricing,
 	]);
 
-	// priceCard의 content부분
-	const [priceCardContentEl, setPriceCardContentEl] = React.useState(
-		priceModal.priceCards[cardIndex].content,
-	);
-	useEffect(() => {
-		setPriceCardContentEl(priceModal.priceCards[cardIndex].content);
-	}, [priceModal.priceCards[cardIndex].content]);
+	// // priceCard의 content부분
+	// const [priceCardContentEl, setPriceCardContentEl] = React.useState(
+	// 	priceModal.priceCards[cardIndex].content,
+	// );
+	// useEffect(() => {
+	// 	setPriceCardContentEl(priceModal.priceCards[cardIndex].content);
+	// }, [priceModal.priceCards[cardIndex].content]);
 
 	// detail 부분의 높이
 	const detailRef = React.useRef<HTMLTextAreaElement>(null);
@@ -89,16 +89,28 @@ function PriceCard({
 			if (detailRef.current) {
 				detailRef.current.style.height = '30px';
 				detailRef.current.style.height = detailRef.current.scrollHeight + 'px';
-				setPriceCardInfoEl(
-					Object.assign({}, priceCardInfoEl, {
-						detail: event.target.value,
-						detailHeight: detailRef.current.scrollHeight,
+				const newValue = Object.assign({}, priceCardInfoEl, {
+					detail: event.target.value,
+					detailHeight: detailRef.current.scrollHeight,
+				});
+				setPriceCardInfoEl(newValue);
+				dispatch(
+					updatePriceCard({
+						index: cardIndex,
+						card: newValue,
 					}),
 				);
 			}
 		} else {
-			setPriceCardInfoEl(
-				Object.assign({}, priceCardInfoEl, { [name]: event.target.value }),
+			const newValue = Object.assign({}, priceCardInfoEl, {
+				[name]: event.target.value,
+			});
+			setPriceCardInfoEl(newValue);
+			dispatch(
+				updatePriceCard({
+					index: cardIndex,
+					card: newValue,
+				}),
 			);
 		}
 		if (featureRef.current) {
@@ -109,21 +121,36 @@ function PriceCard({
 			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
 	};
 
+	// useEffect(() => {
+	// 	dispatch(
+	// 		updatePriceCard({
+	// 			index: cardIndex,
+	// 			card: priceCardInfoEl,
+	// 		}),
+	// 	);
+	// }, [priceCardInfoEl]);
+
 	const deleteTitleHandle = () => {
-		setPriceCardInfoEl(Object.assign({}, priceCardInfoEl, { title: '' }));
+		const newValue = Object.assign({}, priceCardInfoEl, { title: '' });
+		setPriceCardInfoEl(newValue);
 		dispatch(
 			updatePriceCard({
 				index: cardIndex,
-				card: priceCardInfoEl,
+				card: newValue,
 			}),
 		);
 	};
 
 	const deleteDetailHandle = () => {
-		setPriceCardInfoEl(
-			Object.assign({}, priceCardInfoEl, {
-				detail: '',
-				detailHeight: 30,
+		const newValue = Object.assign({}, priceCardInfoEl, {
+			detail: '',
+			detailHeight: 30,
+		});
+		setPriceCardInfoEl(newValue);
+		dispatch(
+			updatePriceCard({
+				index: cardIndex,
+				card: newValue,
 			}),
 		);
 		if (detailRef.current) {
@@ -133,25 +160,21 @@ function PriceCard({
 	};
 
 	const deleteFeatureContent = () => {
-		setPriceCardInfoEl(
-			Object.assign({}, priceCardInfoEl, {
-				feature: '',
-				content: [],
+		const newValue = Object.assign({}, priceCardInfoEl, {
+			feature: '',
+			content: [],
+		});
+		setPriceCardInfoEl(newValue);
+		dispatch(
+			updatePriceCard({
+				index: cardIndex,
+				card: newValue,
 			}),
 		);
 		if (featureRef.current) {
 			featureRef.current.style.height = '30px';
 		}
 	};
-
-	useEffect(() => {
-		dispatch(
-			updatePriceCard({
-				index: cardIndex,
-				card: priceCardInfoEl,
-			}),
-		);
-	}, [priceCardInfoEl]);
 
 	// 월간, 연간 할인율
 	const [currentYearDiscount, setCurrentYearDiscount] = React.useState(0);
@@ -350,7 +373,7 @@ function PriceCard({
 
 	return (
 		<div
-			className="p-1"
+			className="h-full p-1"
 			onMouseOver={cardOverHoverHandler}
 			onMouseOut={cardOutHoverHandler}
 		>
@@ -391,7 +414,7 @@ function PriceCard({
 				>
 					<label
 						onMouseOver={cardOverHoverHandler}
-						//onMouseOut={cardOutHoverHandler}
+						// onMouseOut={cardOutHoverHandler}
 						className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
 					>
 						<div

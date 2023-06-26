@@ -16,20 +16,21 @@ function PriceCardContent({
 }) {
 	const { priceModal, dispatch } = usePriceModal();
 	const contentRef = useRef<HTMLTextAreaElement>(null);
+	const contentHoverRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (contentHoverRef.current && contentRef.current) {
-			contentHoverRef.current.style.height = '30px';
-			contentRef.current.style.height = '30px';
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (contentHoverRef.current && contentRef.current) {
+	// 		contentHoverRef.current.style.height = '30px';
+	// 		contentRef.current.style.height = '30px';
+	// 	}
+	// }, []);
 
 	const [contentEl, setContentEl] = useState(
 		priceModal.priceCards[cardIndex].content[contentIndex],
 	);
-	useEffect(() => {
-		setContentEl(priceModal.priceCards[cardIndex].content[contentIndex]);
-	}, [priceModal.priceCards[cardIndex].content[contentIndex]]);
+	// useEffect(() => {
+	// 	setContentEl(priceModal.priceCards[cardIndex].content[contentIndex]);
+	// }, [priceModal.priceCards[cardIndex].content[contentIndex]]);
 
 	const inputHandle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		if (contentRef.current) {
@@ -39,20 +40,18 @@ function PriceCardContent({
 		if (contentHoverRef.current && contentRef.current)
 			contentHoverRef.current.style.height = contentRef.current.style.height;
 		setContentEl(event.target.value);
-	};
-
-	useEffect(() => {
+		console.log(contentEl);
 		dispatch(
 			updateContent({
 				cardIndex,
 				contentIndex,
-				contentData: contentEl,
+				contentData: event.target.value,
 			}),
 		);
-	}, [contentEl]);
+	};
 
 	const deleteHandle = () => {
-		//setContentEl('');
+		setContentEl('');
 		if (contentRef.current) {
 			contentRef.current.style.height = '30px';
 		}
@@ -61,7 +60,6 @@ function PriceCardContent({
 		dispatch(deletePriceCardContent({ cardIndex, contentIndex }));
 	};
 
-	const contentHoverRef = useRef<HTMLDivElement>(null);
 	const [isContentHovering, setIsContentHovering] = useState(false);
 
 	// content
@@ -80,7 +78,7 @@ function PriceCardContent({
 		<div
 			onMouseOver={contentOverHoverHandler}
 			onMouseOut={contentOutHoverHandler}
-			className="relative min-h-[30px]"
+			className="relative h-[30px]"
 			ref={contentHoverRef}
 		>
 			{isContentHovering ? (
@@ -94,11 +92,11 @@ function PriceCardContent({
 				/>
 			) : null}
 			<textarea
-				className="min-h-[30px] w-[272px] resize-none overflow-hidden border-[1px] border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+				className="h-[30px] w-[272px] resize-none overflow-hidden border-[1px] border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 				placeholder="세부 기능을 입력해 주세요"
 				ref={contentRef}
 				value={contentEl}
-				onChange={(event) => inputHandle(event)}
+				onChange={inputHandle}
 			/>
 		</div>
 	);

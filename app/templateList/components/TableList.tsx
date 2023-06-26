@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import SquareBtn from '@/components/button/SquareBtn';
+import { usePathname } from 'next/navigation';
 
 function TableList({
 	visibleSearchedPosts,
@@ -10,12 +11,15 @@ function TableList({
 	fetchTemplates,
 	posts,
 }) {
+	// console.log({ posts, visiblePosts, searchedPosts });
+
 	const visiblePostsToRender =
 		keyword !== '' ? visibleSearchedPosts : visiblePosts;
 
+	const pathname = usePathname();
 	return (
 		<div>
-			{visiblePostsToRender.map((post) => (
+			{visiblePostsToRender?.map((post) => (
 				<div
 					key={post.id}
 					className="flex h-[81px] w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px] text-[#747474] hover:bg-[#EAF8FF]"
@@ -53,7 +57,7 @@ function TableList({
 					</div>
 					<div>
 						<SquareBtn
-							textContent="퍼블리시"
+							textContent={pathname.includes('/edit') ? '편집' : '퍼블리시'}
 							textColor="#747474"
 							width="100px"
 							bg="#fff"
@@ -62,7 +66,7 @@ function TableList({
 					</div>
 				</div>
 			))}
-			{visiblePostsToRender.length === 0 && (
+			{visiblePostsToRender?.length === 0 && (
 				<div className="flex h-[81px] w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px] text-[#747474]">
 					검색된 게시물이 없습니다.
 				</div>

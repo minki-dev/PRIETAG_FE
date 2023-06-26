@@ -6,14 +6,12 @@ function ReturnToList({
 	setSearchedPosts,
 	setKeyword,
 	setCurrentPage,
-	handleAllCheckFalse,
 	handleSearch,
 }) {
 	const handleReturnToList = () => {
 		setSearchedPosts([]);
 		setKeyword('');
 		setCurrentPage(1);
-		handleAllCheckFalse();
 		fetchTemplates();
 	};
 

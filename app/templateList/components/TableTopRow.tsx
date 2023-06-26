@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Post } from '../publish/page';
 
 function TableTopRow({
 	posts,
@@ -7,11 +8,13 @@ function TableTopRow({
 	searchedPosts,
 	keyword,
 }) {
-	const isAllChecked =
-		searchedPosts.filter((post) => post.isChecked === true).length ===
-		searchedPosts.length;
-
-	// searchedPosts의 isChecked 항목이 전부 true 이면 isAllchecked를 true로 설정하는 코드
+	const isAllChecked = () => {
+		return keyword
+			? searchedPosts.length > 0 &&
+					searchedPosts.every((post: Post) => post.isChecked)
+			: visiblePosts?.length > 0 &&
+					visiblePosts.every((post: Post) => post.isChecked);
+	};
 
 	return (
 		<div className="flex h-[81px] w-full min-w-[900px] items-center justify-between border-[#989898]  bg-[#F9F9F9] px-[16px] ">
@@ -19,8 +22,8 @@ function TableTopRow({
 				{' '}
 				<input
 					type="checkbox"
-					checked={isAllChecked}
-					onChange={handleAllCheck}
+					defaultChecked={isAllChecked()}
+					onClick={handleAllCheck}
 					className="h-[24px] w-[24px]"
 					value={'off' || ''}
 				/>

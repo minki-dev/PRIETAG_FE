@@ -1,27 +1,90 @@
+'use client';
+
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import priceOptions from './components/priceOptions';
+import MoreDropDown from './components/MoreDropDown';
+import ViewDropDown from './components/ViewDropDown';
+import ToggleDropDown from './components/ToggleDropDown';
 
 interface DataItem {
 	id: number;
 	title: string;
 	date: string;
+	moreIsClicked: boolean;
 }
 
-const data = [
-	{ id: 1, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 2, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 3, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 4, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 5, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 6, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 7, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 8, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-	{ id: 9, title: '저번에 만들었나', date: '2023.05.31.15:00' },
-];
 export default function PriceTable() {
+	const [viewIsClicked, setViewIsClicked] = useState(false);
+	const [moreIsClicked, setMoreIsClicked] = useState(false);
+	const [data, setData] = useState([
+		{
+			id: 1,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 2,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 3,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 4,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 5,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 6,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 7,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 8,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+		{
+			id: 9,
+			title: '저번에 만들었나',
+			date: '2023.05.31.15:00',
+			moreIsClicked: false,
+		},
+	]);
+	const handleMoreClick = (id) => {
+		setData((prevData) => {
+			return prevData.map((item) => {
+				if (item.id === id) {
+					console.log('id', moreIsClicked);
+					return { ...item, moreIsClicked: !item.moreIsClicked };
+				}
+				return item;
+			});
+		});
+	};
 	return (
 		<>
 			<Header />
@@ -51,7 +114,7 @@ export default function PriceTable() {
 								width={24}
 								height={24}
 								className=" object-cover "
-								alt="연"
+								alt="연필아이콘"
 							/>{' '}
 						</div>
 						<div>새로운 가격표 만들기</div>
@@ -62,48 +125,58 @@ export default function PriceTable() {
 								width={24}
 								height={24}
 								className=" object-cover "
-								alt="연"
+								alt="생성아이콘"
 							/>{' '}
 						</div>
 					</button>
-					<select className=" my-auto h-[42px] w-[166px]">
-						<option>정렬기준</option>
-						<option>최종편집일시</option>
-						<option>요금제명</option>
-					</select>
+					<div
+						onClick={() => {
+							setViewIsClicked(!viewIsClicked);
+						}}
+						className="relative flex h-[26px] w-[166px] items-center justify-between rounded-[4px] border border-[#796161] px-[8px]"
+					>
+						<div className="p-[8px]"> 정렬기준</div>
+						<div>
+							<ToggleDropDown viewIsClicked={viewIsClicked} />
+						</div>
+						{viewIsClicked ? <ViewDropDown /> : null}
+					</div>
 				</div>
 				<div className=" grid min-w-[900px] grid-cols-[repeat(3,minmax(100px,413px))] grid-rows-[repeat(3,minmax(100px,327px))] justify-evenly gap-[80px] ">
-					{data.map((item: DataItem) => (
+					{data.map((item: DataItem, index: number) => (
 						<div
 							key={item.id}
 							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
 						>
-							<div className="h-[72px] "></div>
+							<div className="h-[72px] p-[24px]"></div>
 							<div className="h-[calc(100%-72px-112px)] bg-blue-100">
 								가격표 이미지 넣을 공간
 							</div>
-							<div className="relative flex">
-								<div className="relative left-[24px] top-[16px] h-[80px] ">
-									<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">
-										{item.title}
-									</div>
-									<div className="pt-[8px] text-[14px] font-normal leading-snug text-neutral-500">
-										최종편집일시
-									</div>
-									<div className="leading-0  text-[14px] font-normal">
-										{item.date}
-									</div>
+							<div className="relative flex flex-col justify-center px-[24px] py-[16px]">
+								<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">
+									{item.title}
 								</div>
-								<div className="relative left-[15px] h-[20px] w-[4px] pt-[65px]">
-									<button type="button" cursor-autor="true">
-										<Image
-											src="/img/menu_dots.svg"
-											width={4}
-											height={20}
-											alt="옵션 메뉴"
-										/>
-									</button>
+								<div className="pt-[8px] text-[14px] font-normal leading-snug text-neutral-500">
+									최종편집일시
 								</div>
+								<div className="leading-0  text-[14px] font-normal">
+									{item.date}
+								</div>
+								<button
+									type="button"
+									className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
+									onClick={() => {
+										handleMoreClick(item.id);
+									}}
+								>
+									<Image
+										src="/img/menu_dots.svg"
+										width={4}
+										height={20}
+										alt="더보기"
+									/>
+								</button>
+								{item.moreIsClicked ? <MoreDropDown /> : null}
 							</div>
 						</div>
 					))}

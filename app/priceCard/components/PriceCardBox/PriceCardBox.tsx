@@ -14,6 +14,7 @@ import {
 	swapColumns,
 	useFeatureTable,
 } from '@/store/slice/featureTableSlice';
+import { useConfig } from '@/store/slice/configSlice';
 
 interface priceCardid {
 	id: string;
@@ -34,7 +35,8 @@ interface colorInfo {
 function PriceCardBox() {
 	const { priceModal, dispatch: priceModalDispatch } = usePriceModal();
 	const { dispatch: featureTableDispatch } = useFeatureTable();
-
+	const { configState } = useConfig();
+	const { previewMode } = configState;
 	const colorInfoEl: colorInfo = {
 		mainColor: '#00A3FF',
 		subColor01: '#60C8FF',
@@ -72,7 +74,14 @@ function PriceCardBox() {
 							{...provided.droppableProps}
 							ref={provided.innerRef}
 							//style={getListStyle(snapshot.isDraggingOver)}
-							className="flex flex-nowrap justify-center gap-10"
+							className={`responsiveCardBoxLayout  flex flex-nowrap justify-center ${
+								previewMode === 'tablet'
+									? 'gap-7'
+									: previewMode === 'mobile'
+									? 'flex-col'
+									: 'grid-cols-4 gap-10'
+							} 
+							`}
 						>
 							{!priceModal.priceCards
 								? null

@@ -18,12 +18,12 @@ function PriceCardContent({
 	const contentRef = useRef<HTMLTextAreaElement>(null);
 	const contentHoverRef = useRef<HTMLDivElement>(null);
 
-	// useEffect(() => {
-	// 	if (contentHoverRef.current && contentRef.current) {
-	// 		contentHoverRef.current.style.height = '30px';
-	// 		contentRef.current.style.height = '30px';
-	// 	}
-	// }, []);
+	useEffect(() => {
+		if (contentHoverRef.current && contentRef.current) {
+			contentHoverRef.current.style.height = '30px';
+			contentRef.current.style.height = '30px';
+		}
+	}, []);
 
 	const [contentEl, setContentEl] = useState(
 		priceModal.priceCards[cardIndex].content[contentIndex],
@@ -78,7 +78,7 @@ function PriceCardContent({
 		<div
 			onMouseOver={contentOverHoverHandler}
 			onMouseOut={contentOutHoverHandler}
-			className="relative h-[30px]"
+			className="relative min-h-[30px]"
 			ref={contentHoverRef}
 		>
 			{isContentHovering ? (
@@ -92,7 +92,7 @@ function PriceCardContent({
 				/>
 			) : null}
 			<textarea
-				className="h-[30px] w-[272px] resize-none overflow-hidden border-[1px] border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
+				className="responsiveContent min-h-[30px] w-[272px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none"
 				placeholder="세부 기능을 입력해 주세요"
 				ref={contentRef}
 				value={contentEl}

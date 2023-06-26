@@ -8,11 +8,19 @@ import { useConfig } from '@/store/slice/configSlice';
 export default function TableContainer() {
 	const { featureTableState } = useFeatureTable();
 	const { configState } = useConfig();
-	const { isPreview } = configState;
+	const { isPreview, previewMode } = configState;
 	//  Data fetching required in order to initialize table
 	return (
 		<section
-			className={`${isPreview ? 'editable-outer-preview' : 'editable-outer'} w-full`}
+			className={`${
+				isPreview ? 'editable-outer-preview' : 'editable-outer'
+			} responsiveTable w-full ${
+				previewMode === 'tablet'
+					? 'overflow-x-auto'
+					: previewMode === 'mobile'
+					? 'overflow-x-auto'
+					: ''
+			}`}
 		>
 			<DraggableArea areaType="tableArea" />
 			{featureTableState.featureTableList.map((featureTable, index) => {

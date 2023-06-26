@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import Link from 'next/link';
 
 function HomeHeader() {
 	return (
@@ -24,13 +25,20 @@ function HomeHeader() {
 						<nav className="h-full">
 							<ul className="flex h-full cursor-pointer  justify-between text-[16px]">
 								<div className="hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black sm:flex">
-									<li className=" hover:font-medium">홈</li>
+									<Link href="/">
+										{' '}
+										<li className=" hover:font-medium">홈</li>
+									</Link>
 								</div>
 								<div className="hover:border-opacity-1 hidden  h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black xl:mx-[67px]  xl:flex">
-									<li className=" hover:font-medium">템플릿 편집</li>
+									<Link href="/templateList">
+										<li className=" hover:font-medium">템플릿 편집</li>
+									</Link>
 								</div>
 								<div className="hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black sm:flex">
-									<li className=" hover:font-medium">대시 보드</li>
+									<Link href="/dashboard">
+										<li className=" hover:font-medium">대시 보드</li>
+									</Link>
 								</div>
 							</ul>
 						</nav>

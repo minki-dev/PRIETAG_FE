@@ -342,20 +342,6 @@ function PriceCard({
 
 	const { v4: uuidv4 } = require('uuid');
 
-	const bgColor: colorInfo = {
-		mainColor: `bg-[${color.mainColor}]`,
-		subColor01: `bg-[${color.subColor01}]`,
-		subColor02: `bg-[${color.subColor02}]`,
-		fontColor: 'text-[#000000]',
-	};
-
-	const textColor: colorInfo = {
-		mainColor: `text-[${color.mainColor}]`,
-		subColor01: `text-[${color.subColor01}]`,
-		subColor02: `text-[${color.subColor02}]`,
-		fontColor: 'text-[#000000]',
-	};
-
 	const titleLabelRef = useRef<HTMLLabelElement>(null);
 	const priceRef = useRef<HTMLSpanElement>(null);
 	const subscribeButtonRef = useRef<HTMLAnchorElement>(null);
@@ -451,7 +437,7 @@ function PriceCard({
 					<label
 						onMouseOver={cardOverHoverHandler}
 						onMouseOut={cardOutHoverHandler}
-						className={`flex h-[103px] w-full items-center justify-center rounded-t-lg ${bgColor.subColor02}`}
+						className={`flex h-[103px] w-full items-center justify-center rounded-t-lg`}
 						ref={titleLabelRef}
 					>
 						<div
@@ -476,8 +462,6 @@ function PriceCard({
 										: previewMode === 'mobile'
 										? 'w-[255px] text-2xl'
 										: 'h-[47px] w-[272px] text-2xl'
-								}  ${
-									bgColor.subColor02
 								} responsiveInput border border-dashed border-[#BCBCBC] px-2 py-1  font-medium  outline-none`}
 								type="text"
 								maxLength={11}
@@ -506,7 +490,7 @@ function PriceCard({
 										: previewMode === 'mobile'
 										? 'text-xl'
 										: 'text-[32px]'
-								} font-bold ${textColor.mainColor}`}
+								} font-bold `}
 						>
 							{discountPrice.toLocaleString('ko-KR')}원/
 							{priceModal.isCheckPerYear && priceModal.monthYearToggle
@@ -652,9 +636,7 @@ function PriceCard({
 							: previewMode === 'mobile'
 							? 'h-[40px] w-[255px] text-sm'
 							: 'h-[48px] w-[256px]'
-					} my-[40px] flex  cursor-pointer items-center justify-center rounded-[4px] font-bold text-white ${
-						bgColor.mainColor
-					} `}
+					} my-[40px] flex  cursor-pointer items-center justify-center rounded-[4px] font-bold text-white`}
 					type="button"
 					ref={subscribeButtonRef}
 				>

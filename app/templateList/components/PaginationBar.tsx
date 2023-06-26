@@ -6,10 +6,11 @@ import { ModalTypes } from '@/components/modal/ModalState';
 import Image from 'next/image';
 
 function PaginationBar({
-	pages,
 	setCurrentPage,
 	currentPage,
 	numOfTotalPages,
+	handleDeleteSelected,
+	numOfVisiblePages,
 }) {
 	const { dispatch } = useModal();
 	const prevPageHandler = () => {
@@ -23,7 +24,7 @@ function PaginationBar({
 			setCurrentPage(currentPage + 1);
 		}
 	};
-
+	const pages = [...Array(numOfVisiblePages + 1).keys()].slice(1);
 	return (
 		<div className="relative flex h-[168px] w-full justify-center">
 			<div className="absolute left-0 top-[28px] ">
@@ -33,9 +34,9 @@ function PaginationBar({
 					textColor="#fff"
 					textContent="선택 삭제"
 					borderColor="#FF0000"
-					onClick={() => {
-						dispatch(openModal(ModalTypes.TemplateDelModal));
-					}}
+					onClick={handleDeleteSelected}
+
+					// dispatch(openModal(ModalTypes.TemplateDelModal));
 				/>{' '}
 				<GlobalModal />
 			</div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 
 function SearchInput({
@@ -6,6 +6,7 @@ function SearchInput({
 	handleKeywordChange,
 	searchInputRef,
 	handleSearch,
+	fetchTemplates,
 }) {
 	return (
 		<div className="relative flex h-[46px] w-[400px] items-center justify-between">
@@ -15,7 +16,7 @@ function SearchInput({
 					type="text"
 					placeholder="검색어를 입력해 주세요"
 					className="shadow-[0_0px_4px_rgba(0, 0, 0, 0.35)] absolute right-0 mt-[10px] min-w-[400px] rounded-md px-[16px] py-[10px] shadow"
-					value={keyword}
+					value={keyword || ''}
 					onChange={handleKeywordChange}
 					ref={searchInputRef}
 				/>

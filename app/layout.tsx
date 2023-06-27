@@ -11,7 +11,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<link rel="icon" href="/logo.ico" sizes="any" />
-			<body className={inter.className}>
+			<body className={inter.className} suppressHydrationWarning={true}>
 				<ReduxProvider>
 					<main className="min-h-screen w-screen bg-gray-100">
 						<main className=" m-auto w-[375px]  bg-white sm:w-full xl:min-w-[1280px] xl:max-w-[1920px]  ">

@@ -37,11 +37,12 @@ import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
 import Footer from '@/components/footer/Footer';
 import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
+import UploadModal from './components/UploadModal/UploadModal';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { priceModal, dispatch } = usePriceModal();
-	const { faq, dispatch: faqDispatch } = useFAQ();
+
 	const toggleModal = () => {
 		setIsModalOpen(!isModalOpen);
 	};
@@ -158,6 +159,7 @@ export default function EditTemplate() {
 				<RightMenu />
 				{configState.isPriceModalOpen && <PriceModal />}
 				{configState.isColorModalOpen && <ColorModal />}
+				{configState.isUploadModalOpen && <UploadModal />}
 				<section
 					className={`${
 						isPreview ? 'editable-outer-preview' : 'editable-outer '
@@ -188,8 +190,8 @@ export default function EditTemplate() {
 					<DraggableArea areaType="faqArea" />
 					<FAQ />
 				</section>
-				<Footer />
 			</main>
+			<Footer />
 		</>
 	);
 }

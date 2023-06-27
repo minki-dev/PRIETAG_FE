@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 
 function ReturnToList({
@@ -6,13 +6,15 @@ function ReturnToList({
 	setSearchedPosts,
 	setKeyword,
 	setCurrentPage,
+	handleSearch,
 }) {
 	const handleReturnToList = () => {
-		fetchTemplates();
 		setSearchedPosts([]);
 		setKeyword('');
 		setCurrentPage(1);
+		fetchTemplates();
 	};
+
 	return (
 		<div>
 			<div className="absolute left-0">

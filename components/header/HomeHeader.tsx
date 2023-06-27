@@ -18,13 +18,7 @@ function HomeHeader() {
 				<div className="flex h-full w-full items-center justify-between px-[20px] sm:w-[calc(100%-240px)] sm:px-0 xl:w-[calc(100%-80px)]  ">
 					<div className=" relative h-[18px] w-[53px] sm:h-[32px] sm:w-[93px] xl:h-[32px] xl:w-[94px]  ">
 						{' '}
-						<Image
-							src="/img/ezfee.svg"
-							alt="로고 이미지"
-							// width={93.81}
-							// height={32}
-							fill={true}
-						/>{' '}
+						<Image src="/img/ezfee.svg" alt="로고 이미지" fill={true} />{' '}
 					</div>
 					<div className=" h-[72px] min-w-[240px] shrink-0">
 						<nav className="h-full">

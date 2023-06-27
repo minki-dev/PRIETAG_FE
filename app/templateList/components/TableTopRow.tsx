@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Post } from '../publish/page';
 
-function TableTopRow({ posts, handleAllCheck }) {
+function TableTopRow({
+	posts,
+	handleAllCheck,
+	visiblePosts,
+	searchedPosts,
+	keyword,
+}) {
+	const isAllChecked = () => {
+		return keyword
+			? searchedPosts.length > 0 &&
+					searchedPosts.every((post: Post) => post.isChecked)
+			: visiblePosts?.length > 0 &&
+					visiblePosts.every((post: Post) => post.isChecked);
+	};
+
 	return (
 		<div className="flex h-[81px] w-full min-w-[900px] items-center justify-between border-[#989898]  bg-[#F9F9F9] px-[16px] ">
 			<div className="h-[24px] w-[92px] min-w-[92px] ">
 				{' '}
 				<input
 					type="checkbox"
-					checked={posts.every((post) => post.isChecked)}
-					onChange={handleAllCheck}
+					defaultChecked={isAllChecked()}
+					onClick={handleAllCheck}
 					className="h-[24px] w-[24px]"
+					value={'off' || ''}
 				/>
 			</div>
 

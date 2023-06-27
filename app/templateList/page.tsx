@@ -8,6 +8,7 @@ import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
 import PaginationBar from './components/PaginationBar';
+import { useRouter } from 'next/navigation';
 
 interface DataItem {
 	id: number;
@@ -19,59 +20,60 @@ interface DataItem {
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState(false);
 	const [moreIsClicked, setMoreIsClicked] = useState(false);
+	const router = useRouter();
 	const [data, setData] = useState([
 		{
 			id: 1,
-			title: '저번에 만들었나',
+			title: 'Gitbook 요금제 ',
 			date: '2023.05.31.15:00',
 			moreIsClicked: false,
 		},
 		{
 			id: 2,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: 'Gitbook 요금제_2',
+			date: '2023.06.01.12:00',
 			moreIsClicked: false,
 		},
 		{
 			id: 3,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: 'Swit 플랜',
+			date: '2023.05.29.11:20',
 			moreIsClicked: false,
 		},
 		{
 			id: 4,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: '패스트캠퍼스 최종요금제',
+			date: '2023.05.28.05:50',
 			moreIsClicked: false,
 		},
 		{
 			id: 5,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: 'INHR 서비스 요금제 ',
+			date: '2023.05.27.08:30',
 			moreIsClicked: false,
 		},
 		{
 			id: 6,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: '채널톡 가격 서비스 정책표',
+			date: '2023.05.21.10:14',
 			moreIsClicked: false,
 		},
 		{
 			id: 7,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: '라이너 요금 정책표',
+			date: '2023.05.17.16:26',
 			moreIsClicked: false,
 		},
 		{
 			id: 8,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: '플렉스 요금제',
+			date: '2023.05.15.15:24',
 			moreIsClicked: false,
 		},
 		{
 			id: 9,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
+			title: '클로바인 요금제',
+			date: '2023.05.11.09:43',
 			moreIsClicked: false,
 		},
 	]);
@@ -79,7 +81,6 @@ export default function TemplateList() {
 		setData((prevData) => {
 			return prevData.map((item) => {
 				if (item.id === id) {
-					console.log('id', moreIsClicked);
 					return { ...item, moreIsClicked: !item.moreIsClicked };
 				}
 				return item;
@@ -107,7 +108,12 @@ export default function TemplateList() {
 			</div>
 			<div className="h-full  w-full   px-[240px] pb-[240px] pt-[80px]">
 				<div className="flex h-[120px] w-full min-w-[900px] items-center  justify-between">
-					<button className="  flex h-[58px]  w-[262px] justify-around rounded-lg border border-stone-300 bg-white p-4">
+					<button
+						onClick={() => {
+							router.push('/editTemplate');
+						}}
+						className="  flex h-[58px]  w-[262px] justify-around rounded-lg border border-stone-300 bg-white p-4"
+					>
 						<div>
 							{' '}
 							<Image
@@ -118,6 +124,7 @@ export default function TemplateList() {
 								alt="연필아이콘"
 							/>{' '}
 						</div>
+
 						<div>새로운 가격표 만들기</div>
 						<div>
 							{' '}
@@ -148,10 +155,13 @@ export default function TemplateList() {
 						<div
 							key={item.id}
 							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
+							onClick={() => {
+								router.push('/templateList/edit');
+							}}
 						>
 							<div className="h-[72px] p-[24px]"></div>
-							<div className="h-[calc(100%-72px-112px)] bg-blue-100">
-								가격표 이미지 넣을 공간
+							<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
+								<Image src="/img/a.png" width={400} height={300} alt="가격표" />
 							</div>
 							<div className="relative flex flex-col justify-center px-[24px] py-[16px]">
 								<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">

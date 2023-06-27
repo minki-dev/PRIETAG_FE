@@ -16,7 +16,7 @@ function PriceCardContent({
 	contentIndex: number;
 }) {
 	const { configState } = useConfig();
-	const { previewMode } = configState;
+	const { isPreview, previewMode } = configState;
 
 	const { priceModal, dispatch } = usePriceModal();
 	const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -69,15 +69,39 @@ function PriceCardContent({
 
 	// content
 	const contentOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsContentHovering(true);
-		if (contentRef.current)
-			contentRef.current.style.border = '1px solid #000000';
+		if (!isPreview) {
+			setIsContentHovering(true);
+			if (contentRef.current)
+				contentRef.current.style.border = '1px solid #000000';
+		}
 	};
 	const contentOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsContentHovering(false);
-		if (contentRef.current)
-			contentRef.current.style.border = '1px dashed #BCBCBC';
+		if (!isPreview) {
+			setIsContentHovering(false);
+			if (contentRef.current)
+				contentRef.current.style.border = '1px dashed #BCBCBC';
+		}
 	};
+
+	useEffect(() => {
+		if (isPreview) {
+			if (contentRef.current && contentHoverRef.current) {
+				contentRef.current.style.border = 'none';
+				contentRef.current.disabled = true;
+				if (contentRef.current.value === '') {
+					contentHoverRef.current.style.display = 'none';
+				}
+			}
+		} else {
+			if (contentRef.current && contentHoverRef.current) {
+				contentRef.current.style.border = '1px dashed #BCBCBC';
+				contentRef.current.disabled = false;
+				if (contentRef.current.value === '') {
+					contentHoverRef.current.style.display = 'block';
+				}
+			}
+		}
+	}, [isPreview]);
 
 	return (
 		<div
@@ -103,7 +127,7 @@ function PriceCardContent({
 						: previewMode === 'mobile'
 						? 'w-[255px] text-xs'
 						: 'w-[272px]'
-				} h-[30px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none`}
+				} h-[30px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none disabled:bg-white`}
 				placeholder="세부 기능을 입력해 주세요"
 				ref={contentRef}
 				value={contentEl}

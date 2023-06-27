@@ -48,13 +48,13 @@ function PriceCard({
 		priceModal.pricing,
 	]);
 
-	// // priceCard의 content부분
-	// const [priceCardContentEl, setPriceCardContentEl] = React.useState(
-	// 	priceModal.priceCards[cardIndex].content,
-	// );
-	// useEffect(() => {
-	// 	setPriceCardContentEl(priceModal.priceCards[cardIndex].content);
-	// }, [priceModal.priceCards[cardIndex].content]);
+	// priceCard의 content부분
+	const [priceCardContentEl, setPriceCardContentEl] = React.useState(
+		priceModal.priceCards[cardIndex].content,
+	);
+	useEffect(() => {
+		setPriceCardContentEl(priceModal.priceCards[cardIndex].content);
+	}, [priceModal.priceCards[cardIndex].content]);
 
 	// detail 부분의 높이
 	const detailRef = React.useRef<HTMLTextAreaElement>(null);
@@ -361,6 +361,7 @@ function PriceCard({
 
 	const { v4: uuidv4 } = require('uuid');
 
+	// 색상 설정 및 특정 카드 강조
 	const titleLabelRef = useRef<HTMLLabelElement>(null);
 	const priceRef = useRef<HTMLSpanElement>(null);
 	const subscribeButtonRef = useRef<HTMLAnchorElement>(null);
@@ -401,6 +402,63 @@ function PriceCard({
 			subscribeButtonRef.current.style.color = color.fontColor;
 		}
 	}, [color, priceModal.isCardHighLight, priceModal.highLightIndex, cardIndex]);
+
+	const addContentButtonRef = useRef<HTMLButtonElement>(null);
+
+	// 미리보기 설정
+	useEffect(() => {
+		if (isPreview) {
+			if (titleRef.current) {
+				titleRef.current.style.border = 'none';
+				titleRef.current.disabled = true;
+				if (titleRef.current.value === '') {
+					titleRef.current.style.visibility = 'hidden';
+				}
+			}
+			if (detailRef.current && detailHoverRef.current) {
+				detailRef.current.style.border = 'none';
+				detailRef.current.disabled = true;
+				if (detailRef.current.value === '') {
+					detailHoverRef.current.style.visibility = 'hidden';
+				}
+			}
+			if (featureRef.current) {
+				featureRef.current.style.border = 'none';
+				featureRef.current.disabled = true;
+				if (featureRef.current.value === '') {
+					featureRef.current.style.visibility = 'hidden';
+				}
+			}
+			if (addContentButtonRef.current) {
+				addContentButtonRef.current.style.display = 'none';
+			}
+		} else {
+			if (titleRef.current) {
+				titleRef.current.style.border = '1px dashed #BCBCBC';
+				titleRef.current.disabled = false;
+				if (titleRef.current.value === '') {
+					titleRef.current.style.visibility = 'visible';
+				}
+			}
+			if (detailRef.current && detailHoverRef.current) {
+				detailRef.current.style.border = '1px dashed #BCBCBC';
+				detailRef.current.disabled = false;
+				if (detailRef.current.value === '') {
+					detailHoverRef.current.style.visibility = 'visible';
+				}
+			}
+			if (featureRef.current) {
+				featureRef.current.style.border = '1px dashed #BCBCBC';
+				featureRef.current.disabled = false;
+				if (featureRef.current.value === '') {
+					featureRef.current.style.visibility = 'visible';
+				}
+			}
+			if (addContentButtonRef.current) {
+				addContentButtonRef.current.style.display = 'inline-block';
+			}
+		}
+	}, [isPreview]);
 
 	return (
 		<div
@@ -573,7 +631,7 @@ function PriceCard({
 									: previewMode === 'mobile'
 									? 'w-[255px]'
 									: 'w-[272px]'
-							}  mb-[16px] min-h-[30px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none`}
+							} mb-[16px] min-h-[30px] resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] outline-none disabled:bg-white`}
 							placeholder="요금제 설명"
 							ref={detailRef}
 							onChange={(event) => inputHandle(event, 'detail')}
@@ -618,7 +676,7 @@ function PriceCard({
 									: previewMode === 'mobile'
 									? 'w-[255px] text-xs'
 									: 'w-[272px]'
-							} min-h-[30px]  resize-none overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold  outline-none`}
+							} min-h-[30px] resize-none  overflow-hidden border border-dashed border-[#BCBCBC] px-[8px] py-[2px] font-bold outline-none  disabled:bg-white`}
 							placeholder="타이틀을 입력해 주세요"
 							onChange={(event) => inputHandle(event, 'feature')}
 							value={priceCardInfoEl.feature}
@@ -626,7 +684,7 @@ function PriceCard({
 							onMouseOver={featureOverHoverHandler}
 							onMouseOut={featureOutHoverHandler}
 						/>
-						{priceModal.priceCards[cardIndex].content.map((data, index) => (
+						{priceCardContentEl.map((data, index) => (
 							<PriceCardContent
 								key={uuidv4()}
 								cardIndex={cardIndex}
@@ -643,6 +701,7 @@ function PriceCard({
 							} h-[30px]  border border-dashed border-[#BCBCBC]`}
 							type="button"
 							onClick={() => dispatch(addContent(cardIndex))}
+							ref={addContentButtonRef}
 						>
 							+
 						</button>

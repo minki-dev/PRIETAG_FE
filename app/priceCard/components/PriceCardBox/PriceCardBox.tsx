@@ -27,7 +27,7 @@ function PriceCardBox() {
 	const { priceModal, dispatch: priceModalDispatch } = usePriceModal();
 	const { dispatch: featureTableDispatch } = useFeatureTable();
 	const { configState } = useConfig();
-	const { previewMode, color } = configState;
+	const { isPreview, previewMode, color } = configState;
 
 	const reorder = (startIndex: number, endIndex: number) => {
 		const result = Array.from(priceModal.priceCards);
@@ -52,7 +52,11 @@ function PriceCardBox() {
 	};
 	// console.log(priceModal.priceCards);
 	return (
-		<div className="editable-inner flex min-h-[547px] items-center justify-center gap-10">
+		<div
+			className={`${
+				isPreview ? 'editable-inner-preview' : 'editable-inner'
+			} flex min-h-[535px] items-center justify-center gap-10`}
+		>
 			<DragDropContext onDragEnd={handleOnDragEnd}>
 				<Droppable droppableId="priceCard" direction="horizontal">
 					{(provided, snapshot) => (

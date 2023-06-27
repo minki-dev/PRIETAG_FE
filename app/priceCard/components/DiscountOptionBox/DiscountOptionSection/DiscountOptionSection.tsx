@@ -8,10 +8,14 @@ import { useConfig } from '@/store/slice/configSlice';
 function DiscountOptionSection() {
 	const { priceModal, dispatch } = usePriceModal();
 	const { configState } = useConfig();
-	const { color } = configState;
+	const { isPreview, color } = configState;
 
 	return (
-		<div className="editable-inner flex justify-center gap-10">
+		<div
+			className={`${
+				isPreview ? 'editable-inner-preview' : 'editable-inner'
+			} flex justify-center gap-10`}
+		>
 			{priceModal.isCheckPerYear ? (
 				<MonthYearChecked color={color.mainColor} />
 			) : null}

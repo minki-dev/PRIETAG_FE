@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 function NoResonsiveFooter() {
 	return (
-		<div className=" shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] ]   relative  flex   w-screen justify-between bg-white px-[240px] py-[40px]   text-[16px] shadow">
+		<div className=" shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] ]   relative  flex   w-screen justify-between bg-white py-[40px] text-[16px]   shadow sm:px-[240px]">
 			<div className=" w-full min-w-[300px] ">
 				<div className="relative mb-[12px] h-[36px] w-[106px] ">
 					<Image

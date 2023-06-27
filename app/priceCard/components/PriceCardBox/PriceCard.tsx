@@ -33,7 +33,7 @@ function PriceCard({
 	const { dispatch: featureTableDispatch } = useFeatureTable();
 	const { configState } = useConfig();
 
-	const { previewMode } = configState;
+	const { isPreview, previewMode } = configState;
 
 	// priceCard 전체 정보
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
@@ -290,54 +290,73 @@ function PriceCard({
 	const cardOverHoverHandler = (
 		e: React.MouseEvent<HTMLDivElement | HTMLLabelElement>,
 	) => {
-		if (e.target === e.currentTarget) {
-			setIsCardHovering(true);
-			if (cardRef.current) cardRef.current.style.outline = '1px solid #000000';
+		if (!isPreview) {
+			if (e.target === e.currentTarget) {
+				setIsCardHovering(true);
+				if (cardRef.current)
+					cardRef.current.style.outline = '1px solid #000000';
+			}
 		}
 	};
 	const cardOutHoverHandler = (
 		e: React.MouseEvent<HTMLDivElement | HTMLLabelElement>,
 	) => {
-		if (e.target === e.currentTarget) {
-			setIsCardHovering(false);
-			if (cardRef.current) cardRef.current.style.outline = 'none';
+		if (!isPreview) {
+			if (e.target === e.currentTarget) {
+				setIsCardHovering(false);
+				if (cardRef.current) cardRef.current.style.outline = 'none';
+			}
 		}
 	};
 
 	// title
 	const titleOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsTitleHovering(true);
-		if (titleRef.current) titleRef.current.style.border = '1px solid #000000';
+		if (!isPreview) {
+			setIsTitleHovering(true);
+			if (titleRef.current) titleRef.current.style.border = '1px solid #000000';
+		}
 	};
 	const titleOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsTitleHovering(false);
-		if (titleRef.current) titleRef.current.style.border = '1px dashed #BCBCBC';
+		if (!isPreview) {
+			setIsTitleHovering(false);
+			if (titleRef.current)
+				titleRef.current.style.border = '1px dashed #BCBCBC';
+		}
 	};
 
 	// detail
 	const detailOverHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsDetailHovering(true);
-		if (detailHoverRef.current)
-			detailHoverRef.current.style.outline = '1px solid #000000';
+		if (!isPreview) {
+			setIsDetailHovering(true);
+			if (detailHoverRef.current)
+				detailHoverRef.current.style.outline = '1px solid #000000';
+		}
 	};
 	const detailOutHoverHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-		setIsDetailHovering(false);
-		if (detailHoverRef.current) detailHoverRef.current.style.outline = 'none';
+		if (!isPreview) {
+			setIsDetailHovering(false);
+			if (detailHoverRef.current) detailHoverRef.current.style.outline = 'none';
+		}
 	};
 
 	// feature
 	const featureOverHoverHandler = (
 		e: React.MouseEvent<HTMLTextAreaElement | HTMLImageElement>,
 	) => {
-		setIsFeatureHovering(true);
-		if (featureHoverRef.current)
-			featureHoverRef.current.style.outline = '1px solid #000000';
+		if (!isPreview) {
+			setIsFeatureHovering(true);
+			if (featureHoverRef.current)
+				featureHoverRef.current.style.outline = '1px solid #000000';
+		}
 	};
 	const featureOutHoverHandler = (
 		e: React.MouseEvent<HTMLTextAreaElement | HTMLImageElement>,
 	) => {
-		setIsFeatureHovering(false);
-		if (featureHoverRef.current) featureHoverRef.current.style.outline = 'none';
+		if (!isPreview) {
+			setIsFeatureHovering(false);
+			if (featureHoverRef.current)
+				featureHoverRef.current.style.outline = 'none';
+		}
 	};
 
 	const { v4: uuidv4 } = require('uuid');

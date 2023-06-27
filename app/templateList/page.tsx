@@ -7,6 +7,7 @@ import Image from 'next/image';
 import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
+import PaginationBar from './components/PaginationBar';
 
 interface DataItem {
 	id: number;
@@ -15,7 +16,7 @@ interface DataItem {
 	moreIsClicked: boolean;
 }
 
-export default function PriceTable() {
+export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState(false);
 	const [moreIsClicked, setMoreIsClicked] = useState(false);
 	const [data, setData] = useState([
@@ -180,8 +181,9 @@ export default function PriceTable() {
 							</div>
 						</div>
 					))}
-				</div>
+				</div>{' '}
 			</div>
+
 			<Footer />
 		</>
 	);

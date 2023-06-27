@@ -17,7 +17,7 @@ function ReturnToList({
 
 	return (
 		<div>
-			<div className="absolute left-0">
+			<div className="absolute left-0 top-[7px] ">
 				<Image
 					src="/img/page_pre.svg"
 					alt="이전으로 가기"

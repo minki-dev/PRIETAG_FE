@@ -37,6 +37,7 @@ import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
 import Footer from '@/components/footer/Footer';
 import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
+import NoResponsiveFooter from '@/components/footer/NoResponsiveFooter';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -188,8 +189,8 @@ export default function EditTemplate() {
 					<DraggableArea areaType="faqArea" />
 					<FAQ />
 				</section>
-				<Footer />
 			</main>
+			<NoResponsiveFooter />
 		</>
 	);
 }

@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import SquareBtn from '@/components/button/SquareBtn';
 import { usePathname } from 'next/navigation';
+import { openModal, useModal } from '@/store/slice/modalSlice';
+import { ModalTypes } from '@/components/modal/ModalState';
 
+import { GlobalModal } from '@/components/modal/GlobalModal';
 function TableList({
 	visibleSearchedPosts,
 	searchedPosts,
@@ -12,6 +15,7 @@ function TableList({
 	posts,
 }) {
 	// console.log({ posts, visiblePosts, searchedPosts });
+	const { dispatch, isOpen, params } = useModal();
 
 	const visiblePostsToRender =
 		keyword !== '' ? visibleSearchedPosts : visiblePosts;
@@ -28,32 +32,32 @@ function TableList({
 						<input
 							type="checkbox"
 							checked={post.isChecked}
-							// checked={checkedPosts.includes(post.id)}
 							onChange={(e) => handleSingleCheck(e, post.id)}
 							className="h-[24px] w-[24px]"
-							// value={post.id.toString() || ''}
 							value={'off' || ''}
 						/>
 					</div>
 					<div className="flex w-[127px] min-w-[127px] ">어쩌구저ㅉ꾸</div>
-					<div className="w-[210px] min-w-[30px]  px-[80px]">{post.id}.0</div>
-					<div className=" flex w-[400px] truncate">
-						{post.title
-							.split(new RegExp(`(${keyword})`, 'gi'))
-							.map((part, index) => (
-								<span
-									key={index}
-									style={{
-										color:
-											part.toLowerCase() === keyword.toLowerCase()
-												? '#00A3FF'
-												: '#000000',
-										whiteSpace: 'pre',
-									}}
-								>
-									{part}
-								</span>
-							))}
+					<div className="w-[200px] min-w-[30px]  px-[80px]">{post.id}.0</div>
+					<div className="relative h-full w-[400px] ">
+						<div className=" absolute left-0 top-[30px]  w-[300px] truncate">
+							{post.title
+								.split(new RegExp(`(${keyword})`, 'gi'))
+								.map((part, index) => (
+									<span
+										key={index}
+										style={{
+											color:
+												part.toLowerCase() === keyword.toLowerCase()
+													? '#00A3FF'
+													: '#000000',
+											whiteSpace: 'pre',
+										}}
+									>
+										{part}
+									</span>
+								))}
+						</div>
 					</div>
 					<div>
 						<SquareBtn
@@ -62,6 +66,11 @@ function TableList({
 							width="100px"
 							bg="#fff"
 							borderColor="#747474"
+							onClick={
+								pathname.includes('/edit')
+									? () => dispatch(openModal(ModalTypes.FAQResetModal))
+									: () => dispatch(openModal(ModalTypes.ConfirmPublishModal))
+							}
 						/>
 					</div>
 				</div>

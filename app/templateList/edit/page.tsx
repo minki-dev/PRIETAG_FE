@@ -10,8 +10,6 @@ import SearchInput from '../components/SearchInput';
 import TableTopRow from '../components/TableTopRow';
 import TableList from '../components/TableList';
 import PaginationBar from '../components/PaginationBar';
-import { openModal, useModal } from '@/store/slice/modalSlice';
-import { ModalTypes } from '@/components/modal/ModalState';
 
 // axios instance 생성
 const getTemplates = axios.create({
@@ -40,7 +38,6 @@ export default function Edit() {
 	const indexOfFirstPost = indexOfLastPost - 10; //현재 페이지에서 가장 첫번째에 있는 게시물의 index (0,10,20,...)
 	const [visiblePosts, setVisiblePosts] = useState<Post[]>();
 	const allUnCheckRef = useRef<boolean>(true);
-	const { dispatch, isOpen, params } = useModal();
 
 	//검색
 	const searchInputRef = useRef(); //검색창
@@ -181,7 +178,6 @@ export default function Edit() {
 						visiblePosts={visiblePosts}
 						searchedPosts={searchedPosts}
 						keyword={keyword}
-						// isChecked={isChecked}
 					/>
 					<TableList
 						visibleSearchedPosts={getVisibleSearchedPosts()}

@@ -34,9 +34,10 @@ function PaginationBar({
 					textColor="#fff"
 					textContent="선택 삭제"
 					borderColor="#FF0000"
-					onClick={handleDeleteSelected}
-
-					// dispatch(openModal(ModalTypes.TemplateDelModal));
+					onClick={() => {
+						handleDeleteSelected(),
+							dispatch(openModal(ModalTypes.TemplateDelModal));
+					}}
 				/>{' '}
 				<GlobalModal />
 			</div>

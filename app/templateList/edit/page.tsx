@@ -3,16 +3,12 @@
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import Subheader from '../components/Subheader';
 import ReturnToList from '../components/ReturnToList';
 import SearchInput from '../components/SearchInput';
-import TableTopRow from '../components/TableTopRow';
-import TableList from '../components/TableList';
 import PaginationBar from '../components/PaginationBar';
 import { deleteItem } from '@/store/slice/versionSlice';
 import { useDispatch } from 'react-redux';
-import { versionTemplate } from '../data/data';
 import TableListExample from '../components/TableListExample';
 
 export interface Post {

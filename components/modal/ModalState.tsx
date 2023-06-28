@@ -13,10 +13,16 @@ type ModalType = {
 	FAQResetModal: ModalState;
 	FAQSectionDelModal: ModalState;
 	LinkInsertModal: ModalState;
+	CopyPriceModal: ModalState;
+	DelHistoryModal: ModalState;
 };
 
 const blue = `bg-[#00A3FF]`;
 const red = `bg-[#FF0000]`;
+
+const One = () => {
+	console.log('1이라고 적습니다');
+};
 
 export const ModalTypes: ModalType = {
 	TemplateDelModal: {
@@ -33,7 +39,7 @@ export const ModalTypes: ModalType = {
 				behaveButton: {
 					text: '삭제',
 					color: red,
-					onAction: () => {},
+					onAction: One,
 				},
 			},
 		},

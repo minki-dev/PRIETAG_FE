@@ -124,6 +124,8 @@ function TableListExample({}) {
 								textContent="편집"
 								bg="white"
 								borderColor="#747474"
+								onClick={() => {}}
+								
 							/>
 						</td>
 					</tr>
@@ -152,6 +154,8 @@ function TableListExample({}) {
 									textContent="편집"
 									bg="white"
 									borderColor="#747474"
+								onClick={() => {}}
+
 								/>
 							</td>
 						</tr>

@@ -490,7 +490,7 @@ function PriceCard({
 						? 'w-[335px]'
 						: 'w-[336px]'
 				}
-				relative flex h-full flex-col items-center justify-between rounded-lg bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]`}
+				relative flex h-full flex-col items-center justify-between rounded-[16px] bg-white shadow-[0_0_6px_0_rgba(0,0,0,0.15)]`}
 			>
 				{isCardHovering ? (
 					<>
@@ -527,7 +527,7 @@ function PriceCard({
 					<label
 						onMouseOver={cardOverHoverHandler}
 						onMouseOut={cardOutHoverHandler}
-						className={`flex h-[103px] w-full items-center justify-center rounded-t-lg`}
+						className={`flex h-[103px] w-full items-center justify-center rounded-t-[11px]`}
 						ref={titleLabelRef}
 					>
 						<div

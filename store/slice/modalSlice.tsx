@@ -6,12 +6,12 @@ import { RootState } from '..';
 export interface ModalProps {
 	cancelButton: {
 		text: string;
-		// onCancel: () => void;
+		onCancel: (() => void) | null
 	};
 	behaveButton: {
 		text: string;
 		color: string;
-		// onAction: () => void;
+		onAction: (() => void) | null
 	};
 }
 
@@ -19,14 +19,14 @@ export interface ModalParams {
 	title: string;
 	description: React.ReactNode;
 	buttons: {
-		cancelButton?: {
+		cancelButton: {
 			text: string;
-			// onCancel: () => void;
+			onCancel: (() => void) | null
 		};
-		behaveButton?: {
+		behaveButton: {
 			text: string;
 			color: string;
-			// onAction: () => void;
+			onAction:(() => void) | null
 		};
 	};
 }
@@ -44,12 +44,12 @@ const initialState: ModalState = {
 		buttons: {
 			cancelButton: {
 				text: '',
-				// onCancel: () => {},
+				onCancel: null
 			},
 			behaveButton: {
 				text: '',
 				color: '',
-				// onAction: () => {},
+				onAction: null
 			},
 		},
 	},

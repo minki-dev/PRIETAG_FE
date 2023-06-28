@@ -98,14 +98,13 @@ export default function Table({
 		);
 	};
 
-
 	return (
 		<div
 			className={`${
 				isPreview
 					? 'editable-inner-preview border-transparent'
 					: 'group/table editable-inner hover:border-black'
-			} flex justify-center  relative w-full border-2`}
+			} relative flex  w-full justify-center border-2`}
 		>
 			<DeleteButton
 				className="group-hover/table:block"
@@ -181,6 +180,7 @@ export default function Table({
 								{row.map((data, dataColIndex) => {
 									return (
 										<TableRow
+											key={uuid()}
 											defaultValue={data}
 											rowIndex={rowIndex}
 											isPreview={isPreview}

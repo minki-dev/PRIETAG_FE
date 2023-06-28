@@ -9,7 +9,7 @@ import {
 	updateHeadDiscount,
 	usePriceModal,
 } from '@/store/slice/priceModalSlice';
-import Counter from '@/components/Counter';
+
 import FAQ from './components/FAQ';
 import PriceModal from './components/PriceModal/PriceModal';
 // import { testCard } from './components/Test';
@@ -37,6 +37,7 @@ import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
 import Footer from '@/components/footer/Footer';
 import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
+import NoResponsiveFooter from '@/components/footer/NoResponsiveFooter';
 import UploadModal from './components/UploadModal/UploadModal';
 
 export default function EditTemplate() {
@@ -191,7 +192,7 @@ export default function EditTemplate() {
 					<FAQ />
 				</section>
 			</main>
-			<Footer />
+			<NoResponsiveFooter />
 		</>
 	);
 }

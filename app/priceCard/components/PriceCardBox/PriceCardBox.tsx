@@ -1,14 +1,14 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import AddCardButton from './AddCardButton';
 import PriceCard from './PriceCard';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 import { StrictModeDroppable as Droppable } from '@/app/helpers/StrictModeDroppable';
-import { v4 as uuidv4 } from 'uuid';
 import {
 	addPriceCard,
 	changeOrderPriceCard,
 	usePriceModal,
+	updateCardMaxHeight,
 } from '@/store/slice/priceModalSlice';
 import {
 	addColumn,
@@ -16,15 +16,6 @@ import {
 	useFeatureTable,
 } from '@/store/slice/featureTableSlice';
 import { useConfig } from '@/store/slice/configSlice';
-
-interface priceCardid {
-	id: string;
-}
-interface colorInfo {
-	mainColor: string;
-	subColor01: string;
-	subColor02: string;
-}
 
 /* 테스트용 스타일 */
 // const getListStyle = (isDraggingOver: any) => ({
@@ -37,12 +28,7 @@ function PriceCardBox() {
 	const { priceModal, dispatch: priceModalDispatch } = usePriceModal();
 	const { dispatch: featureTableDispatch } = useFeatureTable();
 	const { configState } = useConfig();
-	const { previewMode } = configState;
-	const colorInfoEl: colorInfo = {
-		mainColor: '#00A3FF',
-		subColor01: '#60C8FF',
-		subColor02: '#EAF8FF',
-	};
+	const { isPreview, previewMode, color } = configState;
 
 	const reorder = (startIndex: number, endIndex: number) => {
 		const result = Array.from(priceModal.priceCards);
@@ -58,7 +44,6 @@ function PriceCardBox() {
 
 		reorder(result.source.index, result.destination.index);
 	};
-	const { v4: uuidv4 } = require('uuid');
 
 	const handleAddCard = () => {
 		if (priceModal.priceCards.length > 3) return;
@@ -67,8 +52,22 @@ function PriceCardBox() {
 		featureTableDispatch(addColumn());
 	};
 	// console.log(priceModal.priceCards);
+	const cardBoxHeightRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (isPreview && cardBoxHeightRef.current) {
+			priceModalDispatch(
+				updateCardMaxHeight(cardBoxHeightRef.current.scrollHeight),
+			);
+		}
+	}, [isPreview]);
 	return (
-		<div className=" flex min-h-[553px]  items-center justify-center gap-10  ">
+		<div
+			className={`${
+				isPreview ? 'editable-inner-preview' : 'editable-inner'
+			} flex min-h-[535px] items-center justify-center gap-10`}
+			ref={cardBoxHeightRef}
+		>
 			<DragDropContext onDragEnd={handleOnDragEnd}>
 				<Droppable droppableId="priceCard" direction="horizontal">
 					{(provided, snapshot) => (
@@ -96,10 +95,14 @@ function PriceCardBox() {
 											{(provided) => (
 												<div
 													{...provided.draggableProps}
-													{...provided.dragHandleProps}
+													//{...provided.dragHandleProps}
 													ref={provided.innerRef}
 												>
-													<PriceCard cardIndex={index} color={colorInfoEl} />
+													<PriceCard
+														cardIndex={index}
+														color={color}
+														provided={provided}
+													/>
 												</div>
 											)}
 										</Draggable>
@@ -111,7 +114,7 @@ function PriceCardBox() {
 			</DragDropContext>
 			{priceModal.priceCards.length > 3 ? null : (
 				<button type="button" onClick={handleAddCard}>
-					<AddCardButton color={colorInfoEl} />
+					<AddCardButton />
 				</button>
 			)}
 		</div>

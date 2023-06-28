@@ -3,9 +3,9 @@ import Image from 'next/image';
 
 function Footer() {
 	return (
-		<div className=" shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] relative  h-[740px] w-full  justify-between  bg-white px-[20px] py-[40px] text-[14px] shadow sm:flex sm:h-[316px] sm:flex-row   sm:px-[120px] xl:px-[240px] xl:text-[16px]">
-			<div className=" w-full min-w-[300px] sm:h-[216px] sm:w-[281px] xl:w-[341px] ">
-				<div className="relative h-[36px] w-[106px] sm:h-[48px] sm:w-[142px]">
+		<div className=" shadow-[0_-1px_5px_rgba(0, 0, 0, 0.25)] relative  flex h-[740px] w-full  flex-col  justify-center bg-white py-[40px] text-[14px] shadow sm:flex sm:h-[316px] sm:flex-row sm:justify-between sm:px-[120px] xl:h-[326px] xl:px-[240px] xl:text-[16px]">
+			<div className=" w-full sm:h-[216px] sm:w-[281px] sm:min-w-[300px] xl:w-[341px] ">
+				<div className="relative mb-[12px] h-[36px] w-[106px] sm:h-[48px] sm:w-[142px]">
 					<Image
 						src="/img/ezfee.svg"
 						alt="로고 이미지"
@@ -22,8 +22,8 @@ function Footer() {
 			<div className="absolute bottom-[30px] font-medium sm:bottom-[70px] ">
 				Copyright {new Date().getFullYear()}. Zillinks all reserved.
 			</div>
-			<div className=" flex w-full flex-col items-center justify-evenly text-[rgb(116,116,116)]  sm:w-[630px]  sm:min-w-[480px] sm:flex-row   xl:min-w-[800px] xl:max-w-[60%]">
-				<ul className="flex h-[116px] w-full flex-col justify-between sm:mt-[32px] sm:w-[121px] sm:min-w-[121px] xl:w-[138px] xl:min-w-[138px]">
+			<div className=" flex w-full flex-col items-center justify-between text-[rgb(116,116,116)] sm:flex  sm:w-[630px]  sm:min-w-[480px] sm:flex-row sm:justify-evenly  xl:min-w-[800px] xl:max-w-[60%]">
+				<ul className=" mt-[32px] flex h-[116px] w-full flex-col justify-between sm:mt-[32px] sm:w-[121px] sm:min-w-[121px] xl:w-[138px] xl:min-w-[138px]">
 					<div className=" font-bold text-black">Policy</div>
 					<a>
 						{' '}

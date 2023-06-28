@@ -13,6 +13,8 @@ type ModalType = {
 	FAQResetModal: ModalState;
 	FAQSectionDelModal: ModalState;
 	LinkInsertModal: ModalState;
+	CopyPriceModal: ModalState;
+	DelHistoryModal: ModalState;
 };
 
 const blue = `bg-[#00A3FF]`;
@@ -80,7 +82,7 @@ export const ModalTypes: ModalType = {
 				},
 				behaveButton: {
 					text: '퍼블리시',
-					color: red,
+					color: blue,
 					onAction: () => {},
 				},
 			},
@@ -218,6 +220,42 @@ export const ModalTypes: ModalType = {
 				behaveButton: {
 					text: '링크 입력',
 					color: blue,
+					onAction: () => {},
+				},
+			},
+		},
+	},
+	CopyPriceModal: {
+		isOpen: true,
+		params: {
+			title: '가격표 복제',
+			description: `'저번에 만들었던 합리적인 요금'가격표를 복제하시겠습니까?`,
+			buttons: {
+				cancelButton: {
+					text: '취소',
+					onCancel: () => {},
+				},
+				behaveButton: {
+					text: '복제',
+					color: blue,
+					onAction: () => {},
+				},
+			},
+		},
+	},
+	DelHistoryModal: {
+		isOpen: true,
+		params: {
+			title: '히스토리',
+			description: `히스토리가 삭제됩니다. 삭제된 히스토리는 복구할 수 없습니다. 진행하시겠습니까?`,
+			buttons: {
+				cancelButton: {
+					text: '취소',
+					onCancel: () => {},
+				},
+				behaveButton: {
+					text: '복제',
+					color: red,
 					onAction: () => {},
 				},
 			},

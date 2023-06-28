@@ -3,20 +3,9 @@ import { useConfig } from '@/store/slice/configSlice';
 import Image from 'next/image';
 import React from 'react';
 
-interface colorInfo {
-	mainColor: string;
-	subColor01: string;
-	subColor02: string;
-}
-
-function AddCardButton({ color }: { color: colorInfo }) {
+function AddCardButton() {
 	const { configState } = useConfig();
 	const { isPreview } = configState;
-	const bgColor: colorInfo = {
-		mainColor: `bg-[${color.mainColor}]`,
-		subColor01: `bg-[${color.subColor01}]`,
-		subColor02: `bg-[${color.subColor02}]`,
-	};
 
 	return (
 		<>

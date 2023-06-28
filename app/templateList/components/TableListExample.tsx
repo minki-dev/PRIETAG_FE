@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import SquareBtn from '@/components/button/SquareBtn';
 import { usePathname } from 'next/navigation';
 import { openModal, useModal } from '@/store/slice/modalSlice';
@@ -8,7 +10,9 @@ import { deleteItem, setCurrentPage } from '@/store/slice/versionSlice';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import { RootState } from '@/store';
 import { SquareBtnProps } from '@/components/button/SquareBtn';
+import { setVersions } from '@/store/slice/versionSlice';
 import Image from 'next/image';
+import { version } from 'os';
 function TableListExample({}) {
 	const { dispatch, isOpen, params } = useModal();
 	const versions = useSelector((state: RootState) => state.version.versions);
@@ -23,20 +27,35 @@ function TableListExample({}) {
 	const indexOfLastItem = currentPage * itemsPerPage;
 	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 	const currentItems = versions.slice(indexOfFirstItem, indexOfLastItem);
-	const pathname = usePathname();
-	// const handleDelete = (itemId: number) => {
-	// 	dispatch(deleteItem(itemId));
-	// };
-	// const handlePageChange = (pageNumber: number) => {
-	// 	dispatch(setCurrentPage(pageNumber));
-	// };
+	const isAllChecked = currentItems.every((version) => version.isChecked);
+
+	const handleAllChecked = () => {
+		const updatedVersions = versions.map((version) => ({
+			...version,
+			isChecked: !isAllChecked,
+		}));
+		dispatch(setVersions(updatedVersions));
+	};
+	const handleCheckboxChange = (itemId: number) => {
+		const updatedVersions = versions.map((version) =>
+			version.id === itemId
+				? { ...version, isChecked: !version.isChecked }
+				: version,
+		);
+		dispatch(setVersions(updatedVersions));
+	};
 	return (
 		<div>
 			<table className="w-full ">
 				<thead>
 					<tr className="flex h-[81px] w-full  items-center justify-between border-[#989898]  bg-[#F9F9F9] px-[16px] ">
 						<th className=" min-w-[140px] text-left">
-							<input type="checkbox" className="h-[24px] w-[24px]" />
+							<input
+								type="checkbox"
+								className="h-[24px] w-[24px]"
+								checked={isAllChecked}
+								onClick={handleAllChecked}
+							/>
 						</th>
 						<th className="relative flex min-w-[150px] ">
 							<div> 마지막 수정 일시 </div>
@@ -114,7 +133,14 @@ function TableListExample({}) {
 							className="flex h-[81px]  w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px] text-[#747474] hover:bg-[#c8e5f4]"
 						>
 							<td className="min-w-[140px] ">
-								<input type="checkbox" className="h-[24px] w-[24px]" />
+								<input
+									type="checkbox"
+									className="h-[24px] w-[24px]"
+									checked={version.isChecked}
+									onChange={() => {
+										handleCheckboxChange(version.id);
+									}}
+								/>
 							</td>
 							<td className="min-w-[150px]">{version.updated_at}</td>
 							<td className="min-w-[210px]">{version.version}.0</td>

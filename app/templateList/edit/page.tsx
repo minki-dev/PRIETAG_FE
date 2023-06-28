@@ -29,13 +29,8 @@ export default function Edit() {
 			<Subheader title="편집" />
 			<div className="h-full  w-full  px-[240px]  pb-[240px] pt-[80px]">
 				<div className="relative flex h-[56px]  w-full min-w-[900px] items-center justify-between">
-					<ReturnToList
-					// fetchTemplates={fetchTemplates}
-					/>
-					<SearchInput
-
-					// fetchTemplates={fetchTemplates}
-					/>
+					<ReturnToList />
+					<SearchInput />
 				</div>
 				<div className="mt-[40px] h-full w-full min-w-[900px]  border-y-[2px] border-[#989898] ">
 					<TableListExample />

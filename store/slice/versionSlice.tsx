@@ -193,8 +193,11 @@ const versionSlice = createSlice({
 		setCurrentPage: (state, action) => {
 			state.currentPage = action.payload;
 		},
+		setVersions: (state, action) => {
+			state.versions = action.payload;
+		},
 	},
 });
-export const { deleteItem, setCurrentPage } = versionSlice.actions;
+export const { deleteItem, setCurrentPage, setVersions } = versionSlice.actions;
 
 export default versionSlice.reducer;

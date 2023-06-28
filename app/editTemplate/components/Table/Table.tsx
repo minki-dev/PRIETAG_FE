@@ -75,11 +75,13 @@ export default function Table({
 	const handleDeleteRow = (idx: number) => {
 		tableDispatch(removeRow({ featureTableIndex, rowIndex: idx }));
 	};
-	
+
 	//	remove this component, resets after modal confirm click
 	const handleTableRemove = () => {
 		if (featureTableState.featureTableList.length === 1) {
-			modalDispatch(openModal(ModalTypes.DetailedFunctionContainerDelModal));
+			modalDispatch(
+				openModal(ModalTypes.DetailedFunctionContainerDelModal.params),
+			);
 			return;
 		}
 		tableDispatch(removeTable({ featureTableIndex }));
@@ -153,7 +155,7 @@ export default function Table({
 						})}
 					</div>
 				)}
-				<div className='w-full border-b-2 border-gray-300'></div>
+				<div className="w-full border-b-2 border-gray-300"></div>
 				{priceCards.length !== 0 && featureName && (
 					<div
 						style={{
@@ -179,7 +181,7 @@ export default function Table({
 								placeholder={`${!isPreview ? '포함된 기능' : ''}`}
 								disabled={isPreview}
 								onBlur={(e) => setFeatureName(e.target.value)}
-								className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
+								className="h-full w-full p-2 focus:outline-none disabled:bg-transparent"
 							/>
 						</div>
 					</div>
@@ -226,14 +228,14 @@ export default function Table({
 				{!isPreview && (
 					<button
 						type="button"
-						className="flex items-center justify-center w-full h-16 col-span-5 border-2 border-gray-300 border-dashed"
+						className="col-span-5 flex h-16 w-full items-center justify-center border-2 border-dashed border-gray-300"
 						onClick={handleAddRow}
 					>
 						<HiOutlinePlus />
 					</button>
 				)}
 			</div>
-			<div className="col-span-5 mt-3 mb-4 border-b-2 border-gray">{}</div>
+			<div className="border-gray col-span-5 mb-4 mt-3 border-b-2">{}</div>
 		</div>
 	);
 }

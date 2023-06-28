@@ -1,6 +1,3 @@
-import { ModalProps } from '@/store/slice/modalSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store';
 import { closeModal, useModal } from '@/store/slice/modalSlice';
 
 export const GlobalModal = () => {
@@ -10,6 +7,7 @@ export const GlobalModal = () => {
 	};
 
 	const onAction = () => {
+		if(params.buttons.behaveButton.onAction) params.buttons.behaveButton.onAction()
 		dispatch(closeModal());
 	};
 
@@ -19,14 +17,14 @@ export const GlobalModal = () => {
 		<div
 			tabIndex={-1}
 			aria-hidden="true"
-			className="fixed left-0 right-0 top-0 z-50  h-full w-full bg-black bg-opacity-30"
+			className="fixed top-0 left-0 right-0 z-50 w-full h-full bg-black bg-opacity-30"
 			onClick={() => {
 				dispatch(closeModal());
 			}}
 		>
 			<div className="absolute left-1/2 top-1/2 h-[240px] w-[480px] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-2xl bg-white !opacity-100 shadow-md">
 				<div className="absolute left-[32px] top-[21px] h-[32px] ">
-					<span className="text-center text-xl font-medium leading-8 text-black">
+					<span className="text-xl font-medium leading-8 text-center text-black">
 						{params.title}
 					</span>
 				</div>

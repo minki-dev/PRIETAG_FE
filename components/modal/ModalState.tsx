@@ -13,6 +13,8 @@ type ModalType = {
 	FAQResetModal: ModalState;
 	FAQSectionDelModal: ModalState;
 	LinkInsertModal: ModalState;
+	CopyPriceModal: ModalState;
+	DelHistoryModal: ModalState;
 };
 
 const blue = `bg-[#00A3FF]`;

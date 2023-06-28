@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import SquareBtn from '@/components/button/SquareBtn';
 import { usePathname } from 'next/navigation';
 import { openModal, useModal } from '@/store/slice/modalSlice';
@@ -12,9 +12,13 @@ import { RootState } from '@/store';
 import { SquareBtnProps } from '@/components/button/SquareBtn';
 import { setVersions } from '@/store/slice/versionSlice';
 import Image from 'next/image';
-import { version } from 'os';
+
 function TableListExample({}) {
 	const { dispatch, isOpen, params } = useModal();
+	const pathname = usePathname();
+	const edit = '/templateList/edit';
+	const publish = '/templateList/publish';
+
 	const versions = useSelector((state: RootState) => state.version.versions);
 	const currentPage = useSelector(
 		(state: RootState) => state.version.currentPage,
@@ -96,19 +100,25 @@ function TableListExample({}) {
 								/>{' '}
 							</div>
 						</th>
-						<th className="w-[100px] min-w-[28px]">편집</th>
+						<th className="w-[100px] min-w-[28px]">
+							{pathname === edit ? '편집' : '퍼블리시'}
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr className="flex h-[81px] w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px]  text-[#747474] hover:bg-[#c8e5f4]">
 						<td className="min-w-[140px]">
-							<SquareBtn
-								borderColor="#00A3FF"
-								textColor="#00A3FF"
-								textContent="퍼블리시중"
-								bg="#DEF4FF"
-								onClick={() => {}}
-							/>
+							{pathname === edit ? (
+								<SquareBtn
+									borderColor="#00A3FF"
+									textColor="#00A3FF"
+									textContent="퍼블리시중"
+									bg="#DEF4FF"
+									onClick={() => {}}
+								/>
+							) : (
+								<input type="checkbox" className="h-[24px] w-[24px]" />
+							)}
 						</td>
 
 						<td className="min-w-[150px]">2023.06.29.05:26</td>
@@ -118,14 +128,25 @@ function TableListExample({}) {
 						</td>
 
 						<td className="flex w-[100px] min-w-[28px] items-center justify-center">
-							<SquareBtn
-								textColor="#747474"
-								width="88px"
-								textContent="편집"
-								bg="white"
-								borderColor="#747474"
-								onClick={() => {}}
-							/>
+							{pathname === edit ? (
+								<SquareBtn
+									textColor="#747474"
+									width="88px"
+									textContent="편집"
+									bg="white"
+									borderColor="#747474"
+									onClick={() => {}}
+								/>
+							) : (
+								<SquareBtn
+									textColor="#00A3FF"
+									width="88px"
+									textContent="퍼블리시중"
+									bg="#DEF4FF"
+									borderColor="#00A3FF"
+									onClick={() => {}}
+								/>
+							)}
 						</td>
 					</tr>
 					{currentItems.map((version) => (

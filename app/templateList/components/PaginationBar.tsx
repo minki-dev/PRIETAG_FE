@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import SquareBtn from '@/components/button/SquareBtn';
 import { openModal, useModal } from '@/store/slice/modalSlice';
 import { GlobalModal } from '@/components/modal/GlobalModal';
@@ -58,11 +58,6 @@ function PaginationBar() {
 				buttons: deleteBehavior.buttons,
 			}),
 		);
-
-		// if (ModalTypes.TemplateDelModal.params.buttons.behaveButton.onAction) {
-		// ModalTypes.TemplateDelModal.params.buttons.behaveButton.onAction()
-
-		// }
 	};
 	return (
 		<div className="relative flex h-[168px] w-full justify-center">

@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 export default function HomeHeader() {
 	const [cookie, setCookie] = useCookies();
 	const [isLogin, setIsLogin] = useState(false);
-	const [email, setEmail] = useState('');
+
 	const router = useRouter();
 	const params = useSearchParams();
 
@@ -43,15 +43,15 @@ export default function HomeHeader() {
 		try {
 			const res = await login(code);
 
-			setEmail(res.data.email);
 			if (window !== undefined) {
 				if (res.data.email !== null) {
 					localStorage.setItem('email', res.data.email);
+					console.log('이메일 설정');
 				}
 			}
 
 			const authToken = getAuthorizationTokenFromCookie();
-			console.log(email);
+
 			if (authToken !== '') {
 				setIsLogin(true);
 			}
@@ -70,12 +70,15 @@ export default function HomeHeader() {
 		return '';
 	};
 	useEffect(() => {
-		const authToken = getAuthorizationTokenFromCookie();
-
-		if (authToken !== '') {
+		if (code !== '') {
+			if (window !== undefined) {
+				if (localStorage.getItem('email') === null) {
+					fetchData();
+				}
+			}
 			setIsLogin(true);
 		} else {
-			fetchData();
+			return;
 		}
 	}, []);
 	const movePage = (url: string) => {
@@ -159,10 +162,9 @@ export default function HomeHeader() {
 								height={32}
 								className="mr-[8px]"
 							/>
-							{window !== undefined &&
-								(localStorage.getItem('email')
-									? localStorage.getItem('email')
-									: '로그인을 진행해주세요')}
+							{window !== undefined && localStorage.getItem('email') !== null
+								? localStorage.getItem('email')
+								: '로그인을 진행해주세요'}
 						</button>
 						<button
 							className={` ${

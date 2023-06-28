@@ -5,6 +5,7 @@ import {
 	updatePriceCard,
 	usePriceModal,
 	addContent,
+	updateCardMaxHeight,
 } from '@/store/slice/priceModalSlice';
 import React, { useEffect, useRef, useState } from 'react';
 import PriceCardContent from './PriceCardContent';
@@ -460,11 +461,23 @@ function PriceCard({
 		}
 	}, [isPreview]);
 
+	const cardHeightRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (isPreview && cardHeightRef.current)
+			cardHeightRef.current.style.height = priceModal.cardMaxHeight;
+	}, [priceModal.cardMaxHeight]);
+	useEffect(() => {
+		if (!isPreview && cardHeightRef.current)
+			cardHeightRef.current.style.height = '100%';
+	}, [isPreview]);
+
 	return (
 		<div
 			className="h-full p-1"
 			onMouseOver={cardOverHoverHandler}
 			onMouseOut={cardOutHoverHandler}
+			ref={cardHeightRef}
 		>
 			<div
 				onMouseOver={cardOverHoverHandler}

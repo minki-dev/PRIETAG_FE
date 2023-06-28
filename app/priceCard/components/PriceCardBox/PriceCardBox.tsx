@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import AddCardButton from './AddCardButton';
 import PriceCard from './PriceCard';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
@@ -8,6 +8,7 @@ import {
 	addPriceCard,
 	changeOrderPriceCard,
 	usePriceModal,
+	updateCardMaxHeight,
 } from '@/store/slice/priceModalSlice';
 import {
 	addColumn,
@@ -51,11 +52,21 @@ function PriceCardBox() {
 		featureTableDispatch(addColumn());
 	};
 	// console.log(priceModal.priceCards);
+	const cardBoxHeightRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (isPreview && cardBoxHeightRef.current) {
+			priceModalDispatch(
+				updateCardMaxHeight(cardBoxHeightRef.current.scrollHeight),
+			);
+		}
+	}, [isPreview]);
 	return (
 		<div
 			className={`${
 				isPreview ? 'editable-inner-preview' : 'editable-inner'
 			} flex min-h-[535px] items-center justify-center gap-10`}
+			ref={cardBoxHeightRef}
 		>
 			<DragDropContext onDragEnd={handleOnDragEnd}>
 				<Droppable droppableId="priceCard" direction="horizontal">

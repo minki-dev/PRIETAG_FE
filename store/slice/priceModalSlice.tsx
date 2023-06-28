@@ -53,7 +53,7 @@ type PriceModalState = {
 	yearDiscountRate: number;
 	isCheckPerPerson: boolean;
 	headDiscount: HeadDiscountItem[];
-
+	cardMaxHeight: string;
 	// 월간/연간 토글 버튼 상태 저장 필요
 	// 월간/연간에 따라 가격, 할인율 표시 위함
 	monthYearToggle: boolean; // false: month, true: year
@@ -99,7 +99,7 @@ const initialState: PriceModalState = {
 		{ headCount: 0, discountRate: 0 },
 		{ headCount: 0, discountRate: 0 },
 	],
-
+	cardMaxHeight: '495px',
 	monthYearToggle: false, // false: month, true: year
 	userCount: 1,
 };
@@ -358,6 +358,15 @@ export const priceModalSlice = createSlice({
 			const currentUserCount = action.payload < 1 ? 1 : action.payload;
 			return Object.assign({}, state, { userCount: currentUserCount });
 		},
+
+		/** 가격 카드 높이 업데이트 */
+		updateCardMaxHeight: (
+			state: PriceModalState,
+			action: PayloadAction<number>,
+		) => {
+			const currentHeight = action.payload - 32;
+			state.cardMaxHeight = currentHeight + 'px';
+		},
 	},
 });
 
@@ -386,6 +395,7 @@ export const {
 	addContent,
 	updateContent,
 	deletePriceCardContent,
+	updateCardMaxHeight,
 } = priceModalSlice.actions;
 
 export function usePriceModal() {

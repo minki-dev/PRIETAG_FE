@@ -13,6 +13,8 @@ import priceCardReducer from './slice/priceCardSlice';
 import dashboardReducer from './slice/dashboardSlice'
 import versionListReducer from './slice/versionListSlice';
 import uploadModalReducer from './slice/uploadModalSlice';
+import templateReducer from './slice/templateSlice';
+import versionReducer from './slice/versionSlice';
 
 const logger = createLogger();
 
@@ -28,6 +30,8 @@ const rootReducer = combineReducers({
 	dashboard: dashboardReducer,
 	versionList: versionListReducer,
 	uploadModal: uploadModalReducer,
+	template: templateReducer,
+	version: versionReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

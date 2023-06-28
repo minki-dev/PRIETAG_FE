@@ -70,7 +70,7 @@ function PaginationBar() {
 				</button>
 				<nav className="flex">
 					{Array(pageCount)
-						.fill()
+						.fill(0)
 						.map((_, i) => (
 							<button
 								key={i + 1}

@@ -28,10 +28,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '삭제',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -46,6 +48,7 @@ export const ModalTypes: ModalType = {
 				behaveButton: {
 					text: '확인',
 					color: blue,
+					onAction: () => {},
 				},
 			},
 		},
@@ -60,6 +63,7 @@ export const ModalTypes: ModalType = {
 				behaveButton: {
 					text: '확인',
 					color: blue,
+					onAction: () => {},
 				},
 			},
 		},
@@ -72,10 +76,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '퍼블리시',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -89,10 +95,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '삭제 후 재생성',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -106,10 +114,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '삭제 후 재생성',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -123,10 +133,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '삭제 후 재생성',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -140,10 +152,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '삭제 후 재생성',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -157,10 +171,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '삭제',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -174,10 +190,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '삭제',
 					color: red,
+					onAction: () => {},
 				},
 			},
 		},
@@ -195,10 +213,12 @@ export const ModalTypes: ModalType = {
 			buttons: {
 				cancelButton: {
 					text: '취소',
+					onCancel: () => {},
 				},
 				behaveButton: {
 					text: '링크 입력',
 					color: blue,
+					onAction: () => {},
 				},
 			},
 		},

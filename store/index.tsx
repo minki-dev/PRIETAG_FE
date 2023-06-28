@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-// import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import modalReducer from './slice/modalSlice';
@@ -7,11 +7,14 @@ import featureTableReducer from './slice/featureTableSlice';
 import DNDBoxReducer from './slice/DNDBoxSlice';
 import priceModalReducer from './slice/priceModalSlice';
 import faqSliceReducer from './slice/faqSlice';
+import monthYearToggleReducer from './slice/monthYearToggleSlice';
 import configReducer from './slice/configSlice';
 import priceCardReducer from './slice/priceCardSlice';
 import dashboardReducer from './slice/dashboardSlice'
 import versionListReducer from './slice/versionListSlice';
-// const logger = createLogger();
+import uploadModalReducer from './slice/uploadModalSlice';
+
+const logger = createLogger();
 
 const rootReducer = combineReducers({
 
@@ -24,6 +27,7 @@ const rootReducer = combineReducers({
 	config: configReducer,
 	dashboard: dashboardReducer,
 	versionList: versionListReducer,
+	uploadModal: uploadModalReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

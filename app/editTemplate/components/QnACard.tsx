@@ -1,12 +1,20 @@
-import { useFAQ } from '@/store/slice/faqSlice';
+import { useConfig } from '@/store/slice/configSlice';
+import {
+	deleteFAQ,
+	submitFAQ,
+	togglePreview,
+	useFAQ,
+} from '@/store/slice/faqSlice';
+
 import React, { ChangeEventHandler, useEffect, useRef } from 'react';
-import { set } from 'react-hook-form';
 import { IoIosArrowDown } from 'react-icons/io';
 
 export default function QnACard({
+	index,
 	question,
 	answer,
 }: {
+	index: number;
 	question: string;
 	answer: string;
 }) {
@@ -14,7 +22,9 @@ export default function QnACard({
 	const [answerValue, setAnswerValue] = React.useState(answer);
 	const [viewAnswer, setViewAnswer] = React.useState(false);
 	const [isError, setIsError] = React.useState(false);
-	const { faq } = useFAQ();
+	const [isSubmit, setIsSubmit] = React.useState(false);
+	const { faq, dispatch: faqDispatch } = useFAQ();
+	const { configState, dispatch: configDispatch } = useConfig();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const toggleAnswer = () => {
 		setViewAnswer(!viewAnswer);
@@ -42,12 +52,31 @@ export default function QnACard({
 			setIsError(true);
 		}
 	};
+	const removeFAQ = (index: number) => {
+		faqDispatch(deleteFAQ({ index }));
+		setIsSubmit(true);
+	};
+
+	const confirmFAQ = ({
+		index,
+		questionValue,
+		answerValue,
+	}: {
+		index: number;
+		questionValue: string;
+		answerValue: string;
+	}) => {
+		faqDispatch(submitFAQ({ index, questionValue, answerValue }));
+
+		setIsSubmit(true);
+	};
+
 	return (
 		<>
 			<div className="mt-8 flex flex-row justify-between ">
 				<div
 					className={`flex h-20 flex-row  items-center  bg-[#EAF8FF] ${
-						faq.isPreview === true
+						configState.isPreview === true
 							? 'border-2 border-transparent'
 							: 'border-2 border-dashed'
 					} w-full px-4 py-2`}
@@ -55,7 +84,7 @@ export default function QnACard({
 					<input
 						type="text"
 						onChange={onChangeQuestion}
-						disabled={faq.isPreview}
+						disabled={configState.isPreview || isSubmit === true}
 						value={questionValue}
 						placeholder="질문 내용을 입력해주세요"
 						className=" h-6 w-full bg-[#EAF8FF]  font-ptMedium text-xl font-medium  text-[#00aeff]  placeholder-[#00a3ff] focus:outline-none "
@@ -71,7 +100,7 @@ export default function QnACard({
 			{viewAnswer && (
 				<div
 					className={`  ${
-						faq.isPreview === true
+						configState.isPreview === true
 							? 'border-2 border-transparent'
 							: 'border-2 border-dashed'
 					} } h-auto w-full px-4 py-10`}
@@ -80,7 +109,7 @@ export default function QnACard({
 						ref={textareaRef}
 						value={answerValue}
 						onChange={onChangeAnswer}
-						disabled={faq.isPreview}
+						disabled={configState.isPreview || isSubmit}
 						maxLength={300}
 						placeholder="답변 내용을 입력해주세요"
 						className="placeholder-center h-auto w-full  bg-white font-ptRegular text-base font-normal text-[borderGray] placeholder-[borderGray] focus:outline-none"
@@ -90,15 +119,52 @@ export default function QnACard({
 							isError ? 'text-red-500' : 'text-[#999999]'
 						}`}
 					>
-						{answerValue.length}/{300}
-						{isError && (
-							<span className={`ml-2 ${faq.isPreview ? 'hidden' : ''}}`}>
-								최대 글자 수에 도달했습니다
-							</span>
+						{configState.isPreview ? (
+							''
+						) : (
+							<div>
+								{answerValue.length}/{300}
+								{isError && (
+									<span
+										className={`ml-2 ${configState.isPreview ? 'hidden' : ''}}`}
+									>
+										최대 글자 수에 도달했습니다
+									</span>
+								)}
+							</div>
 						)}
 					</div>
 				</div>
 			)}
+
+			{!configState.isPreview ? (
+				<div className="flex flex-col pr-[53px]">
+					<div className="flex flex-col gap-4">
+						<div className="flex justify-end gap-2">
+							<button
+								type="button"
+								disabled={questionValue === '' || answerValue === ''}
+								className="[3px] mt-4 h-[31px] w-[104px] rounded border border-[borderGray] bg-white font-ptMedium text-base  font-medium text-borderGray"
+								onClick={() => removeFAQ(index)}
+							>
+								삭제
+							</button>
+							<button
+								type="button"
+								disabled={
+									questionValue === '' || answerValue === '' || isSubmit
+								}
+								className="[3px] mt-4 h-[31px] w-[104px] rounded bg-[#00A3FF] font-ptMedium text-base font-medium text-white  disabled:cursor-not-allowed disabled:opacity-50"
+								onClick={() =>
+									confirmFAQ({ index, questionValue, answerValue })
+								}
+							>
+								게시하기
+							</button>
+						</div>
+					</div>
+				</div>
+			) : null}
 		</>
 	);
 }

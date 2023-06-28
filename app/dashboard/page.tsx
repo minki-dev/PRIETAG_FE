@@ -7,6 +7,7 @@ import VersionChart from './components/VersionChart';
 import DateChart from './components/DateChart';
 import { translateVersionListData } from '@/constants/versionList';
 import VersionList from './components/VersionList';
+import Footer from '@/components/footer/Footer';
 
 export default function Dashboard() {
 	return (

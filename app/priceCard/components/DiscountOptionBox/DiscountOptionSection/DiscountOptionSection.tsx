@@ -2,24 +2,26 @@
 import React from 'react';
 import MonthYearChecked from './MonthYearChecked';
 import UserCountChecked from './UserCountChecked';
-
-interface colorInfo {
-	mainColor: string;
-	subColor01: string;
-	subColor02: string;
-}
+import { usePriceModal } from '@/store/slice/priceModalSlice';
+import { useConfig } from '@/store/slice/configSlice';
 
 function DiscountOptionSection() {
-	const colorInfoEl: colorInfo = {
-		mainColor: '#00A3FF',
-		subColor01: '#60C8FF',
-		subColor02: '#EAF8FF',
-	};
+	const { priceModal, dispatch } = usePriceModal();
+	const { configState } = useConfig();
+	const { isPreview, color } = configState;
 
 	return (
-		<div className="flex justify-center gap-10">
-			<MonthYearChecked color={colorInfoEl} />
-			<UserCountChecked color={colorInfoEl} />
+		<div
+			className={`${
+				isPreview ? 'editable-inner-preview' : 'editable-inner'
+			} flex justify-center gap-10`}
+		>
+			{priceModal.isCheckPerYear ? (
+				<MonthYearChecked color={color.mainColor} />
+			) : null}
+			{priceModal.pricing === '정량제' ? (
+				<UserCountChecked color={color.mainColor} />
+			) : null}
 		</div>
 	);
 }

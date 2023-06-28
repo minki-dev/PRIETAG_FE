@@ -10,6 +10,7 @@ interface priceCardInfo {
 	price: number;
 	discountRate: number;
 	detail: string;
+	detailHeight: number;
 	feature: string;
 	content: string[];
 }
@@ -17,6 +18,8 @@ interface priceCardInfo {
 interface priceCardSection {
 	priceCardOrder: string[];
 	priceCards: priceCardInfo[];
+	priceCardAreaPadding: number;
+	detailMaxHeight: number;
 }
 
 const initialState: priceCardSection = {
@@ -28,10 +31,13 @@ const initialState: priceCardSection = {
 			price: 80000,
 			discountRate: 10,
 			detail: '',
+			detailHeight: 30,
 			feature: '',
 			content: [''],
 		},
 	],
+	priceCardAreaPadding: 10,
+	detailMaxHeight: 30,
 };
 
 export const priceCardSlice = createSlice({
@@ -43,12 +49,14 @@ export const priceCardSlice = createSlice({
 			action: PayloadAction<string>, // 카드 아이디(선택된 1개)
 		) => {
 			if (!state.priceCardOrder[0]) {
-				return {
-					priceCardOrder: [action.payload],
-					priceCards: [
-						{ ...initialState.priceCards[0], ...{ id: action.payload } },
-					],
-				};
+				const addPriceCardOrder = [action.payload];
+				const addPriceCards = [
+					{ ...initialState.priceCards[0], ...{ id: action.payload } },
+				];
+				return Object.assign({}, state, {
+					priceCardOrder: addPriceCardOrder,
+					priceCards: addPriceCards,
+				});
 			} else {
 				const addPriceCardOrder = [
 					...state.priceCardOrder,
@@ -58,10 +66,10 @@ export const priceCardSlice = createSlice({
 					...state.priceCards,
 					...[{ ...initialState.priceCards[0], ...{ id: action.payload } }],
 				];
-				return {
+				return Object.assign({}, state, {
 					priceCardOrder: addPriceCardOrder,
 					priceCards: addPriceCards,
-				};
+				});
 			}
 		},
 		changeOrderPriceCard: (
@@ -75,10 +83,10 @@ export const priceCardSlice = createSlice({
 						(priceCard) => priceCard.id === cardId,
 					) as priceCardInfo,
 			);
-			return {
+			return Object.assign({}, state, {
 				priceCardOrder: action.payload,
 				priceCards: changePriceCards,
-			};
+			});
 		},
 		updatePriceCard: (
 			state: priceCardSection,
@@ -90,10 +98,14 @@ export const priceCardSlice = createSlice({
 			);
 			const newPriceCards = Array.from(state.priceCards);
 			newPriceCards[currentPriceCardIndex] = action.payload;
-			return {
+			const maxHeight = Math.max(
+				...newPriceCards.map((card) => Number(card.detailHeight)),
+			);
+			return Object.assign({}, state, {
 				priceCardOrder: currentPriceCardOrder,
 				priceCards: newPriceCards,
-			};
+				detailMaxHeight: maxHeight,
+			});
 		},
 		deletePriceCard: (
 			state: priceCardSection,
@@ -105,10 +117,16 @@ export const priceCardSlice = createSlice({
 			const newPriceCards = state.priceCards.filter(
 				(card) => card.id !== action.payload,
 			);
-			return {
+			return Object.assign({}, state, {
 				priceCardOrder: newPriceCardOrder,
 				priceCards: newPriceCards,
-			};
+			});
+		},
+		updatePriceCardAreaPadding: (
+			state: priceCardSection,
+			action: PayloadAction<number>,
+		) => {
+			return Object.assign({}, state, { priceCardAreaPadding: action.payload });
 		},
 	},
 });
@@ -118,6 +136,7 @@ export const {
 	changeOrderPriceCard,
 	updatePriceCard,
 	deletePriceCard,
+	updatePriceCardAreaPadding,
 } = priceCardSlice.actions;
 
 export function usePriceCard() {

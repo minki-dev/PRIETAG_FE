@@ -18,7 +18,7 @@ import React from 'react';
 import { HiOutlinePlus } from 'react-icons/hi';
 import { v4 as uuid } from 'uuid';
 import TableRow from './TableRow';
-import { usePriceCard } from '@/store/slice/priceCardSlice';
+import { usePriceModal } from '@/store/slice/priceModalSlice';
 
 type TablePropsType = {
 	featureTableIndex: number;
@@ -35,8 +35,8 @@ export default function Table({
 	featureNameValue,
 	table,
 }: TablePropsType) {
-	// @Redux priceCard
-	const { priceCard: priceCardState } = usePriceCard();
+	// @Redux priceModal
+	const { priceModal: priceCardState } = usePriceModal();
 
 	// @Redux featureTable
 	const { featureTableState, dispatch: tableDispatch } = useFeatureTable();
@@ -46,7 +46,7 @@ export default function Table({
 
 	// @Redux config
 	const { configState } = useConfig();
-	const { isPreview } = configState;
+	const { isPreview, previewMode } = configState;
 
 	//	toggle state's featureHeader boolean by featureTableIndex
 	const toggleHeader = () => {
@@ -104,7 +104,14 @@ export default function Table({
 				isPreview
 					? 'editable-inner-preview border-transparent'
 					: 'group/table editable-inner hover:border-black'
-			} relative flex  w-full justify-center border-2`}
+			}  relative  flex w-[1656px] ${
+				previewMode === 'tablet'
+					? 'justify-start'
+					: previewMode === 'mobile'
+					? 'justify-start'
+					: 'justify-center'
+			} 
+			 mobile-xl:justify-start border-2 max-xl:justify-start `}
 		>
 			<DeleteButton
 				className="group-hover/table:block"
@@ -138,7 +145,7 @@ export default function Table({
 					</div>
 				)}
 				{featureName && (
-					<div className="grid grid-cols-5 gap-x-5">
+					<div className="grid grid-cols-5 gap-x-5 ">
 						<div
 							className={`relative  mb-4 ml-[1.5px] mt-4 h-12 border-2 border-dashed border-gray-500 ${
 								!isPreview

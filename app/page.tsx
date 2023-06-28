@@ -2,87 +2,181 @@
 
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import Image from 'next/image'
-
+import Image from 'next/image';
 
 export default function Home() {
 	return (
 		<main>
 			<Header />
-			<section className='w-[1920px] h-[950px] relative bg-slate-50'>
-				<div className='left-[353px] top-[247px] absolute flex-col justify-center items-start gap-6 inline-flex'>
-					<div className="justify-center items-start gap-4 inline-flex">
-						<div className="text-indigo-600 text-[64px] font-bold">가격표 페이지를</div>
-						<div className="text-indigo-600 text-[64px] font-bold">쉽게</div>
+			{/* section01 */}
+			<section className="relative flex h-[950px] w-full bg-slate-50 pb-[153px] pl-[353px] pr-[349px] pt-[190px]">
+				<div className="flex-col">
+					<div className="relative h-[254px] w-[529px]">
+						<Image
+							src="/img/mediumCircle.svg"
+							alt="circle"
+							width={42}
+							height={42}
+							className="absolute left-[-40px] top-[-30px]"
+						/>
+						<div className="text-[60px] font-bold text-[#514EDA]">
+							가격표 페이지를 쉽게
+						</div>
+						<div className="leading-20 mt-[24px] text-[32px] font-normal text-[#747474]">
+							개발 리소스 없이
+							<br />
+							Saas 가격표 페이지 <br />
+							제작과 분석을 시작해보세요!
+						</div>
 					</div>
-					<div className="text-neutral-500 text-[32px] font-normal leading-10">개발 리소스 없이<br />Saas 가격표 페이지 <br />제작과 분석을 시작해보세요!</div>
+					<button className="mt-[56px] flex h-[72px] w-[200px] items-center justify-center rounded-lg bg-[#2559A7] px-[10px] py-3">
+						<span className="mr-[12px] text-[20px] font-medium leading-10 text-white">
+							시작하기
+						</span>
+						<Image
+							src="/img/stroke.svg"
+							alt="arrow"
+							width={40}
+							height={12}
+							className=""
+						/>
+					</button>
 				</div>
-				<button type='button' className="w-[200px] h-[72px] px-14 py-3 left-[350px] top-[558px] absolute bg-blue-800 rounded-lg justify-center items-center gap-4 inline-flex">
-					<div className="text-white text-[24px] font-medium leading-10">시작하기</div>
-				</button>
-				<div className="w-[42px] h-[42px] left-[307px] top-[210px] absolute bg-blue-600 rounded-full" />
-				<Image
-					src='/img/home1.svg'
-					alt='home'
-					width={780}
-					height={780}
-					className='relative top-[160px] left-[885px]'
-				/>
+				<div className="flex-row">
+					<Image
+						src="/img/home1.svg"
+						alt="home1"
+						width={723}
+						height={632}
+						className="mt-[-100px]"
+					/>
+				</div>
 			</section>
-			<section className='w-[1920px] h-[352px] py-[120px] bg-gradient-to-r from-blue-600 to-sky-400 justify-center items-center flex flex-col z-1'>
-				<div className='text-white text-[32px] font-bold leading-10'>간편하게 가격표 페이지를 제작하고,</div>
-				<div className="mt-3 text-white text-[32px] font-bold leading-10">고객의 반응을 확인해보세요!</div>
+			{/* section02 */}
+			<section className="z-1 flex h-[352px] w-full flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-sky-400 py-[120px]">
+				<div className="text-[32px] font-bold leading-10 text-white">
+					간편하게 가격표 페이지를 제작하고,
+				</div>
+				<div className="mt-3 text-[32px] font-bold leading-10 text-white">
+					고객의 반응을 확인해보세요!
+				</div>
 			</section>
-			<section className="w-[1920px] h-[720px] relative bg-white">
-				<div className="w-[308px] h-[204px] left-[240px] top-[200px] absolute">
-					<div className="w-72 h-[188px] left-[20px] top-[16px] absolute">
-						<div className="left-0 top-0 absolute text-indigo-600 text-[30px] font-bold leading-10">노코드로 제작하는<br />가격표 페이지</div>
-						<div className="left-0 top-[111px] absolute text-neutral-500 text-[22px] font-normal leading-10">더이상 불필요한 개발 리소스를<br />낭비하지 마세요!</div>
+			{/* section03 */}
+			<section className="relative flex h-[720px] w-full bg-white pl-[240px] pr-[237px]">
+				<div className="ml-[20px] mt-[106px] h-[204px] w-[388px]">
+					<div className="relative h-[103px] w-[229px]">
+						<Image
+							src="/img/mediumCircle.svg"
+							alt="circle"
+							width={24}
+							height={24}
+							className="absolute left-[-20px] top-[-20px]"
+						/>
+						<div className="text-[30px] font-bold leading-10 text-indigo-600">
+							노코드로 제작하는
+							<br />
+							가격표 페이지
+						</div>
+					</div>
+					<div className="h-[77px] w-[290px]">
+						<div className="text-[22px] font-normal leading-10 text-neutral-500">
+							더이상 불필요한 개발 리소스를
+							<br />
+							낭비하지 마세요!
+						</div>
 					</div>
 				</div>
-				<Image
-					src='/img/home2.svg'
-					alt='home2'
-					width={1000}
-					height={1000}
-					className='left-[895px] top-[-30px] relative'
-				/>
-			</section>
-			<section className="w-[1920px] h-[720px] relative bg-slate-50 top-[-130px]">
-				<Image
-					src='/img/home3.svg'
-					alt='home3'
-					width={1000}
-					height={1000}
-					className='absolute bottom-0 left-[240px]'
-				/>
-				<div className="w-[129px] h-[129px] left-[1494px] top-[98px] absolute rounded-full" />
-				<div className="w-[449px] h-[113px] left-[1186px] top-[162px] absolute">
-					<div className="w-6 h-6 left-[325px] top-0 absolute bg-blue-600 rounded-full" />
-					<div className="left-0 top-[14px] absolute text-indigo-600 text-[32px] font-bold leading-10">한 눈에 보는 가격표의 KPI</div>
-					<div className="left-0 top-[74px] absolute text-neutral-500 text-[22px] font-normal leading-10">진입수, 이탈수, 결제 전환율을 비교할 수 있어요!</div>
+				<div className="absolute right-[237px]">
+					<Image
+						src="/img/price_table.png"
+						alt="home2"
+						width={1330}
+						height={720}
+					/>
 				</div>
 			</section>
-			<section className='w-[1920px] h-[1000px] relative bg-white'>
-				<div className='relative top-[200px] left-[240px]'>
-					<div className="w-[439px] text-indigo-600 text-[32px] font-bold leading-10">이지피만의 차별화된 기능</div>
-					<div className="mt-[26px] text-neutral-500 text-[24px] font-normal leading-10">가격 설정부터 편집, 퍼블리시의 기본적인 페이지 디자인과<br />개발 기능은 물론, KPI까지 측정하고 분석할 수 있습니다.</div>
+			{/* section04 */}
+			<section className="relative flex h-[720px] w-full bg-slate-50 pl-[240px] pr-[285px] pt-[162px]">
+				<div className="absolute -bottom-[85px] flex h-[579px] w-[1328px]">
+					<Image
+						src="/img/home3.svg"
+						alt="home3"
+						className=""
+						width={1280}
+						height={579}
+					/>
 				</div>
-				<div className='relative flex top-[425px] left-[240px]'>
-					<Image src='/img/home_9077.svg' alt='homeSection5' width={232} height={280} className='mr-[70px]' />
-					<Image src='/img/home_9091.svg' alt='homeSection5' width={232} height={280} className='mr-[70px]' />
-					<Image src='/img/home_9092.svg' alt='homeSection5' width={232} height={280} className='mr-[70px]' />
-					<Image src='/img/home_9081.svg' alt='homeSection5' width={232} height={280} className='mr-[70px]' />
-					<Image src='/img/home_9093.svg' alt='homeSection5' width={232} height={280} className='mr-[70px]' />
+				<div className="relative h-[113px] w-[449px]">
+					<div className="absolute left-[1135px] top-[-15px] h-6 w-6 rounded-full bg-blue-600" />
+					<div className="absolute left-[800px] h-[52px] w-[333px] text-[31px] font-bold leading-10 text-indigo-600">
+						한 눈에 보는 가격표의 KPI
+					</div>
+					<div className="absolute left-[800px] top-10 h-[39px] w-[449px] text-[22px] font-normal leading-10 text-neutral-500">
+						진입수, 이탈수, 결제 전환율을 비교할 수 있어요!
+					</div>
 				</div>
 			</section>
-			<section className='w-[1920px] h-[388px] py-[120px] bg-gradient-to-r from-blue-600 to-sky-400 flex-col justify-center items-center gap-8 inline-flex'>
-				<div className="text-white text-[32px] font-bold leading-10">지금 이지피를 시작해 보세요!</div>
-				<button className="w-[200px] h-16 px-12 py-3 bg-white rounded-lg shadow justify-center items-center gap-4 inline-flex">
-					<span className="text-blue-600 text-[24px] font-medium leading-10">시작하기</span>
+			<section className="relative flex h-[900px] w-full flex-col bg-white pl-[240px] pr-[240px] pt-[200px] ">
+				<div className="relative h-[145px] w-[541px] flex-row">
+					<div className="w-[439px] text-[32px] font-bold leading-10 text-indigo-600">
+						이지피만의 차별화된 기능
+					</div>
+					<div className="mt-[26px] text-[22px] font-normal leading-10 text-neutral-500">
+						가격 설정부터 편집, 퍼블리시의 기본적인 페이지 디자인과
+						<br />
+						개발 기능은 물론, KPI까지 측정하고 분석할 수 있습니다.
+					</div>
+				</div>
+				<div className="relative mt-[80px] flex h-[280px] w-[1440px] space-x-[70px] ">
+					<Image
+						src="/img/home_9077.svg"
+						alt="homeSection5"
+						width={232}
+						height={280}
+						className=""
+					/>
+					<Image
+						src="/img/home_9091.svg"
+						alt="homeSection5"
+						width={232}
+						height={280}
+						className=" "
+					/>
+					<Image
+						src="/img/home_9092.svg"
+						alt="homeSection5"
+						width={232}
+						height={280}
+						className=" "
+					/>
+					<Image
+						src="/img/home_9081.svg"
+						alt="homeSection5"
+						width={232}
+						height={280}
+						className=" "
+					/>
+					<Image
+						src="/img/home_9093.svg"
+						alt="homeSection5"
+						width={232}
+						height={280}
+						className=" "
+					/>
+				</div>
+			</section>
+			<section className="inline-flex h-[388px] w-full flex-col items-center justify-center gap-8 bg-gradient-to-r from-blue-600 to-sky-400 py-[120px]">
+				<div className="text-[32px] font-bold leading-10 text-white">
+					지금 이지피를 시작해 보세요!
+				</div>
+				<button className="mt-[32px] flex h-[72px] w-[200px] items-center justify-center rounded-lg bg-[#FFFFFF] px-[10px] py-3">
+					<span className="mr-[12px] text-[20px] font-medium leading-10 text-[#315EFF]">
+						시작하기
+					</span>
+					<Image src="/img/blueArrow.svg" alt="arrow" width={40} height={12} />
 				</button>
 			</section>
 			<Footer />
-		</main >
+		</main>
 	);
 }

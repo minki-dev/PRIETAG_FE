@@ -9,7 +9,7 @@ const handler = NextAuth({
 			clientSecret: `${process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET}` || '',
 			authorization: {
 				params: {
-					redirect_uri: `https://prietag-fe-minki-dev.vercel.app`,
+					redirect_uri: `https://ezfee.vercel.app`,
 				},
 			},
 		}),

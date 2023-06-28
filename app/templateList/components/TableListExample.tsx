@@ -54,7 +54,7 @@ function TableListExample({}) {
 								type="checkbox"
 								className="h-[24px] w-[24px]"
 								checked={isAllChecked}
-								onClick={handleAllChecked}
+								onChange={handleAllChecked}
 							/>
 						</th>
 						<th className="relative flex min-w-[150px] ">

@@ -33,6 +33,11 @@ interface ContentData {
 	contentIndex: number;
 	contentData: string;
 }
+// priceCard의 content 항목 삭제할 때 사용
+interface ContentDelete {
+	cardIndex: number;
+	contentIndex: number;
+}
 
 type PriceModalState = {
 	isCardSet: boolean;
@@ -48,7 +53,7 @@ type PriceModalState = {
 	yearDiscountRate: number;
 	isCheckPerPerson: boolean;
 	headDiscount: HeadDiscountItem[];
-
+	cardMaxHeight: string;
 	// 월간/연간 토글 버튼 상태 저장 필요
 	// 월간/연간에 따라 가격, 할인율 표시 위함
 	monthYearToggle: boolean; // false: month, true: year
@@ -94,7 +99,7 @@ const initialState: PriceModalState = {
 		{ headCount: 0, discountRate: 0 },
 		{ headCount: 0, discountRate: 0 },
 	],
-
+	cardMaxHeight: '495px',
 	monthYearToggle: false, // false: month, true: year
 	userCount: 1,
 };
@@ -280,7 +285,7 @@ export const priceModalSlice = createSlice({
 			});
 		},
 
-		/** 가격 카드 content 부분 추가하기 */
+		/** 가격 카드 content 부분 항목 추가하기 */
 		addContent: (
 			state: PriceModalState,
 			action: PayloadAction<number>, // 카드의 인덱스: number 넘겨받음
@@ -312,6 +317,21 @@ export const priceModalSlice = createSlice({
 			});
 		},
 
+		/** 가격 카드-콘텐츠 항목 1개 삭제하기 */
+		deletePriceCardContent: (
+			state: PriceModalState,
+			action: PayloadAction<ContentDelete>,
+		) => {
+			const contentArr = Array.from(
+				state.priceCards[action.payload.cardIndex].content,
+			);
+			const spliceContentArr = contentArr.splice(
+				action.payload.contentIndex,
+				1,
+			);
+			state.priceCards[action.payload.cardIndex].content = contentArr;
+		},
+
 		/** 가격 카드 영역 패딩 값 업데이트하기 */
 		updatePriceCardAreaPadding: (
 			state: PriceModalState,
@@ -337,6 +357,15 @@ export const priceModalSlice = createSlice({
 		) => {
 			const currentUserCount = action.payload < 1 ? 1 : action.payload;
 			return Object.assign({}, state, { userCount: currentUserCount });
+		},
+
+		/** 가격 카드 높이 업데이트 */
+		updateCardMaxHeight: (
+			state: PriceModalState,
+			action: PayloadAction<number>,
+		) => {
+			const currentHeight = action.payload - 32;
+			state.cardMaxHeight = currentHeight + 'px';
 		},
 	},
 });
@@ -365,6 +394,8 @@ export const {
 	toggleHighLight,
 	addContent,
 	updateContent,
+	deletePriceCardContent,
+	updateCardMaxHeight,
 } = priceModalSlice.actions;
 
 export function usePriceModal() {

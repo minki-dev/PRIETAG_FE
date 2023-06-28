@@ -61,6 +61,9 @@ export const configSlice = createSlice({
 			console.log('toggleColorModal');
 			return { ...state, isColorModalOpen: !state.isColorModalOpen };
 		},
+		toggleUploadModal: (state: ConfigState) => {
+			return { ...state, isUploadModalOpen: !state.isUploadModalOpen };
+		},
 		toggleOnBoardingModal: (state: ConfigState) => {
 			// PriceModal UploadModal ColorModal의 isOpen값을 모두 변경
 			state.isOnboardingModalOpen = !state.isOnboardingModalOpen;
@@ -117,6 +120,7 @@ export const {
 	togglePriceModal,
 	toggleColorModal,
 	toggleOnBoardingModal,
+	toggleUploadModal,
 } = configSlice.actions;
 
 export function useConfig() {

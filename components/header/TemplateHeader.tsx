@@ -16,12 +16,17 @@ import {
 	toggleColorModal,
 	togglePreview,
 	togglePriceModal,
+	toggleUploadModal,
 	useConfig,
 } from '@/store/slice/configSlice';
+import { useUploadModal } from '@/store/slice/uploadModalSlice';
 
 export default function TemplateHeader() {
 	const [isClicked, setIsClicked] = useState(false);
 	const { configState, dispatch: configDispatch } = useConfig();
+	const { uploadModal } = useUploadModal();
+	const file = uploadModal?.formData?.get('file') as File;
+	const imageUrl = file ? URL.createObjectURL(file) : '';
 	const resetPreviewMode = () => {
 		configDispatch(setPreviewMode('desktop'));
 		configDispatch(togglePreview());
@@ -81,14 +86,26 @@ export default function TemplateHeader() {
 				) : (
 					<div className="flex h-full w-full items-center px-[20px]">
 						<div className=" relative  cursor-pointer sm:h-[32px] sm:w-[93px] xl:h-[32px] xl:w-[94px]">
-							<Image
-								src="/img/upload_logo.svg"
-								alt="로고 이미지"
-								// width={93.81}
-								// height={32}
-								fill
-								className="absolute left-[40px] top-[20px]"
-							/>
+							{uploadModal?.formData?.get('file') ? (
+								<Image
+									src={imageUrl}
+									alt="로고 이미지"
+									width={32}
+									height={32}
+									className="object-cover"
+									onClick={() => configDispatch(toggleUploadModal())}
+								/>
+							) : (
+								<Image
+									src="/img/upload_logo.svg"
+									alt="로고 이미지"
+									// width={93.81}
+									// height={32}
+									fill
+									className="absolute left-[40px] top-[20px]"
+									onClick={() => configDispatch(toggleUploadModal())}
+								/>
+							)}
 						</div>
 						<input
 							placeholder="저장될 파일 이름을 입력해 주세요"

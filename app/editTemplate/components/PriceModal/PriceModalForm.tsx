@@ -533,13 +533,21 @@ export default function PriceModalForm({}: {}) {
 							))}
 						</div>
 					)}
-
-					<button
-						type="submit"
-						className="[3px] mr-6 mt-4 h-[34px] w-[120px] rounded bg-[#00A3FF] font-ptMedium text-base font-medium text-white"
-					>
-						적용
-					</button>
+					<div className="flex gap-2">
+						<button
+							type="button"
+							className="[3px] mt-4  h-[34px] w-[120px] rounded border-1 border-[#747474] bg-white font-ptMedium text-base  font-medium text-borderGray"
+							onClick={() => configDispatch(toggleOnBoardingModal())}
+						>
+							취소
+						</button>
+						<button
+							type="submit"
+							className="[3px] mr-6 mt-4 h-[34px] w-[120px] rounded bg-[#00A3FF] font-ptMedium text-base font-medium text-white"
+						>
+							적용
+						</button>
+					</div>
 				</div>
 			</dialog>
 		</form>

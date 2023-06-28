@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import HomeHeader from './HomeHeader';
+
 import TemplateHeader from './TemplateHeader';
 import { usePathname } from 'next/navigation';
+import HomeHeader from './HomeHeader';
 
 function Header() {
 	const pathname = usePathname();

@@ -16,6 +16,9 @@
 .draggable-handle {
 	@apply absolute left-0 top-[50%] w-fit translate-y-[-50%]  rounded-lg opacity-0 transition duration-200 ease-out;
 }
+.draggable-handle {
+	@apply absolute left-0 top-[50%] w-fit translate-y-[-50%]  rounded-lg opacity-0 transition duration-200 ease-out;
+}
 .draggable-title input {
 	@apply m-auto h-[77px] w-full text-center max-xl:text-[32px] max-mobile:text-[24px];
 }

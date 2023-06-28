@@ -55,15 +55,17 @@ export default function RightMenu() {
 	return (
 		<>
 			<div
-				className={`fixed top-0 z-10 h-full pt-10 transition-all ${!isMenuOpen ? '-right-[246px]' : ' right-0'
-					}`}
+				className={`fixed top-0 z-10 h-full pt-10 transition-all ${
+					!isMenuOpen ? '-right-[246px]' : ' right-0'
+				}`}
 			>
 				<div className="relative h-fit w-[246px]">
 					<button
 						type="button"
 						onClick={() => setIsMenuOpen(!isMenuOpen)}
-						className={`absolute right-[246px] top-1/2 z-[1] flex h-[80px] w-[32px] -translate-y-1/2 items-center justify-center rounded-l-xl shadow-[0px_0px_6px_rgba(0,0,0,0.15)]  ${!isMenuOpen ? ' bg-[#00A3FF]' : 'bg-[#ffffff]'
-							}`}
+						className={`absolute right-[246px] top-1/2 z-[1] flex h-[80px] w-[32px] -translate-y-1/2 items-center justify-center rounded-l-xl shadow-[0px_0px_6px_rgba(0,0,0,0.15)]  ${
+							!isMenuOpen ? ' bg-[#00A3FF]' : 'bg-[#ffffff]'
+						}`}
 					>
 						{isMenuOpen ? (
 							<MdOutlineArrowForwardIos className=" text-xl text-[#00A3FF]" />
@@ -175,43 +177,92 @@ export default function RightMenu() {
 						</section>
 
 						{/* 텍스트 박스 */}
-						<section className='border-b border-solid p-[12px_0px_12px_12px] border-gray-300'>
-							<button type='button' onClick={() => setIsTextboxOption(!isTextboxOption)} className='relative button_li'>
-								<span className='option_li'>텍스트 박스</span>
-								{isTextboxOption ? <IoMdArrowDropup className='hover:text-[#00A3FF] absolute right-3' /> : <IoMdArrowDropdown className='hover:text-[#00A3FF] absolute right-3' />}
+						<section className="border-b border-solid border-gray-300 p-[12px_0px_12px_12px]">
+							<button
+								type="button"
+								onClick={() => setIsTextboxOption(!isTextboxOption)}
+								className="relative button_li"
+							>
+								<span className="option_li">텍스트 박스</span>
+								{isTextboxOption ? (
+									<IoMdArrowDropup className="absolute right-3 hover:text-[#00A3FF]" />
+								) : (
+									<IoMdArrowDropdown className="absolute right-3 hover:text-[#00A3FF]" />
+								)}
 							</button>
-							{isTextboxOption &&
+							{isTextboxOption && (
 								<div>
-									<button onClick={() => handleAddBox("TITLE")} type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>
+									<button
+										onClick={() => handleAddBox('TITLE')}
+										type="button"
+										className="group mx-3 flex h-[39px] w-[198px] items-center rounded hover:text-[#00A3FF] hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)]"
+									>
 										<RxPlus />
-										<span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474]'>타이틀 텍스트 박스 추가</span>
+										<span className="ml-2 text-sm font-normal not-italic leading-[22px] text-[#747474] group-hover:text-[#00A3FF]">
+											타이틀 텍스트 박스 추가
+										</span>
 									</button>
-									<button onClick={() => handleAddBox("SUBTITLE")} type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>
+									<button
+										onClick={() => handleAddBox('SUBTITLE')}
+										type="button"
+										className="group mx-3 flex h-[39px] w-[198px] items-center rounded hover:text-[#00A3FF] hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)]"
+									>
 										<RxPlus />
-										<span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474] '>서브 타이틀 텍스트 박스 추가</span>
+										<span className="ml-2 text-sm font-normal not-italic leading-[22px] text-[#747474] group-hover:text-[#00A3FF] ">
+											서브 타이틀 텍스트 박스 추가
+										</span>
 									</button>
-									<button onClick={() => handleAddBox("TEXT")} type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>
+									<button
+										onClick={() => handleAddBox('TEXT')}
+										type="button"
+										className="group mx-3 flex h-[39px] w-[198px] items-center rounded hover:text-[#00A3FF] hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)]"
+									>
 										<RxPlus />
-										<span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474] '>미니 타이틀 텍스트 박스 추가</span>
+										<span className="ml-2 text-sm font-normal not-italic leading-[22px] text-[#747474] group-hover:text-[#00A3FF] ">
+											미니 타이틀 텍스트 박스 추가
+										</span>
 									</button>
-								</div>}
+								</div>
+							)}
 						</section>
 						{/* 디자인 */}
-						<section className='rightmenu_li '>
-							<button type='button' onClick={() => setIsDesignOption(!isDesignOption)} className='button_li'>
-								<span className='option_li'>디자인</span>
-								{isDesignOption ? <IoMdArrowDropup className='hover:text-[#00A3FF]' /> : <IoMdArrowDropdown className='hover:text-[#00A3FF]' />}
+						<section className="rightmenu_li ">
+							<button
+								type="button"
+								onClick={() => setIsDesignOption(!isDesignOption)}
+								className="button_li"
+							>
+								<span className="option_li">디자인</span>
+								{isDesignOption ? (
+									<IoMdArrowDropup className="hover:text-[#00A3FF]" />
+								) : (
+									<IoMdArrowDropdown className="hover:text-[#00A3FF]" />
+								)}
 							</button>
-							{isDesignOption &&
+							{isDesignOption && (
 								<div>
-									<button onClick={() => handleAddBox("PADDING")} type='button' className='w-[198px] h-[39px] hover:px-2 group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center '>
+									<button
+										onClick={() => handleAddBox('PADDING')}
+										type="button"
+										className="group mx-3 flex h-[39px] w-[198px] items-center rounded hover:px-2 hover:text-[#00A3FF] hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] "
+									>
 										<RxPlus />
-										<span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474] 	'>임의 상하 패딩 추가</span>
+										<span className="ml-2 text-sm font-normal not-italic leading-[22px] text-[#747474] group-hover:text-[#00A3FF] 	">
+											임의 상하 패딩 추가
+										</span>
 									</button>
-									<button type='button' className='w-[198px] h-[39px] group hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)] hover:text-[#00A3FF] rounded flex mx-3 items-center'>                <RxPlus />
-										<span className='group-hover:text-[#00A3FF] ml-2 text-sm leading-[22px] font-normal not-italic text-[#747474] 	'>스트로크 라인 추가</span>
+									<button
+										type="button"
+										className="group mx-3 flex h-[39px] w-[198px] items-center rounded hover:text-[#00A3FF] hover:shadow-[0px_0px_4px_rgba(0,0,0,0.25)]"
+									>
+										{' '}
+										<RxPlus />
+										<span className="ml-2 text-sm font-normal not-italic leading-[22px] text-[#747474] group-hover:text-[#00A3FF] 	">
+											스트로크 라인 추가
+										</span>
 									</button>
-								</div>}
+								</div>
+							)}
 						</section>
 
 						{/* 컬러 정보 */}

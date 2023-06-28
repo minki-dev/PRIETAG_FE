@@ -83,6 +83,7 @@ export default function Table({
 		tableDispatch(removeRow({ featureTableIndex, rowIndex: idx }));
 	};
 
+
 	//	remove this component, resets after modal confirm click
 	const handleTableRemove = () => {
 		if (featureTableList.length === 1) {
@@ -180,6 +181,7 @@ export default function Table({
 						})}
 					</div>
 				)}
+				<div className="w-full border-b-2 border-gray-300"></div>
 				<div className="w-full border-b-2 border-gray-300"></div>
 				{priceCards.length !== 0 && featureName && (
 					<div

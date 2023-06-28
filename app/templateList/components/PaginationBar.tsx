@@ -36,7 +36,7 @@ function PaginationBar() {
 					textContent="선택 삭제"
 					borderColor="#FF0000"
 					onClick={() => {
-						dispatch(openModal(ModalTypes.TemplateDelModal));
+						dispatch(openModal(ModalTypes.TemplateDelModal.params));
 					}}
 				/>{' '}
 				<GlobalModal />

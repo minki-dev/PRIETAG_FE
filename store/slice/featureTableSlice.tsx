@@ -6,7 +6,7 @@ const INITIAL_FEATURE_TABLE: featureTable = {
 	featureHeader: true,
 	featureName: true,
 	featureNameValue: '',
-	table: [['']],
+	table: [['', '']],
 };
 
 export type featureTable = {
@@ -54,12 +54,10 @@ export const featureTableSlice = createSlice({
 			action.payload.forEach((featureTable, index) => {
 				state.featureTableList[index] = featureTable;
 			});
-			return state;
 		},
 
 		resetFeatureTable: (state: featureTableState) => {
 			state.featureTableList = [INITIAL_FEATURE_TABLE];
-			return state;
 		},
 		toggleFeatureHeader: (
 			state: featureTableState,
@@ -68,7 +66,6 @@ export const featureTableSlice = createSlice({
 			const { featureTableIndex } = action.payload;
 			const targetFeatureTable = state.featureTableList[featureTableIndex];
 			targetFeatureTable.featureHeader = !targetFeatureTable.featureHeader;
-			return state;
 		},
 		toggleFeatureName: (
 			state: featureTableState,
@@ -77,7 +74,6 @@ export const featureTableSlice = createSlice({
 			const { featureTableIndex } = action.payload;
 			const targetFeatureTable = state.featureTableList[featureTableIndex];
 			targetFeatureTable.featureName = !targetFeatureTable.featureName;
-			return state;
 		},
 		updateFeatureName: (
 			state: featureTableState,
@@ -87,7 +83,6 @@ export const featureTableSlice = createSlice({
 
 			state.featureTableList[featureTableIndex].featureNameValue =
 				featureNameValue;
-			return state;
 		},
 
 		swapColumns: (
@@ -107,14 +102,12 @@ export const featureTableSlice = createSlice({
 					});
 				});
 			}
-			return state;
 		},
 
 		addColumn: (state: featureTableState) => {
 			state.featureTableList.forEach((featureTable) => {
 				return featureTable.table.map((row) => row.push(''));
 			});
-			return state;
 		},
 
 		removeColumn: (
@@ -131,25 +124,19 @@ export const featureTableSlice = createSlice({
 					})
 				})
 				}
-				return state
 			},
 		addRow: (
 			state: featureTableState,
-			action: PayloadAction<Pick<RowActionPayload, 'featureTableIndex'>>,
+			action: PayloadAction<Pick<RowActionPayload, 'featureTableIndex'> & {qty: number}>,
 		) => {
-			const { featureTableIndex } = action.payload;
+			const { featureTableIndex, qty } = action.payload;
 
 			if (featureTableIndex < 0) return;
 			if (featureTableIndex > state.featureTableList.length) return;
 
-			state.featureTableList[featureTableIndex].table.push([
-				'',
-				'',
-				'',
-				'',
-				'',
-			]);
-			return state;
+			state.featureTableList[featureTableIndex].table.push(
+				Array.from({length: qty + 1} , content => (""))
+			);
 		},
 		removeRow: (
 			state: featureTableState,
@@ -167,7 +154,6 @@ export const featureTableSlice = createSlice({
 			if (rowIndex > targetFeatureTable.length) return;
 
 			targetFeatureTable.splice(rowIndex, 1);
-			return state;
 		},
 		updateTableData: (
 			state: featureTableState,
@@ -179,12 +165,9 @@ export const featureTableSlice = createSlice({
 				action.payload;
 			state.featureTableList[featureTableIndex].table[rowIndex][colIndex] =
 				tableData;
-
-			return state;
 		},
 		addTable: (state: featureTableState) => {
 			state.featureTableList.push(INITIAL_FEATURE_TABLE);
-			return state;
 		},
 
 		removeTable: (
@@ -200,8 +183,8 @@ export const featureTableSlice = createSlice({
 				return;
 			state.featureTableList.splice(featureTableIndex, 1);
 
-			return state;
 		},
+		
 	},
 });
 

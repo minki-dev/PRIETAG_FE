@@ -1,6 +1,3 @@
-import { ModalProps } from '@/store/slice/modalSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store';
 import { closeModal, useModal } from '@/store/slice/modalSlice';
 
 export const GlobalModal = () => {
@@ -8,9 +5,12 @@ export const GlobalModal = () => {
 	const onCancel = () => {
 		dispatch(closeModal());
 	};
-	// const onAction = () => {
-	// 	dispatch(closeModal());
-	// };
+
+	const onAction = () => {
+		if (params.buttons.behaveButton.onAction)
+			params.buttons.behaveButton.onAction();
+		dispatch(closeModal());
+	};
 
 	if (!isOpen) return null;
 

@@ -10,7 +10,7 @@ import faqSliceReducer from './slice/faqSlice';
 import monthYearToggleReducer from './slice/monthYearToggleSlice';
 import configReducer from './slice/configSlice';
 import priceCardReducer from './slice/priceCardSlice';
-import dashboardReducer from './slice/dashboardSlice'
+import dashboardReducer from './slice/dashboardSlice';
 import versionListReducer from './slice/versionListSlice';
 import uploadModalReducer from './slice/uploadModalSlice';
 import templateReducer from './slice/templateSlice';
@@ -19,7 +19,6 @@ import versionReducer from './slice/versionSlice';
 const logger = createLogger();
 
 const rootReducer = combineReducers({
-
 	modal: modalReducer,
 	priceCard: priceCardReducer,
 	featureTable: featureTableReducer,
@@ -32,6 +31,7 @@ const rootReducer = combineReducers({
 	uploadModal: uploadModalReducer,
 	template: templateReducer,
 	version: versionReducer,
+	monthYearToggle: monthYearToggleReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -40,7 +40,7 @@ export const store = configureStore({
 	reducer: rootReducer,
 	// middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 	middleware: (getDefaultMiddleware) =>
-	getDefaultMiddleware({
-		serializableCheck: false,
-	}),
+		getDefaultMiddleware({
+			serializableCheck: false,
+		}),
 });

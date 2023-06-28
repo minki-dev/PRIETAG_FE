@@ -36,7 +36,9 @@ export default function Table({
 	table,
 }: TablePropsType) {
 	// @Redux priceModal
-	const { priceModal: priceCardState } = usePriceModal();
+	const {
+		priceModal: { priceCards },
+	} = usePriceModal();
 
 	// @Redux featureTable
 	const { featureTableState, dispatch: tableDispatch } = useFeatureTable();
@@ -65,17 +67,18 @@ export default function Table({
 
 	//	add row on current table
 	const handleAddRow = () => {
-		tableDispatch(addRow({ featureTableIndex }));
+		if (priceCards.length !== 0)
+			tableDispatch(addRow({ featureTableIndex, qty: priceCards.length }));
 	};
 
 	// remove row on current table
 	const handleDeleteRow = (idx: number) => {
 		tableDispatch(removeRow({ featureTableIndex, rowIndex: idx }));
 	};
-
+	
 	//	remove this component, resets after modal confirm click
 	const handleTableRemove = () => {
-		if (featureTableState.featureTableList.length <= 1) {
+		if (featureTableState.featureTableList.length === 1) {
 			modalDispatch(openModal(ModalTypes.DetailedFunctionContainerDelModal));
 			return;
 		}
@@ -100,11 +103,11 @@ export default function Table({
 
 	return (
 		<div
-			className={`${
+			className={` ${
 				isPreview
 					? 'editable-inner-preview border-transparent'
 					: 'group/table editable-inner hover:border-black'
-			}  relative  flex w-[1656px] ${
+			}  relative  flex ${
 				previewMode === 'tablet'
 					? 'justify-start'
 					: previewMode === 'mobile'
@@ -118,34 +121,48 @@ export default function Table({
 				onClick={handleTableRemove}
 			/>
 
-			<div className="">
-				{featureHeader && (
+			<div
+				className={`border-black ${priceCards.length !== 0 && 'border-y-2'}`}
+			>
+				{priceCards.length !== 0 && featureHeader && (
 					<div
+						style={{
+							gridTemplateColumns: `repeat(${
+								priceCards.length + 1
+							}, minmax(0, 1fr))`,
+						}}
 						className={`${
 							!isPreview && 'group/header hover:border-black'
-						} relative flex items-center justify-end border-2  border-transparent`}
+						} relative my-6 grid gap-x-5 border-2 border-transparent`}
 					>
 						<DeleteButton
 							className="group-hover/header:block"
 							onClick={toggleHeader}
 						/>
-						{priceCardState.priceCards.map((card) => {
+						{priceCards.map((card, index) => {
 							return (
 								<div
 									key={uuid()}
-									className={`${
-										!isPreview ? ' bg-gray-300 text-white' : ''
-									} prevent-text-overflow h-10 w-tableData p-2 pl-6 text-center xl:w-tableDataTablet 2xl:w-tableDataPc`}
+									className={`${!isPreview ? ' bg-gray-300 text-white' : ''} ${
+										index === 0 ? 'col-start-2' : ''
+									} prevent-text-overflow h-10 w-tableData p-2 text-center xl:w-tableDataTablet 2xl:w-tableDataPc`}
 								>
 									{card.title}
 								</div>
 							);
 						})}
-						<div className="col-span-5 mt-6 border-b-2 border-gray">{}</div>
 					</div>
 				)}
-				{featureName && (
-					<div className="grid grid-cols-5 gap-x-5 ">
+				<div className='w-full border-b-2 border-gray-300'></div>
+				{priceCards.length !== 0 && featureName && (
+					<div
+						style={{
+							gridTemplateColumns: `repeat(${
+								priceCards.length + 1
+							}, minmax(0, 1fr))`,
+						}}
+						className="grid gap-x-5"
+					>
 						<div
 							className={`relative  mb-4 ml-[1.5px] mt-4 h-12 border-2 border-dashed border-gray-500 ${
 								!isPreview
@@ -167,43 +184,49 @@ export default function Table({
 						</div>
 					</div>
 				)}
-				{table.map((row, rowIndex) => {
-					return (
-						<div
-							key={uuid()}
-							className={` h-16 py-2 ${
-								(rowIndex + 1) % 2 === 0 ? 'bg-[#EAF8FF]' : ''
-							}`}
-						>
+				{priceCards.length !== 0 &&
+					table.map((row, rowIndex) => {
+						return (
 							<div
-								className={`relative grid grid-cols-5 gap-x-5 border-2 border-transparent ${
-									!isPreview && 'group/row hover:border-black'
+								key={uuid()}
+								className={` h-16 py-2 ${
+									(rowIndex + 1) % 2 === 0 ? 'bg-[#EAF8FF]' : ''
 								}`}
 							>
-								<DeleteButton
-									className="group-hover/row:block"
-									onClick={() => handleDeleteRow(rowIndex)}
-								/>
-								{row.map((data, dataColIndex) => {
-									return (
-										<TableRow
-											key={uuid()}
-											defaultValue={data}
-											rowIndex={rowIndex}
-											isPreview={isPreview}
-											colIndex={dataColIndex}
-											handleChange={handleDataChange}
-										/>
-									);
-								})}
+								<div
+									style={{
+										gridTemplateColumns: `repeat(${
+											priceCards.length + 1
+										}, minmax(0, 1fr))`,
+									}}
+									className={`relative grid gap-x-5 border-2 border-transparent ${
+										!isPreview && 'group/row hover:border-black'
+									}`}
+								>
+									<DeleteButton
+										className="group-hover/row:block"
+										onClick={() => handleDeleteRow(rowIndex)}
+									/>
+									{row.map((data, dataColIndex) => {
+										return (
+											<TableRow
+												key={uuid()}
+												defaultValue={data}
+												rowIndex={rowIndex}
+												isPreview={isPreview}
+												colIndex={dataColIndex}
+												handleChange={handleDataChange}
+											/>
+										);
+									})}
+								</div>
 							</div>
-						</div>
-					);
-				})}
+						);
+					})}
 				{!isPreview && (
 					<button
 						type="button"
-						className="flex items-center justify-center w-full h-16 col-span-5 border"
+						className="flex items-center justify-center w-full h-16 col-span-5 border-2 border-gray-300 border-dashed"
 						onClick={handleAddRow}
 					>
 						<HiOutlinePlus />

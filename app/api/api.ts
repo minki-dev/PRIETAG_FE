@@ -16,7 +16,7 @@ export const login = async (code: string) => {
 
 		const authorizationToken =
 			res.headers.get('authorization')?.slice('bearer '.length) || '';
-		document.cookie = `authorizationToken=${authorizationToken}; path=/; max-age=3600; sameSite=Strict`;
+		document.cookie = `authorizationToken=${authorizationToken}; path=/; max-age=36000; sameSite=Strict`;
 
 		return res.json();
 	} catch (err) {

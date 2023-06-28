@@ -219,7 +219,7 @@ export default function DateChart({ className }: Props) {
 
 	return (
 		<section
-			className={`flex flex-col rounded-[10px] bg-white p-6 ${className}`}
+			className={`flex flex-col shadow-md rounded-[10px] bg-white p-6 ${className}`}
 		>
 			<div className="flex justify-between">
 				<h2 className="text-xl leading-8 font-ptBold whitespace-nowrap">

@@ -14,7 +14,7 @@ export default function TableContainer() {
 		<section
 			className={`${
 				isPreview ? 'editable-outer-preview' : 'editable-outer'
-			} responsiveTable w-full ${
+			} responsiveTable ${
 				previewMode === 'tablet'
 					? 'overflow-x-auto'
 					: previewMode === 'mobile'

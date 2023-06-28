@@ -68,10 +68,12 @@ export default function VersionChart({ className }: Props) {
 			: (targetIndex = Number(key));
 	}
 
+
 	const chartData = translateChartDataByVersion(versionListData);
 
 	useEffect(() => {
 		const handleWindowResize = () => {
+
 			window.innerWidth < 1280 ? setIsWindowLess(true) : setIsWindowLess(false);
 		};
 
@@ -248,7 +250,7 @@ export default function VersionChart({ className }: Props) {
 	};
 	return (
 		<section
-			className={`flex flex-col justify-between rounded-[10px] bg-white p-6 ${className}`}
+			className={`flex flex-col shadow-md justify-between rounded-[10px] bg-white p-6 ${className}`}
 		>
 			<div className="flex justify-between">
 				<h2 className="text-xl leading-8 font-ptBold whitespace-nowrap">

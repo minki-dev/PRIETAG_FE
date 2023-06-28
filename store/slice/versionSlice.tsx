@@ -195,6 +195,7 @@ const versionSlice = createSlice({
 		},
 		setVersions: (state, action) => {
 			state.versions = action.payload;
+			console.log(state.versions);
 		},
 	},
 });

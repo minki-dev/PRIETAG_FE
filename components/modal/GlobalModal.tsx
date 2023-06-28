@@ -49,8 +49,8 @@ export const GlobalModal = () => {
 					</button>
 					<button
 						className={`${params.buttons?.behaveButton?.color} ml-[8px] h-[34px] w-[104px] rounded-[3px] text-center text-[14px] font-medium leading-[22px] text-white`}
-						// onClick={onAction}
 						type="button"
+						onClick={() => onAction()}
 					>
 						{params.buttons?.behaveButton?.text}
 					</button>

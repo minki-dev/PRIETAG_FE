@@ -6,10 +6,11 @@ import { ModalTypes } from '@/components/modal/ModalState';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { setCurrentPage } from '@/store/slice/versionSlice';
+import { deleteItem, setCurrentPage } from '@/store/slice/versionSlice';
+import { ModalState } from '@/store/slice/modalSlice';
 
 function PaginationBar() {
-	const { dispatch } = useModal();
+	const { dispatch, params } = useModal();
 	const versions = useSelector((state: RootState) => state.version.versions);
 	const currentPage = useSelector(
 		(state: RootState) => state.version.currentPage,
@@ -25,7 +26,44 @@ function PaginationBar() {
 	const handlePageChange = (pageNumber: number) => {
 		dispatch(setCurrentPage(pageNumber));
 	};
+	const handleDeleteItem = () => {
+		const {
+			params: {
+				title: delModalTitle,
+				description: delModalDescription,
+				buttons: delModalButtons,
+			},
+		} = ModalTypes.TemplateDelModal;
 
+		const deleteBehavior = {
+			title: delModalTitle,
+			description: delModalDescription,
+			buttons: {
+				cancelButton: delModalButtons.cancelButton,
+				behaveButton: {
+					...delModalButtons.behaveButton,
+					onAction: () => {
+						versions
+							.filter((version) => version.isChecked)
+							.forEach((version) => dispatch(deleteItem(version.id)));
+					},
+				},
+			},
+		};
+
+		dispatch(
+			openModal({
+				title: deleteBehavior.title,
+				description: deleteBehavior.description,
+				buttons: deleteBehavior.buttons,
+			}),
+		);
+
+		// if (ModalTypes.TemplateDelModal.params.buttons.behaveButton.onAction) {
+		// ModalTypes.TemplateDelModal.params.buttons.behaveButton.onAction()
+
+		// }
+	};
 	return (
 		<div className="relative flex h-[168px] w-full justify-center">
 			<div className="absolute left-0 top-[28px] ">
@@ -36,8 +74,7 @@ function PaginationBar() {
 					textContent="선택 삭제"
 					borderColor="#FF0000"
 					onClick={() => {
-						dispatch(openModal(ModalTypes.TemplateDelModal));
-						ModalTypes.TemplateDelModal.params.buttons.behaveButton.onAction?.();
+						handleDeleteItem();
 					}}
 				/>{' '}
 				<GlobalModal />

@@ -20,10 +20,6 @@ type ModalType = {
 const blue = `bg-[#00A3FF]`;
 const red = `bg-[#FF0000]`;
 
-const One = () => {
-	console.log('1이라고 적습니다');
-};
-
 export const ModalTypes: ModalType = {
 	TemplateDelModal: {
 		isOpen: true,
@@ -39,7 +35,7 @@ export const ModalTypes: ModalType = {
 				behaveButton: {
 					text: '삭제',
 					color: red,
-					onAction: One,
+					onAction: () => {},
 				},
 			},
 		},

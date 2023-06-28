@@ -9,7 +9,7 @@ import {
 	updateHeadDiscount,
 	usePriceModal,
 } from '@/store/slice/priceModalSlice';
-import Counter from '@/components/Counter';
+
 import FAQ from './components/FAQ';
 import PriceModal from './components/PriceModal/PriceModal';
 // import { testCard } from './components/Test';

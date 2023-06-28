@@ -141,7 +141,7 @@ export default function Table({
 								</div>
 							);
 						})}
-						<div className="border-gray col-span-5 mt-6 border-b-2">{}</div>
+						<div className="col-span-5 mt-6 border-b-2 border-gray">{}</div>
 					</div>
 				)}
 				{featureName && (
@@ -162,7 +162,7 @@ export default function Table({
 								placeholder={`${!isPreview ? '포함된 기능' : ''}`}
 								disabled={isPreview}
 								onBlur={(e) => setFeatureName(e.target.value)}
-								className="h-full w-full p-2 focus:outline-none disabled:bg-transparent"
+								className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
 							/>
 						</div>
 					</div>
@@ -187,6 +187,7 @@ export default function Table({
 								{row.map((data, dataColIndex) => {
 									return (
 										<TableRow
+											key={uuid()}
 											defaultValue={data}
 											rowIndex={rowIndex}
 											isPreview={isPreview}
@@ -202,14 +203,14 @@ export default function Table({
 				{!isPreview && (
 					<button
 						type="button"
-						className="col-span-5 flex h-16 w-full items-center justify-center border"
+						className="flex items-center justify-center w-full h-16 col-span-5 border"
 						onClick={handleAddRow}
 					>
 						<HiOutlinePlus />
 					</button>
 				)}
 			</div>
-			<div className="border-gray col-span-5 mb-4 mt-3 border-b-2">{}</div>
+			<div className="col-span-5 mt-3 mb-4 border-b-2 border-gray">{}</div>
 		</div>
 	);
 }

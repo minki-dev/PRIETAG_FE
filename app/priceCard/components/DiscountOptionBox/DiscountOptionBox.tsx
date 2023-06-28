@@ -8,16 +8,23 @@ import {
 } from '@/store/slice/priceModalSlice';
 
 function DiscountOptionBox() {
-	const { dispatch } = usePriceModal();
+	const { priceModal, dispatch } = usePriceModal();
 	const handleHeightUpdate = (height: number) => {
 		dispatch(updatePriceCardAreaPadding(height));
 	};
 
 	return (
-		<div>
-			<DiscountOptionSection />
-			<ResizablePaddingWithHandle type="inner" onAction={handleHeightUpdate} />
-		</div>
+		<>
+			{!priceModal.isCheckPerYear && priceModal.pricing === '정액제' ? null : (
+				<div>
+					<DiscountOptionSection />
+					<ResizablePaddingWithHandle
+						type="inner"
+						onAction={handleHeightUpdate}
+					/>
+				</div>
+			)}
+		</>
 	);
 }
 

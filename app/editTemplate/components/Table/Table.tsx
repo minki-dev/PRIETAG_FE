@@ -18,7 +18,7 @@ import React from 'react';
 import { HiOutlinePlus } from 'react-icons/hi';
 import { v4 as uuid } from 'uuid';
 import TableRow from './TableRow';
-import { usePriceCard } from '@/store/slice/priceCardSlice';
+import { usePriceModal } from '@/store/slice/priceModalSlice';
 
 type TablePropsType = {
 	featureTableIndex: number;
@@ -35,8 +35,8 @@ export default function Table({
 	featureNameValue,
 	table,
 }: TablePropsType) {
-	// @Redux priceCard
-	const { priceCard: priceCardState } = usePriceCard();
+	// @Redux priceModal
+	const { priceModal: priceCardState } = usePriceModal();
 
 	// @Redux featureTable
 	const { featureTableState, dispatch: tableDispatch } = useFeatureTable();

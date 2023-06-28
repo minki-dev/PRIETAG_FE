@@ -3,20 +3,9 @@ import {
 	updateMonthYearToggle,
 	usePriceModal,
 } from '@/store/slice/priceModalSlice';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-interface colorInfo {
-	mainColor: string;
-	subColor01: string;
-	subColor02: string;
-}
-
-function MonthYearChecked({ color }: { color: colorInfo }) {
-	const textColor: colorInfo = {
-		mainColor: `text-[${color.mainColor}]`,
-		subColor01: `text-[${color.subColor01}]`,
-		subColor02: `text-[${color.subColor02}]`,
-	};
+function MonthYearChecked({ color }: { color: string }) {
 	const { priceModal, dispatch } = usePriceModal();
 
 	const [currentChange, setCurrentChange] = React.useState('month');
@@ -26,6 +15,19 @@ function MonthYearChecked({ color }: { color: colorInfo }) {
 	useEffect(() => {
 		dispatch(updateMonthYearToggle(currentChange));
 	}, [currentChange]);
+
+	const yearRef = useRef<HTMLSpanElement>(null);
+
+	useEffect(() => {
+		if (currentChange === 'year' && yearRef.current) {
+			yearRef.current.style.color = color;
+			console.log(color);
+		} else {
+			if (yearRef.current) {
+				yearRef.current.style.color = '#989898';
+			}
+		}
+	}, [currentChange, color]);
 
 	return (
 		<fieldset className="flex h-[48px] w-[222px] items-center justify-center rounded-[24px] bg-[#F9F9F9] p-[4px] shadow-[inset_0_0_1px_1px_rgba(0,0,0,0.15)]">
@@ -54,7 +56,8 @@ function MonthYearChecked({ color }: { color: colorInfo }) {
 					checked={isChecked('year')}
 				/>
 				<span
-					className={`flex h-full w-full cursor-pointer items-center justify-center rounded-[24px] text-sm font-medium text-[#989898] peer-checked/year:bg-white peer-checked/year:text-[16px] peer-checked/year:text-[#00A3FF] peer-checked/year:shadow-[0_0_5px_rgba(0,0,0,0.3)] peer-checked/year:transition`}
+					ref={yearRef}
+					className={`flex h-full w-full cursor-pointer items-center justify-center rounded-[24px] text-sm font-medium text-[#989898] peer-checked/year:bg-white peer-checked/year:text-[16px] peer-checked/year:font-bold peer-checked/year:shadow-[0_0_5px_rgba(0,0,0,0.3)] peer-checked/year:transition`}
 				>
 					연간 구독
 				</span>

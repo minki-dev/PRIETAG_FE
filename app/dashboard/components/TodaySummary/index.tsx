@@ -2,14 +2,17 @@ import React from 'react';
 import SummaryCard from './SummaryCard';
 import { RxTriangleUp } from 'react-icons/rx';
 import { RxTriangleDown } from 'react-icons/rx';
-type Props = {};
+import { StringLiteralLike } from 'typescript';
+type Props = {
+	className?: String
+};
 
-export default function TodaySummary({}: Props) {
+export default function TodaySummary({className}: Props) {
 	return (
-		<section>
-			<h3 className='text-xl leading-8 font-ptBold'>Today</h3>
-			<span className='text-sm leading-[22px] text-[#747474]'>진입수와 이탈수는 지난 버전의 일평균 값과 비교합니다.</span>
-			<div className="flex gap-4 sm:w-auto sm:flex-col xl:flex-row xl:justify-between">
+		<section className={`${className}`}>
+			<h2 className='text-xl leading-8 font-ptBold'>Today</h2>
+			<span className='text-sm break-keep leading-[22px] text-[#747474]'>진입수와 이탈수는 지난 버전의 일평균 값과 비교합니다.</span>
+			<div className="mt-3 relative flex w-[335px] gap-4 sm:w-auto sm:flex-col xl:flex-row xl:justify-between">
 				<SummaryCard
 					title="진입수"
 					subtitle="지난 버전 대비"

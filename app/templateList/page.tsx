@@ -7,88 +7,26 @@ import Image from 'next/image';
 import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
+import PaginationBar from './components/PaginationBar';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { toggleMoreIsClicked } from '@/store/slice/templateSlice';
+import { TemplateItem } from '@/constants/template';
+import { RootState } from '@/store';
 
-interface DataItem {
-	id: number;
-	title: string;
-	date: string;
-	moreIsClicked: boolean;
-}
-
-export default function PriceTable() {
-	const [viewIsClicked, setViewIsClicked] = useState(false);
-	const [moreIsClicked, setMoreIsClicked] = useState(false);
-	const [data, setData] = useState([
-		{
-			id: 1,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 2,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 3,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 4,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 5,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 6,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 7,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 8,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-		{
-			id: 9,
-			title: '저번에 만들었나',
-			date: '2023.05.31.15:00',
-			moreIsClicked: false,
-		},
-	]);
-	const handleMoreClick = (id) => {
-		setData((prevData) => {
-			return prevData.map((item) => {
-				if (item.id === id) {
-					console.log('id', moreIsClicked);
-					return { ...item, moreIsClicked: !item.moreIsClicked };
-				}
-				return item;
-			});
-		});
+export default function TemplateList() {
+	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
+	const router = useRouter();
+	const dispatch = useDispatch();
+	const template = useSelector((state: RootState) => state.template);
+	const handleMoreClick = (id: number) => {
+		dispatch(toggleMoreIsClicked({ id }));
 	};
+
 	return (
 		<>
 			<Header />
-			{/* subheader */}
 			<div className=" flex min-h-[324px] w-full min-w-[602px] flex-col justify-center bg-[url('/img/splash.svg')] px-[240px]">
 				<div className="mt-[72px] min-w-[602px] text-[32px] font-bold text-black">
 					가격 정책표 리스트
@@ -106,7 +44,12 @@ export default function PriceTable() {
 			</div>
 			<div className="h-full  w-full   px-[240px] pb-[240px] pt-[80px]">
 				<div className="flex h-[120px] w-full min-w-[900px] items-center  justify-between">
-					<button className="  flex h-[58px]  w-[262px] justify-around rounded-lg border border-stone-300 bg-white p-4">
+					<button
+						onClick={() => {
+							router.push('/editTemplate');
+						}}
+						className="  flex h-[58px]  w-[262px] justify-around rounded-lg border border-stone-300 bg-white p-4"
+					>
 						<div>
 							{' '}
 							<Image
@@ -117,6 +60,7 @@ export default function PriceTable() {
 								alt="연필아이콘"
 							/>{' '}
 						</div>
+
 						<div>새로운 가격표 만들기</div>
 						<div>
 							{' '}
@@ -143,14 +87,17 @@ export default function PriceTable() {
 					</div>
 				</div>
 				<div className=" grid min-w-[900px] grid-cols-[repeat(3,minmax(100px,413px))] grid-rows-[repeat(3,minmax(100px,327px))] justify-evenly gap-[80px] ">
-					{data.map((item: DataItem, index: number) => (
+					{template.map((item: TemplateItem, index: number) => (
 						<div
 							key={item.id}
 							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
+							onClick={() => {
+								router.push('/templateList/edit');
+							}}
 						>
 							<div className="h-[72px] p-[24px]"></div>
-							<div className="h-[calc(100%-72px-112px)] bg-blue-100">
-								가격표 이미지 넣을 공간
+							<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
+								<Image src="/img/a.png" width={400} height={300} alt="가격표" />
 							</div>
 							<div className="relative flex flex-col justify-center px-[24px] py-[16px]">
 								<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">
@@ -165,8 +112,9 @@ export default function PriceTable() {
 								<button
 									type="button"
 									className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
-									onClick={() => {
+									onClick={(e) => {
 										handleMoreClick(item.id);
+										e.stopPropagation();
 									}}
 								>
 									<Image
@@ -180,8 +128,10 @@ export default function PriceTable() {
 							</div>
 						</div>
 					))}
-				</div>
+				</div>{' '}
 			</div>
+			<PaginationBar />
+
 			<Footer />
 		</>
 	);

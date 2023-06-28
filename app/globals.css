@@ -86,12 +86,12 @@
 	@apply overflow-x-hidden text-ellipsis whitespace-nowrap;
 }
 
-	/* resizable */
-	.react-resizable-handle.react-resizable-handle-s {
-		@apply left-0 w-full h-full ml-0 bg-white transform-none bg-none;
-		cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;
-	}
+/* resizable */
+.react-resizable-handle.react-resizable-handle-s {
+	@apply left-0 w-full h-full ml-0 bg-white transform-none bg-none;
+	cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;
 }
+
 
 /* responsive pricetag */
 .responsiveLayout {

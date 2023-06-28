@@ -8,7 +8,7 @@ import { useCookies } from 'react-cookie';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-function HomeHeader() {
+export default function HomeHeader() {
 	const [cookie, setCookie] = useCookies();
 	const [token, setToken] = useState('');
 	const [email, setEmail] = useState('');
@@ -78,25 +78,6 @@ function HomeHeader() {
 					<div className=" h-[72px] min-w-[240px] shrink-0">
 						<nav className="h-full">
 							<ul className="flex h-full cursor-pointer  justify-between text-[16px]">
-								<div className="hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black sm:flex">
-									<li className=" hover:font-medium">홈</li>
-								</div>
-								<div className="hover:border-opacity-1 hidden  h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black xl:mx-[67px]  xl:flex">
-									<li
-										className=" hover:font-medium"
-										onClick={() => movePage('editTemplate')}
-									>
-										템플릿 편집
-									</li>
-								</div>
-								<div className="hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center border-opacity-0 hover:border-b-2 hover:border-b-black sm:flex">
-									<li
-										className=" hover:font-medium"
-										onClick={() => movePage('dashboard')}
-									>
-										대시 보드
-									</li>
-								</div>
 								<Link href="/">
 									<div
 										className={`hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center  hover:border-b-2 hover:border-b-black sm:flex ${
@@ -107,24 +88,30 @@ function HomeHeader() {
 										<li className=" hover:font-medium">홈</li>
 									</div>
 								</Link>{' '}
-								<Link href="/templateList">
-									<div
-										className={`hover:border-opacity-1 hidden  h-full w-[92px] items-center justify-center hover:border-b-2 hover:border-b-black xl:mx-[67px]  xl:flex ${
-											pathname === '/templateList' ? underline : noUnderline
-										}`}
+								<div
+									className={`hover:border-opacity-1 hidden  h-full w-[92px] items-center justify-center hover:border-b-2 hover:border-b-black xl:mx-[67px]  xl:flex ${
+										pathname === '/templateList' ? underline : noUnderline
+									}`}
+								>
+									<li
+										className=" hover:font-medium"
+										onClick={() => movePage('editTemplate')}
 									>
-										<li className=" hover:font-medium">템플릿 편집</li>
-									</div>
-								</Link>
-								<Link href="/dashboard">
-									<div
-										className={`hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center hover:border-b-2 hover:border-b-black sm:flex ${
-											pathname === '/dashboard' ? underline : noUnderline
-										}`}
+										템플릿 편집
+									</li>
+								</div>
+								<div
+									className={`hover:border-opacity-1 hidden h-full w-[92px] items-center justify-center hover:border-b-2 hover:border-b-black sm:flex ${
+										pathname === '/dashboard' ? underline : noUnderline
+									}`}
+								>
+									<li
+										className=" hover:font-medium"
+										onClick={() => movePage('dashboard')}
 									>
-										<li className=" hover:font-medium">대시 보드</li>
-									</div>{' '}
-								</Link>
+										대시 보드
+									</li>
+								</div>
 							</ul>
 						</nav>
 					</div>
@@ -162,5 +149,3 @@ function HomeHeader() {
 		</div>
 	);
 }
-
-export default HomeHeader;

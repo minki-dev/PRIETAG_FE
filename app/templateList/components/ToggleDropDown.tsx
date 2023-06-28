@@ -1,7 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 
-function ToggleDropDown({ viewIsClicked }) {
+interface ToogggleDropDownProps {
+	viewIsClicked: boolean;
+}
+
+const ToggleDropDown: React.FC<ToogggleDropDownProps> = ({ viewIsClicked }) => {
 	return (
 		<>
 			{viewIsClicked ? (
@@ -10,7 +14,7 @@ function ToggleDropDown({ viewIsClicked }) {
 					width={10}
 					height={8}
 					className=" object-cover "
-					alt="연"
+					alt="드롭업"
 				/>
 			) : (
 				<Image
@@ -18,11 +22,11 @@ function ToggleDropDown({ viewIsClicked }) {
 					width={10}
 					height={8}
 					className=" object-cover "
-					alt="연"
+					alt="드롭다운"
 				/>
 			)}
 		</>
 	);
-}
+};
 
 export default ToggleDropDown;

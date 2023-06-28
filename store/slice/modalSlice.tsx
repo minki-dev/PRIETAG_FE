@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '..';
 export interface ModalProps {
-	cancelButton: {
+	cancelButton?: {
 		text: string;
 		onCancel: (() => void) | null;
 	};

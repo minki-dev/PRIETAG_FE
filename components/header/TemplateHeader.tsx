@@ -36,7 +36,7 @@ export default function TemplateHeader() {
 		<div className="relative  h-[72px] w-full min-w-[1280px]">
 			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] absolute top-0 z-20 h-[72px] w-full bg-[#FFF] shadow-md">
 				{configState.isPreview ? (
-					<div className="grid h-full w-full ">
+					<div className="grid w-full h-full ">
 						<div className=" flex  flex-row items-center justify-center gap-[34px] ">
 							<Image
 								width={24}

@@ -12,13 +12,16 @@ type PropsType = {
 };
 
 function ResizablePaddingWithHandle({ onAction, type }: PropsType) {
-	const { configState } = useConfig();
-	const { isPreview } = configState;
+	const {
+		configState: { isPreview },
+	} = useConfig();
 	const { minHeight } = BOX_PROPERTY.PADDING[type];
 
 	const heightState = useState<number>(minHeight);
 	return (
-		<div className="relative w-full border-2 border-transparent group hover:border-black">
+		<div className={`group relative w-full border-2 border-transparent ${
+			!isPreview ? "hover:border-black" : ""
+		}`}>
 			<div
 				className={`draggable-handle flex flex-col items-center gap-1 ${
 					!isPreview

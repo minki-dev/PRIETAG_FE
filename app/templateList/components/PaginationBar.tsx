@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SquareBtn from '@/components/button/SquareBtn';
 import { openModal, useModal } from '@/store/slice/modalSlice';
 import { GlobalModal } from '@/components/modal/GlobalModal';
@@ -37,6 +37,7 @@ function PaginationBar() {
 					borderColor="#FF0000"
 					onClick={() => {
 						dispatch(openModal(ModalTypes.TemplateDelModal));
+						ModalTypes.TemplateDelModal.params.buttons.behaveButton.onAction?.();
 					}}
 				/>{' '}
 				<GlobalModal />

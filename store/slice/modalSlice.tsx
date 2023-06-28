@@ -2,8 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '..';
+import { createAction } from '@reduxjs/toolkit';
+import { ModalTypes } from '@/components/modal/ModalState';
 export interface ModalProps {
-	cancelButton: {
+	cancelButton?: {
 		text: string;
 		onCancel: (() => void) | null;
 	};
@@ -51,9 +53,12 @@ const modalSlice = createSlice({
 		closeModal: (state) => {
 			state.isOpen = false;
 		},
+		// deleteModal: (state, action) => {},
 	},
 });
+
 export const { openModal, closeModal } = modalSlice.actions;
+
 export function useModal() {
 	const dispatch = useDispatch();
 	const { isOpen, params } = useSelector((state: RootState) => state.modal);

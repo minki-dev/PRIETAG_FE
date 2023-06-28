@@ -8,10 +8,9 @@ export const GlobalModal = () => {
 	const onCancel = () => {
 		dispatch(closeModal());
 	};
-
-	const onAction = () => {
-		dispatch(closeModal());
-	};
+	// const onAction = () => {
+	// 	dispatch(closeModal());
+	// };
 
 	if (!isOpen) return null;
 
@@ -50,7 +49,7 @@ export const GlobalModal = () => {
 					</button>
 					<button
 						className={`${params.buttons?.behaveButton?.color} ml-[8px] h-[34px] w-[104px] rounded-[3px] text-center text-[14px] font-medium leading-[22px] text-white`}
-						onClick={onAction}
+						// onClick={onAction}
 						type="button"
 					>
 						{params.buttons?.behaveButton?.text}

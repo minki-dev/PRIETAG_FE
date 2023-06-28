@@ -70,7 +70,7 @@ export default function TextBox({
 		default:
 			break;
 	}
-	console.log('customClass', customClass);
+	// console.log('customClass', customClass);
 	return (
 		<Draggable draggableId={id} index={index}>
 			{(provided) => (

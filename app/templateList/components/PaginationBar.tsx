@@ -4,27 +4,28 @@ import { openModal, useModal } from '@/store/slice/modalSlice';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import { ModalTypes } from '@/components/modal/ModalState';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { setCurrentPage } from '@/store/slice/versionSlice';
 
-function PaginationBar({
-	setCurrentPage,
-	currentPage,
-	numOfTotalPages,
-	handleDeleteSelected,
-	numOfVisiblePages,
-}) {
+function PaginationBar() {
 	const { dispatch } = useModal();
-	const prevPageHandler = () => {
-		if (currentPage !== 1) {
-			setCurrentPage(currentPage - 1);
-		}
+	const versions = useSelector((state: RootState) => state.version.versions);
+	const currentPage = useSelector(
+		(state: RootState) => state.version.currentPage,
+	);
+	const itemsPerPage = useSelector(
+		(state: RootState) => state.version.itemsPerPage,
+	);
+	const totalItems = versions.length;
+	const pageCount = Math.ceil(totalItems / itemsPerPage);
+	const indexOfLastItem = currentPage * itemsPerPage;
+	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+	const currentItems = versions.slice(indexOfFirstItem, indexOfLastItem);
+	const handlePageChange = (pageNumber: number) => {
+		dispatch(setCurrentPage(pageNumber));
 	};
 
-	const nextPageHandler = () => {
-		if (currentPage !== numOfTotalPages) {
-			setCurrentPage(currentPage + 1);
-		}
-	};
-	const pages = [...Array(numOfVisiblePages + 1).keys()].slice(1);
 	return (
 		<div className="relative flex h-[168px] w-full justify-center">
 			<div className="absolute left-0 top-[28px] ">
@@ -35,8 +36,7 @@ function PaginationBar({
 					textContent="선택 삭제"
 					borderColor="#FF0000"
 					onClick={() => {
-						handleDeleteSelected(),
-							dispatch(openModal(ModalTypes.TemplateDelModal));
+						dispatch(openModal(ModalTypes.TemplateDelModal));
 					}}
 				/>{' '}
 				<GlobalModal />
@@ -45,8 +45,21 @@ function PaginationBar({
 			<div className="flex items-center">
 				<button
 					onClick={() => {
-						prevPageHandler();
+						dispatch(setCurrentPage(1));
 					}}
+				>
+					<Image
+						src="/img/page_first.svg"
+						alt="처음으로"
+						width={40}
+						height={40}
+					/>{' '}
+				</button>
+				<button
+					onClick={() => {
+						dispatch(setCurrentPage(currentPage - 1));
+					}}
+					disabled={currentPage === 1}
 				>
 					<Image
 						src="/img/page_pre.svg"
@@ -56,30 +69,45 @@ function PaginationBar({
 					/>{' '}
 				</button>
 				<nav className="flex">
-					{pages.map((page) => (
-						<span
-							key={page}
-							onClick={() => {
-								setCurrentPage(page);
-							}}
-							className={`flex h-[40px] w-[40px] items-center justify-center rounded-full ${
-								currentPage === page
-									? 'bg-[#00A3FF] font-bold text-white'
-									: null
-							} cursor-pointer`}
-						>
-							{`${page}`}{' '}
-						</span>
-					))}
+					{Array(pageCount)
+						.fill()
+						.map((_, i) => (
+							<button
+								key={i + 1}
+								onClick={() => {
+									handlePageChange(i + 1);
+								}}
+								className={`flex h-[40px] w-[40px] items-center justify-center rounded-full ${
+									i + 1 === currentPage
+										? 'bg-[#00A3FF] text-white'
+										: 'bg-transparent'
+								}`}
+							>
+								{i + 1}
+							</button>
+						))}
 				</nav>
 				<button
 					onClick={() => {
-						nextPageHandler();
+						dispatch(setCurrentPage(currentPage + 1));
 					}}
+					disabled={currentPage === pageCount}
 				>
 					<Image
 						src="/img/page_next.svg"
 						alt="다음으로"
+						width={40}
+						height={40}
+					/>{' '}
+				</button>
+				<button
+					onClick={() => {
+						dispatch(setCurrentPage(pageCount));
+					}}
+				>
+					<Image
+						src="/img/page_end.svg"
+						alt="마지막으로"
 						width={40}
 						height={40}
 					/>{' '}

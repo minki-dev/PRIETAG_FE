@@ -2,60 +2,95 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { login } from '@/app/api/api';
 import { useCookies } from 'react-cookie';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function HomeHeader() {
 	const [cookie, setCookie] = useCookies();
-	const [token, setToken] = useState('');
+	const [isLogin, setIsLogin] = useState(false);
 	const [email, setEmail] = useState('');
-	const userSignOut = () => {
-		signOut();
-		//authorization cookie 삭제
-		setCookie('authorizationToken', '', { path: '/' });
-	};
-	useEffect(() => {
-		const queryString = window.location.search;
-		const urlParams = new URLSearchParams(queryString);
-		const code = urlParams.get('code') || '';
-		const fetchData = async () => {
-			try {
-				const res = await login(code);
-				setEmail(res.data.email);
-			} catch (error) {
-				console.log(error);
-			}
-		};
+	const router = useRouter();
+	const params = useSearchParams();
 
-		fetchData();
-		const getAuthorizationTokenFromCookie = () => {
-			const cookies = document.cookie.split(';');
-			for (let i = 0; i < cookies.length; i++) {
-				const cookie = cookies[i].trim();
-				if (cookie.startsWith('authorizationToken=')) {
-					return cookie.substring('authorizationToken='.length);
+	const userSignIn = async () => {
+		signIn('kakao', { callbackUrl: 'http://localhost:3000/' });
+	};
+	const userSignOut = async () => {
+		const data = await signOut({
+			redirect: false,
+			callbackUrl: 'http://localhost:3000/',
+		});
+
+		router.push(data.url);
+
+		//authorization cookie 삭제
+		router.replace('/');
+		setCookie('authorizationToken', '', { path: '/' });
+		setIsLogin(false);
+		if (window !== undefined) {
+			localStorage.removeItem('email');
+		}
+	};
+	// const queryString = window.location.search;
+	// const urlParams = new URLSearchParams(queryString);
+	// const code = urlParams.get('code') || '';
+	const code = params.get('code') || '';
+	const fetchData = async () => {
+		try {
+			const res = await login(code);
+
+			setEmail(res.data.email);
+			if (window !== undefined) {
+				if (res.data.email !== null) {
+					localStorage.setItem('email', res.data.email);
 				}
 			}
-			return '';
-		};
+
+			const authToken = getAuthorizationTokenFromCookie();
+			console.log(email);
+			if (authToken !== '') {
+				setIsLogin(true);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const getAuthorizationTokenFromCookie = () => {
+		const cookies = document.cookie.split(';');
+		for (let i = 0; i < cookies.length; i++) {
+			const cookie = cookies[i].trim();
+			if (cookie.startsWith('authorizationToken=')) {
+				return cookie.substring('authorizationToken='.length);
+			}
+		}
+		return '';
+	};
+	useEffect(() => {
 		const authToken = getAuthorizationTokenFromCookie();
-		setToken(authToken);
+
+		if (authToken !== '') {
+			setIsLogin(true);
+		} else {
+			fetchData();
+		}
 	}, []);
 	const movePage = (url: string) => {
-		if (token === '') {
+		if (isLogin === false) {
 			alert('로그인이 필요합니다.');
 			return;
 		} else {
-			window.location.href = `/${url}`;
+			router.push(`/${url}`);
 		}
 	};
 
 	const pathname = usePathname();
 	const underline = 'border-opacity-1 border-b-2 border-b-black';
 	const noUnderline = 'border-opacity-0';
+
 	return (
 		<div className="relative h-[72px] w-full sm:w-screen">
 			<div className="h-[44px] w-full sm:hidden">
@@ -124,19 +159,22 @@ export default function HomeHeader() {
 								height={32}
 								className="mr-[8px]"
 							/>
-							{email === undefined ? '로그인을 진행해주세요' : email}
+							{window !== undefined &&
+								(localStorage.getItem('email')
+									? localStorage.getItem('email')
+									: '로그인을 진행해주세요')}
 						</button>
 						<button
 							className={` ${
-								email === undefined ? '' : 'hidden'
+								isLogin ? 'hidden' : ''
 							}  h-[34px] w-[100px]  items-center text-[#989898] `}
-							onClick={() => signIn('kakao')}
+							onClick={() => userSignIn()}
 						>
 							Sign in
 						</button>
 						<button
 							className={` ${
-								email === undefined ? 'hidden' : ''
+								isLogin ? '' : 'hidden'
 							}  h-[34px] w-[100px]  items-center text-[#989898] `}
 							onClick={() => userSignOut()}
 						>

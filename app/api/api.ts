@@ -1,7 +1,5 @@
 import { useCookies } from 'react-cookie';
 
-import jwt from 'jsonwebtoken';
-
 export interface SetCookieOption {
 	path: string;
 	maxAge: number;

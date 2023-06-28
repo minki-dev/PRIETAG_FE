@@ -7,39 +7,10 @@
 .inner-tablet {
 	width: calc(100vw - 240px);
 }
-/* layout */
-.inner-pc {
-	width: calc(100vw - 480px);
-}
-.inner-tablet {
-	width: calc(100vw - 240px);
-}
 
 /* dnd */
 .draggable-title {
 	@apply relative flex h-[109px];
-}
-
-.draggable-handle {
-	@apply absolute left-0 top-[50%] w-fit translate-y-[-50%]  rounded-lg opacity-0 transition duration-200 ease-out;
-}
-.draggable-title input {
-	@apply m-auto h-[77px] w-full text-center max-xl:text-[32px] max-mobile:text-[24px];
-}
-.draggable-subtitle {
-	@apply relative flex h-[84px];
-}
-.draggable-subtitle input {
-	@apply m-auto h-[52px] w-full text-center max-xl:text-[24px] max-mobile:text-base;
-}
-.draggable-text {
-	@apply relative flex h-[58px];
-}
-.draggable-text input {
-	@apply m-auto h-[26px] w-full text-center max-xl:text-base max-mobile:text-xs;
-}
-.draggable-padding {
-	@apply m-auto max-h-[200px] min-h-[10px];
 }
 .draggable-handle {
 	@apply absolute left-0 top-[50%] w-fit translate-y-[-50%]  rounded-lg opacity-0 transition duration-200 ease-out;
@@ -81,15 +52,52 @@
 .prevent-text-overflow {
 	@apply overflow-x-hidden text-ellipsis whitespace-nowrap;
 }
-/* text */
-.prevent-text-overflow {
-	@apply overflow-x-hidden text-ellipsis whitespace-nowrap;
+
+/* resizable */
+.react-resizable-handle.react-resizable-handle-s {
+	@apply left-0 ml-0 h-full w-full transform-none bg-white bg-none;
+	cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;
 }
 
-	/* resizable */
-	.react-resizable-handle.react-resizable-handle-s {
-		@apply left-0 w-full h-full ml-0 bg-white transform-none bg-none;
-		cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;
+@tailwind utilities;
+
+@font-face {
+	font-family: 'Pretendard-Bold';
+	src: url('/fonts/Pretendard-Bold.ttf');
+}
+
+@font-face {
+	font-family: 'Pretendard-Regular';
+	src: url('/fonts/Pretendard-Regular.ttf');
+}
+
+@font-face {
+	font-family: 'Pretendard-Medium';
+	src: url('/fonts/Pretendard-Medium.ttf');
+}
+
+@font-face {
+	font-family: 'Pretendard-Light';
+	src: url('/fonts/Pretendard-Light.ttf');
+}
+
+@layer base {
+	input[type='number']::-webkit-inner-spin-button,
+	input[type='number']::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+}
+
+@layer components {
+	.rightmenu_li {
+		@apply border-b border-solid border-gray-300 p-3;
+	}
+	.button_li {
+		@apply flex w-full items-center justify-between;
+	}
+	.option_li {
+		@apply top-[114px] text-sm font-bold text-[#747474];
 	}
 }
 

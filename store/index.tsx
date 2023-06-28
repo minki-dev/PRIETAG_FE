@@ -12,6 +12,8 @@ import monthYearToggleReducer from './slice/monthYearToggleSlice';
 import configReducer from './slice/configSlice';
 import priceCardReducer from './slice/priceCardSlice';
 import uploadModalReducer from './slice/uploadModalSlice';
+import templateReducer from './slice/templateSlice';
+import versionReducer from './slice/versionSlice';
 
 const logger = createLogger();
 
@@ -25,6 +27,8 @@ const rootReducer = combineReducers({
 	priceModal: priceModalReducer,
 	config: configReducer,
 	uploadModal: uploadModalReducer,
+	template: templateReducer,
+	version: versionReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -7,7 +7,6 @@ import Image from 'next/image';
 import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
-import PaginationBar from './components/PaginationBar';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -42,13 +41,13 @@ export default function TemplateList() {
 					</div>
 				</div>
 			</div>
-			<div className="h-full  w-full   px-[240px] pb-[240px] pt-[80px]">
+			<div className="h-full  w-full   bg-[#F7F8FC] px-[240px] pb-[240px] pt-[80px]">
 				<div className="flex h-[120px] w-full min-w-[900px] items-center  justify-between">
 					<button
 						onClick={() => {
 							router.push('/editTemplate');
 						}}
-						className="  flex h-[58px]  w-[262px] justify-around rounded-lg border border-stone-300 bg-white p-4"
+						className="  flex h-[58px]  w-[262px] justify-around rounded-[10px] border border-stone-300 bg-white p-4"
 					>
 						<div>
 							{' '}
@@ -91,8 +90,9 @@ export default function TemplateList() {
 						<div
 							key={item.id}
 							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
-							onClick={() => {
+							onClick={(e: React.MouseEvent<HTMLDivElement>) => {
 								router.push('/templateList/edit');
+								e.stopPropagation();
 							}}
 						>
 							<div className="h-[72px] p-[24px]"></div>
@@ -112,7 +112,7 @@ export default function TemplateList() {
 								<button
 									type="button"
 									className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
-									onClick={(e) => {
+									onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
 										handleMoreClick(item.id);
 										e.stopPropagation();
 									}}
@@ -129,8 +129,46 @@ export default function TemplateList() {
 						</div>
 					))}
 				</div>{' '}
+				<div className="relative flex h-[168px] w-full justify-center">
+					<div className="flex items-center">
+						<button>
+							<Image
+								src="/img/page_first.svg"
+								alt="처음으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
+						<button>
+							<Image
+								src="/img/page_pre.svg"
+								alt="이전으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
+						<nav className="flex">
+							<button>1</button>
+						</nav>
+						<button>
+							<Image
+								src="/img/page_next.svg"
+								alt="다음으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
+						<button>
+							<Image
+								src="/img/page_end.svg"
+								alt="마지막으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
+					</div>
+				</div>
 			</div>
-			<PaginationBar />
 
 			<Footer />
 		</>

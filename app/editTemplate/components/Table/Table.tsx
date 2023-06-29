@@ -3,7 +3,10 @@
 import DeleteButton from '@/components/DeleteButton';
 import { ModalTypes } from '@/components/modal/ModalState';
 import { useConfig } from '@/store/slice/configSlice';
-import { openModal, useModal } from '@/store/slice/modalSlice';
+import {
+	openModal,
+	useModal,
+} from '@/store/slice/modalSlice';
 import {
 	addRow,
 	removeRow,
@@ -13,6 +16,7 @@ import {
 	updateFeatureName,
 	useFeatureTable,
 	toggleFeatureName,
+	resetFeatureTable,
 } from '@/store/slice/featureTableSlice';
 import React from 'react';
 import { HiOutlinePlus } from 'react-icons/hi';
@@ -41,7 +45,10 @@ export default function Table({
 	} = usePriceModal();
 
 	// @Redux featureTable
-	const { featureTableState, dispatch: tableDispatch } = useFeatureTable();
+	const {
+		featureTableState: { featureTableList },
+		dispatch: tableDispatch,
+	} = useFeatureTable();
 
 	// @Redux modal
 	const { dispatch: modalDispatch } = useModal();
@@ -76,12 +83,31 @@ export default function Table({
 		tableDispatch(removeRow({ featureTableIndex, rowIndex: idx }));
 	};
 
+
 	//	remove this component, resets after modal confirm click
 	const handleTableRemove = () => {
-		if (featureTableState.featureTableList.length === 1) {
-			modalDispatch(
-				openModal(ModalTypes.DetailedFunctionContainerDelModal.params),
-			);
+		if (featureTableList.length === 1) {
+			const cb = () => {
+				tableDispatch(resetFeatureTable(priceCards.length + 1))
+			}
+			const params = {
+				title: '상세 기능표 섹션 삭제 및 초기화',
+				description:
+					'상세 기능표 섹션의 모든 내용이 삭제됩니다. 삭제된 내용은 복구할 수 없고, 삭제 후 새로운 상세 기능표 섹션이 생성됩니다. 진행하시겠습니까?',
+				buttons: {
+					cancelButton: {
+						text: '취소',
+						onCancel: () => {},
+					},
+					behaveButton: {
+						text: '삭제 후 재생성',
+						color: 'bg-[#FF0000]',
+						onAction: cb
+					},
+				},
+			};
+
+			modalDispatch(openModal(params));
 			return;
 		}
 		tableDispatch(removeTable({ featureTableIndex }));
@@ -124,7 +150,7 @@ export default function Table({
 			/>
 
 			<div
-				className={`border-black ${priceCards.length !== 0 && 'border-y-2'}`}
+				className={`w-full border-black ${priceCards.length !== 0 && 'border-y-2'}`}
 			>
 				{priceCards.length !== 0 && featureHeader && (
 					<div
@@ -147,7 +173,7 @@ export default function Table({
 									key={uuid()}
 									className={`${!isPreview ? ' bg-gray-300 text-white' : ''} ${
 										index === 0 ? 'col-start-2' : ''
-									} prevent-text-overflow h-10 w-tableData p-2 text-center xl:w-tableDataTablet 2xl:w-tableDataPc`}
+									} prevent-text-overflow h-10  p-2 text-center w-full text-overflow`}
 								>
 									{card.title}
 								</div>
@@ -155,6 +181,7 @@ export default function Table({
 						})}
 					</div>
 				)}
+				<div className="w-full border-b-2 border-gray-300"></div>
 				<div className="w-full border-b-2 border-gray-300"></div>
 				{priceCards.length !== 0 && featureName && (
 					<div
@@ -181,7 +208,7 @@ export default function Table({
 								placeholder={`${!isPreview ? '포함된 기능' : ''}`}
 								disabled={isPreview}
 								onBlur={(e) => setFeatureName(e.target.value)}
-								className="h-full w-full p-2 focus:outline-none disabled:bg-transparent"
+								className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
 							/>
 						</div>
 					</div>
@@ -228,14 +255,14 @@ export default function Table({
 				{!isPreview && (
 					<button
 						type="button"
-						className="col-span-5 flex h-16 w-full items-center justify-center border-2 border-dashed border-gray-300"
+						className="flex items-center justify-center w-full h-16 col-span-5 border-2 border-gray-300 border-dashed"
 						onClick={handleAddRow}
 					>
 						<HiOutlinePlus />
 					</button>
 				)}
 			</div>
-			<div className="border-gray col-span-5 mb-4 mt-3 border-b-2">{}</div>
+			<div className="col-span-5 mt-3 mb-4 border-b-2 border-gray">{}</div>
 		</div>
 	);
 }

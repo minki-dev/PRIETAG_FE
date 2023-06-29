@@ -145,6 +145,7 @@ export default function EditTemplate() {
 		<>
 			{' '}
 			{configState.isOnboardingModalOpen && <OnBoardingModal />}
+			<GlobalModal />
 			<Header />
 			<main
 				className={` responsiveLayout mx-auto mt-36 box-content flex  flex-col justify-center

@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '..';
+import { createAction } from '@reduxjs/toolkit';
+import { ModalTypes } from '@/components/modal/ModalState';
 export interface ModalProps {
 	cancelButton?: {
 		text: string;
@@ -44,7 +46,7 @@ const modalSlice = createSlice({
 	name: 'modal',
 	initialState,
 	reducers: {
-		openModal: (state:ModalState, action:PayloadAction<ModalParams>) => {
+		openModal: (state: ModalState, action: PayloadAction<ModalParams>) => {
 			state.isOpen = true;
 			state.params = action.payload;
 		},
@@ -53,7 +55,9 @@ const modalSlice = createSlice({
 		},
 	},
 });
+
 export const { openModal, closeModal } = modalSlice.actions;
+
 export function useModal() {
 	const dispatch = useDispatch();
 	const { isOpen, params } = useSelector((state: RootState) => state.modal);

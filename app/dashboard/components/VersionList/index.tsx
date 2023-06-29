@@ -89,7 +89,7 @@ export default function VersionList({ versionListData, className }: Props) {
 					History
 				</h2>
 
-				<table className="text-sm table-fixed sm:whitespace-normal sm:text-base">
+				<table className="text-sm sm:h-[650px] table-fixed sm:whitespace-normal sm:text-base">
 					<thead className="text-[#747474]' font-ptRegular h-14 border-b-2 border-b-[#1667DB] font-normal">
 						<tr className="">
 							<th className="p-4 text-center whitespace-nowrap ">번호</th>

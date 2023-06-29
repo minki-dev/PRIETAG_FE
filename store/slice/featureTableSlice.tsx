@@ -2,12 +2,18 @@ import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '..';
 
-const INITIAL_FEATURE_TABLE: featureTable = {
-	featureHeader: true,
-	featureName: true,
-	featureNameValue: '',
-	table: [['', '']],
-};
+
+
+const getInitialTable = (cols: number):featureTable => {
+	return {
+		featureHeader: true,
+		featureName: true,
+		featureNameValue: '',
+		table: [
+			Array.from({length: cols}, content => (""))
+		],
+	};
+}
 
 export type featureTable = {
 	featureHeader: boolean;
@@ -40,7 +46,7 @@ type featureLabelPayload = {
 };
 
 const initialState: featureTableState = {
-	featureTableList: [INITIAL_FEATURE_TABLE],
+	featureTableList: [getInitialTable(2)]
 };
 
 export const featureTableSlice = createSlice({
@@ -56,8 +62,8 @@ export const featureTableSlice = createSlice({
 			});
 		},
 
-		resetFeatureTable: (state: featureTableState) => {
-			state.featureTableList = [INITIAL_FEATURE_TABLE];
+		resetFeatureTable: (state: featureTableState, action: PayloadAction<number>) => {
+			state.featureTableList = [getInitialTable(action.payload)]
 		},
 		toggleFeatureHeader: (
 			state: featureTableState,
@@ -166,8 +172,8 @@ export const featureTableSlice = createSlice({
 			state.featureTableList[featureTableIndex].table[rowIndex][colIndex] =
 				tableData;
 		},
-		addTable: (state: featureTableState) => {
-			state.featureTableList.push(INITIAL_FEATURE_TABLE);
+		addTable: (state: featureTableState, action:PayloadAction<number>) => {
+			state.featureTableList.push(getInitialTable(action.payload));
 		},
 
 		removeTable: (

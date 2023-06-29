@@ -14,6 +14,7 @@ import {
 } from 'react-icons/md';
 import { RxPlus, RxQuestionMarkCircled } from 'react-icons/rx';
 import { addFAQ, useFAQ } from '@/store/slice/faqSlice';
+import { usePriceModal } from '@/store/slice/priceModalSlice';
 
 export default function RightMenu() {
 	const [isFontOption, setIsFontOption] = useState(true);
@@ -24,28 +25,31 @@ export default function RightMenu() {
 	const [isMenuOpen, setIsMenuOpen] = useState(true);
 
 	const { dispatch: dndDispatch, boxState } = useDNDBox();
+	const { priceModal: { priceCards } } = usePriceModal()
 	const { dispatch: modalDispatch } = useModal();
 	const { faq, dispatch: faqDispatch } = useFAQ();
-	const { configState, dispatch: configDispatch } = useConfig();
+	const { configState: { isPreview, color }, dispatch: configDispatch } = useConfig();
 
 	const handleAddTable = () => {
-		dndDispatch(addTable());
+		if (!isPreview) dndDispatch(addTable(priceCards.length + 1));
 	};
 
 	const handleAddBox = (boxType: BoxType) => {
-		if (boxState.selectedBox === null) {
-			modalDispatch(openModal(ModalTypes.PositionSelectModal.params));
-			return;
+		if (!isPreview) {
+			if (boxState.selectedBox === null) {
+				modalDispatch(openModal(ModalTypes.PositionSelectModal.params));
+				return;
+			}
+			dndDispatch(addBox({ boxType }));
 		}
-		dndDispatch(addBox({ boxType }));
 	};
 
 	const handleTogglePreview = () => {
-		configDispatch(togglePreview());
+		if (!isPreview) configDispatch(togglePreview());
 	};
 
 	const addNewFAQ = () => {
-		faqDispatch(addFAQ());
+		if (!isPreview) faqDispatch(addFAQ());
 	};
 
 	return (
@@ -177,7 +181,7 @@ export default function RightMenu() {
 							<button
 								type="button"
 								onClick={() => setIsTextboxOption(!isTextboxOption)}
-								className="button_li relative"
+								className="relative button_li"
 							>
 								<span className="option_li">텍스트 박스</span>
 								{isTextboxOption ? (
@@ -266,7 +270,7 @@ export default function RightMenu() {
 							<button
 								type="button"
 								onClick={() => setIsColorOption(!isColorOption)}
-								className="flex w-full items-center justify-between"
+								className="flex items-center justify-between w-full"
 							>
 								<div className="flex items-center">
 									<span className="option_li">컬러 정보</span>
@@ -280,44 +284,44 @@ export default function RightMenu() {
 							</button>
 							{isColorOption && (
 								<div>
-									<button type="button" className="mr-3 flex items-center pt-4">
+									<button type="button" className="flex items-center pt-4 mr-3">
 										<div className="ml-2 flex h-[32px] w-[32px] items-center justify-center rounded-[50%] border border-solid border-[#dddddd]">
 											<div
 												style={{
-													backgroundColor: `${configState.color.mainColor}`,
+													backgroundColor: `${color.mainColor}`,
 												}}
 												className={`h-[24px] w-[24px]  rounded-[50%]`}
 											>
 												{' '}
 											</div>
 										</div>
-										<span className="text ml-2">메인 컬러</span>
+										<span className="ml-2 text">메인 컬러</span>
 									</button>
-									<button type="button" className="mr-3 flex items-center pt-4">
+									<button type="button" className="flex items-center pt-4 mr-3">
 										<div className="ml-2 flex h-[32px] w-[32px] items-center justify-center rounded-[50%] border border-solid border-[#dddddd]">
 											<div
 												style={{
-													backgroundColor: `${configState.color.subColor01}`,
+													backgroundColor: `${color.subColor01}`,
 												}}
 												className="h-[24px] w-[24px] rounded-[50%] "
 											>
 												{' '}
 											</div>
 										</div>
-										<span className="text ml-2">서브 컬러 01</span>
+										<span className="ml-2 text">서브 컬러 01</span>
 									</button>
-									<button type="button" className="mr-3 flex items-center pt-4">
+									<button type="button" className="flex items-center pt-4 mr-3">
 										<div className="ml-2 flex h-[32px] w-[32px] items-center justify-center rounded-[50%] border border-solid border-[#dddddd]">
 											<div
 												style={{
-													backgroundColor: `${configState.color.subColor02}`,
+													backgroundColor: `${color.subColor02}`,
 												}}
 												className="h-[24px] w-[24px] rounded-[50%] "
 											>
 												{' '}
 											</div>
 										</div>
-										<span className="text ml-2">서브 컬러 02</span>
+										<span className="ml-2 text">서브 컬러 02</span>
 									</button>
 								</div>
 							)}

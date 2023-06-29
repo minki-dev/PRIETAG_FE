@@ -259,7 +259,8 @@ export default function VersionChart({ className }: Props) {
 	};
 	return (
 		<section
-			className={`flex flex-col shadow-md justify-between rounded-[10px] bg-white p-6 ${className}`}
+		style={{display: 'flex'}}
+			className={`flex flex-col shadow-md h-full justify-between rounded-[10px] bg-white p-6 ${className}`}
 		>
 			<div className="flex justify-between">
 				<h2 className="text-xl leading-8 font-ptBold whitespace-nowrap">
@@ -308,7 +309,7 @@ export default function VersionChart({ className }: Props) {
 				</div>
 			</div>
 			<div className="overflow-x-auto text-center">
-				<div className="min-h-[400px] min-w-[800px]">
+				<div className="h-[460px] min-h-[400px]">
 					<Chart ref={chartRef} type="bar" options={options} data={data} />
 				</div>
 

@@ -55,7 +55,7 @@ export default function Dropzone({ className }: { className: string }) {
 			},
 			validator: customValidator,
 		});
-	console.log('fileRejections', fileRejections);
+	// console.log('fileRejections', fileRejections);
 	// drag and drop 으로 업로드한 파일을 filReader로  FormData로 변경하는 코드
 
 	return (

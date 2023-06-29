@@ -170,7 +170,7 @@ export default function ComparisonChart({ className }: { className?: string }) {
 			<h2 className="text-xl leading-8 font-ptBold">Comparison</h2>
 			<table className="hidden w-full table-fixed sm:table">
 				<thead className="h-14 border-b-2 border-b-[#1667DB]">
-					<tr className="font-ptRegular text-center font-medium text-[#747474]">
+					<tr className="text-center font-ptRegular font-medium text-[#747474]">
 						<th>버전</th>
 						<th>진입수</th>
 						<th>이탈수</th>
@@ -197,11 +197,11 @@ export default function ComparisonChart({ className }: { className?: string }) {
 									: 'text-[#FF0000]')
 							}`}
 						>
-							{(baseVersion &&
-								targetVersion &&
-								Math.ceil(baseVersion?.conversionRate -
-									targetVersion?.conversionRate))}{' '}
-							%
+							{(baseVersion && targetVersion 
+							&&
+								Math.ceil(
+									baseVersion?.conversionRate - targetVersion?.conversionRate,
+								)+" %")}
 						</td>
 					</tr>
 				</tbody>

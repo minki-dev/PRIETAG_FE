@@ -198,18 +198,13 @@ export default function DateChart({ className }: Props) {
 	};
 
 	const toggleCVROnly = () => {
-		console.log('in');
 		if (chartRef.current) {
-			console.log('cur exists');
-			console.log(checked);
 			checked
 				? (() => {
-						console.log(';asdf');
 						chartRef.current.show(0);
 						chartRef.current.show(1);
 				  })()
 				: (() => {
-						console.log(';aaaaa');
 						chartRef.current.hide(0);
 						chartRef.current.hide(1);
 				  })();
@@ -219,10 +214,10 @@ export default function DateChart({ className }: Props) {
 
 	return (
 		<section
-			className={`flex flex-col shadow-md rounded-[10px] bg-white p-6 ${className}`}
+			className={`flex flex-col justify-between rounded-[10px] bg-white p-6 shadow-md ${className}`}
 		>
 			<div className="flex justify-between">
-				<h2 className="text-xl leading-8 font-ptBold whitespace-nowrap">
+				<h2 className="text-xl leading-8 whitespace-nowrap font-ptBold">
 					Statistic By Date
 				</h2>
 				<div className="block ml-2 xl:hidden">
@@ -233,7 +228,7 @@ export default function DateChart({ className }: Props) {
 					/>
 					<label htmlFor="toggleChart">결제 전환율만 보기</label>
 				</div>
-				<div className="border-1 hidden  w-fit rounded-[20px] border-[#EEEEEE] bg-[#F7F7F7] shadow-md xl:flex">
+				<div className="hidden w-fit  rounded-[20px] border-1 border-[#EEEEEE] bg-[#F7F7F7] shadow-md xl:flex">
 					<button
 						onClick={(e) => showAllData(e)}
 						className={`basis-1/4 whitespace-nowrap rounded-l-[20px] px-4 text-center`}
@@ -272,7 +267,7 @@ export default function DateChart({ className }: Props) {
 					<Chart ref={chartRef} type="bar" options={options} data={data} />
 				</div>
 
-				<span className="font-ptRegular mt-4 text-[#BCBCBC]">
+				<span className="mt-4 font-ptRegular text-[#BCBCBC]">
 					{formatKeyName(dateBy)}
 				</span>
 			</div>

@@ -58,7 +58,7 @@ export const configSlice = createSlice({
 			return { ...state, isPriceModalOpen: !state.isPriceModalOpen };
 		},
 		toggleColorModal: (state: ConfigState) => {
-			console.log('toggleColorModal');
+			// console.log('toggleColorModal');
 			return { ...state, isColorModalOpen: !state.isColorModalOpen };
 		},
 		toggleUploadModal: (state: ConfigState) => {

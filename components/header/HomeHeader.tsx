@@ -133,7 +133,7 @@ export default function HomeHeader() {
 								>
 									<li
 										className=" hover:font-medium"
-										onClick={() => movePage('editTemplate')}
+										onClick={() => movePage('templateList')}
 									>
 										템플릿 편집
 									</li>

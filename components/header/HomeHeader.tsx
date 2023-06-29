@@ -46,7 +46,7 @@ export default function HomeHeader() {
 			if (window !== undefined) {
 				if (res.data.email !== null) {
 					localStorage.setItem('email', res.data.email);
-					console.log('이메일 설정');
+					// console.log('이메일 설정');
 				}
 			}
 

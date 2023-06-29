@@ -45,7 +45,7 @@ function PriceCardContent({
 			contentHoverRef.current.style.height = contentRef.current.style.height;
 		const value = event.target.value;
 		setContentEl(value);
-		console.log(contentEl);
+		// console.log(contentEl);
 		dispatch(
 			updateContent({
 				cardIndex,

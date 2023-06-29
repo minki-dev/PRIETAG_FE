@@ -27,7 +27,7 @@ export default function PricingDropdown() {
 	const handlePricingType = (value: string) => {
 		setPricingType(value);
 		priceDispatch(setPricing(value));
-		console.log(priceModal.pricing);
+		// console.log(priceModal.pricing);
 	};
 
 	return (

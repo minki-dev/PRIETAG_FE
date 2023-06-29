@@ -9,7 +9,7 @@ function MoreDropDown() {
 		<nav className="absolute right-[42px] top-[16px] z-20 w-[120px]  rounded-[4px_4px_4px_4px] bg-white  text-base font-normal  leading-[26px] text-black shadow-[0_0_4px_rgba(0,0,0,0.5)] shadow-[#D9D9D9] sm:w-1/2 xl:w-[160px] ">
 			<ul>
 				<li
-					onClick={(e) => {
+					onClick={(e: React.MouseEvent<HTMLLIElement>) => {
 						router.push('/templateList/publish');
 						e.stopPropagation();
 					}}

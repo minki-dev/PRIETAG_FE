@@ -85,7 +85,7 @@ export default function VersionTableRow({
 	};
 
 	return (
-		<tr className="transition-bg duration-100 hover:bg-[#F4F8FF]">
+		<tr className="transition-bg duration-100 h-[57px] hover:bg-[#F4F8FF]">
 			<td className="p-4 text-center whitespace-nowrap">{index}</td>
 			<td className="p-4 whitespace-nowrap">
 				{data.publishDate.toLocaleString()}
@@ -93,7 +93,7 @@ export default function VersionTableRow({
 			<td className="hidden p-4 whitespace-nowrap text-start sm:table-cell">
 				{data.versionName}
 			</td>
-			<td className="hidden p-4 text-center sm:table-cell">
+			<td className="hidden p-4 min-w-[110px] text-center sm:table-cell">
 				<Link className="whitespace-nowrap" href={'#'}>
 					{isDeleted ? '삭제됨' : isPublished ? '사용중' : '보기'}
 				</Link>
@@ -102,8 +102,8 @@ export default function VersionTableRow({
 				<Checkbox
 					className={`${
 						versionListChecks.get(data.id)?.type === 'BASE'
-							? 'data-[state=checked]:bg-[#315EFF]'
-							: 'data-[state=checked]:bg-[#55CEC7]'
+							? 'data-[state=checked]:bg-[#315EFF] data-[state=checked]:text-white'
+							: 'data-[state=checked]:bg-[#55CEC7] data-[state=checked]:text-white'
 					} ${className}`}
 					disabled={
 						!!baseVersion &&

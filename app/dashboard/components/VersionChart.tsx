@@ -59,15 +59,24 @@ export default function VersionChart({ className }: Props) {
 	const {
 		versionListState: { targetVersion, baseVersion, versionListChecks },
 	} = useVersionList();
-	let baseIndex = null;
-	let targetIndex = null;
-
+	let baseIndex = null
+	let targetIndex = null
+	let checkBaseIndex: number | null = null;
+	let checkTargetIndex: number | null = null
 	for (const key of Array.from(versionListChecks.keys())) {
 		versionListChecks.get(Number(key))?.type === 'BASE'
-			? (baseIndex = Number(key))
-			: (targetIndex = Number(key));
+			? (checkBaseIndex = Number(key))
+			: (checkTargetIndex = Number(key));
 	}
 
+	if (checkBaseIndex || checkTargetIndex) {
+		versionListData.forEach(data => {
+	
+			if (data.id === checkBaseIndex) baseIndex = data.id
+			if (data.id === checkTargetIndex) targetIndex = data.id
+	
+		})
+	}
 
 	const chartData = translateChartDataByVersion(versionListData);
 

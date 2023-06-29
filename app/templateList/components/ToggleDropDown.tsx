@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 
-interface ToogggleDropDownProps {
+export interface TooggleDropDownProps {
 	viewIsClicked: boolean;
 }
 
-const ToggleDropDown: React.FC<ToogggleDropDownProps> = ({ viewIsClicked }) => {
+const ToggleDropDown: React.FC<TooggleDropDownProps> = ({ viewIsClicked }) => {
 	return (
 		<>
 			{viewIsClicked ? (

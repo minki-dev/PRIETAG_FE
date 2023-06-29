@@ -21,7 +21,7 @@ const SquareBtn: React.FC<SquareBtnProps> = ({
 }: SquareBtnProps) => {
 	return (
 		<button
-			className=" width=[120px] h-[34px] rounded-[3px] border px-[18px] py-[4px] text-center  text-[16px] font-medium"
+			className=" width=[120px] h-[34px] rounded-[3px] border px-[6px] py-[4px] text-center  text-[16px] font-medium"
 			type="button"
 			style={{
 				width: width,

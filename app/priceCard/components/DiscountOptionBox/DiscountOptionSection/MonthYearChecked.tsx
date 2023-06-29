@@ -21,7 +21,7 @@ function MonthYearChecked({ color }: { color: string }) {
 	useEffect(() => {
 		if (currentChange === 'year' && yearRef.current) {
 			yearRef.current.style.color = color;
-			console.log(color);
+			// console.log(color);
 		} else {
 			if (yearRef.current) {
 				yearRef.current.style.color = '#989898';

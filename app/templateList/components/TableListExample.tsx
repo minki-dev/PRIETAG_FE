@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 function TableListExample({}) {
-	const { dispatch, isOpen, params } = useModal();
+	const { dispatch } = useModal();
 	const pathname = usePathname();
 	const router = useRouter();
 	const edit = '/templateList/edit';

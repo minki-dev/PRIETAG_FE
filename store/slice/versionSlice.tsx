@@ -195,10 +195,19 @@ const versionSlice = createSlice({
 		},
 		setVersions: (state, action) => {
 			state.versions = action.payload;
-			console.log(state.versions);
+		},
+		filterByKeyword: (state, action) => {
+			const keyword = action.payload;
+			if (keyword) {
+				const filteredVersions = state.versions.filter((version) =>
+					version.title.includes(keyword),
+				);
+				return { ...state, versions: filteredVersions };
+			}
 		},
 	},
 });
-export const { deleteItem, setCurrentPage, setVersions } = versionSlice.actions;
+export const { deleteItem, setCurrentPage, setVersions, filterByKeyword } =
+	versionSlice.actions;
 
 export default versionSlice.reducer;

@@ -12,10 +12,12 @@ import { RootState } from '@/store';
 import { SquareBtnProps } from '@/components/button/SquareBtn';
 import { setVersions } from '@/store/slice/versionSlice';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 function TableListExample({}) {
 	const { dispatch, isOpen, params } = useModal();
 	const pathname = usePathname();
+	const router = useRouter();
 	const edit = '/templateList/edit';
 	const publish = '/templateList/publish';
 
@@ -135,7 +137,9 @@ function TableListExample({}) {
 									textContent="편집"
 									bg="white"
 									borderColor="#747474"
-									onClick={() => {}}
+									onClick={() => {
+										router.push('/editTemplate');
+									}}
 								/>
 							) : (
 								<SquareBtn

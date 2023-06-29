@@ -90,7 +90,7 @@ export default function TemplateList() {
 						<div
 							key={item.id}
 							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
-							onClick={(e) => {
+							onClick={(e: React.MouseEvent<HTMLDivElement>) => {
 								router.push('/templateList/edit');
 								e.stopPropagation();
 							}}
@@ -112,7 +112,7 @@ export default function TemplateList() {
 								<button
 									type="button"
 									className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
-									onClick={(e) => {
+									onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
 										handleMoreClick(item.id);
 										e.stopPropagation();
 									}}

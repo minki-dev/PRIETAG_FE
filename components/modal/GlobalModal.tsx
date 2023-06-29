@@ -7,7 +7,8 @@ export const GlobalModal = () => {
 	};
 
 	const onAction = () => {
-		if(params.buttons.behaveButton.onAction) params.buttons.behaveButton.onAction()
+		if (params.buttons.behaveButton.onAction)
+			params.buttons.behaveButton.onAction();
 		dispatch(closeModal());
 	};
 
@@ -17,14 +18,14 @@ export const GlobalModal = () => {
 		<div
 			tabIndex={-1}
 			aria-hidden="true"
-			className="fixed top-0 left-0 right-0 z-50 w-full h-full bg-black bg-opacity-30"
+			className="fixed left-0 right-0 top-0 z-50  h-full w-full bg-black bg-opacity-30"
 			onClick={() => {
 				dispatch(closeModal());
 			}}
 		>
 			<div className="absolute left-1/2 top-1/2 h-[240px] w-[480px] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-2xl bg-white !opacity-100 shadow-md">
 				<div className="absolute left-[32px] top-[21px] h-[32px] ">
-					<span className="text-xl font-medium leading-8 text-center text-black">
+					<span className="text-center text-xl font-medium leading-8 text-black">
 						{params.title}
 					</span>
 				</div>
@@ -48,8 +49,8 @@ export const GlobalModal = () => {
 					</button>
 					<button
 						className={`${params.buttons?.behaveButton?.color} ml-[8px] h-[34px] w-[104px] rounded-[3px] text-center text-[14px] font-medium leading-[22px] text-white`}
-						onClick={onAction}
 						type="button"
+						onClick={() => onAction()}
 					>
 						{params.buttons?.behaveButton?.text}
 					</button>

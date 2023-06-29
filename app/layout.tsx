@@ -11,7 +11,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<link rel="icon" href="/logo.ico" sizes="any" />
+			<link rel="icon" href="/img/ezfee.svg" sizes="any" />
 			<body className={inter.className} suppressHydrationWarning={true}>
 				<ReduxProvider>
 					<main className="min-h-screen w-screen bg-gray-100">

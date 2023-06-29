@@ -36,7 +36,7 @@ export default function TemplateHeader() {
 		<div className="relative  h-[72px] w-full min-w-[1280px] sm:w-screen">
 			<div className="shadow-[0_1px_3px_rgba(0, 0, 0, 0.15)] absolute top-0 z-20 h-[72px] w-full bg-[#FFF] shadow-md">
 				{configState.isPreview ? (
-					<div className="grid w-full h-full ">
+					<div className="grid h-full w-full ">
 						<div className=" flex  flex-row items-center justify-center gap-[34px] ">
 							<Image
 								width={24}
@@ -99,8 +99,6 @@ export default function TemplateHeader() {
 								<Image
 									src="/img/upload_logo.svg"
 									alt="로고 이미지"
-									// width={93.81}
-									// height={32}
 									fill
 									className="absolute left-[40px] top-[20px]"
 									onClick={() => configDispatch(toggleUploadModal())}
@@ -109,7 +107,7 @@ export default function TemplateHeader() {
 						</div>
 						<input
 							placeholder="저장될 파일 이름을 입력해 주세요"
-							className="color-[#747474]  min-w-1/2 top-[calc(50%-26px/2)] flex h-[26px] w-[260px] cursor-pointer items-center justify-center text-base font-normal leading-[26px] focus:outline-none"
+							className={`color-[#747474] min-w-1/2 top-[calc(50%-26px/2)]  flex h-[26px] w-[260px] max-w-[400px] cursor-pointer items-center justify-center text-[16px] font-normal leading-[26px] focus:rounded-[4px] focus:border focus:border-[#00A3FF] focus:bg-[#EEEEEE] focus:outline-none`}
 						/>{' '}
 						<RxHamburgerMenu
 							className=" absolute right-[40px]  top-[calc(50%-18px/2)] h-[18px] w-[18px] cursor-pointer rounded-[3px] hover:text-[#00A3FF]"

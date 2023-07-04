@@ -59,7 +59,7 @@
 
 /* resizable */
 .react-resizable-handle.react-resizable-handle-s {
-	@apply left-0 w-full h-full ml-0 bg-white transform-none bg-none;
+	@apply left-0 ml-0 h-full w-full transform-none bg-white bg-none;
 	cursor: url('/icons/handle_vert.svg') 12 12, ns-resize;
 }
 
@@ -95,10 +95,10 @@
 
 @layer components {
 	.rightmenu_li {
-		@apply p-3 border-b border-gray-300 border-solid;
+		@apply border-b border-solid border-gray-300 p-3;
 	}
 	.button_li {
-		@apply flex items-center justify-between w-full;
+		@apply flex w-full items-center justify-between;
 	}
 	.option_li {
 		@apply top-[114px] text-sm font-bold text-[#747474];
@@ -107,7 +107,7 @@
 
 /* responsive pricetag */
 .responsiveLayout {
-	@apply max-xl:border-x-[120px] max-xl:border-[#e0e0e0]  max-mobile:w-[335px] max-mobile:border-x-[20px];
+	@apply max-xl:w-[1104px] max-xl:border-x-[88px] max-xl:border-[#e0e0e0]  max-mobile:w-[335px] max-mobile:border-x-[20px];
 }
 .responsiveCardBoxLayout {
 	@apply max-xl:gap-7 max-mobile:flex-col;

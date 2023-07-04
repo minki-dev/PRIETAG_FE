@@ -19,6 +19,7 @@ import {
 	rgbToHex,
 	rgbToHsl,
 } from '@/util/color';
+import { config } from 'process';
 
 export default function ColorModalForm() {
 	const [mainColor, setMainColor] = useState({ r: 255, g: 255, b: 255 });
@@ -127,7 +128,7 @@ export default function ColorModalForm() {
 		>
 			<dialog
 				open={configState.isOnboardingModalOpen || configState.isColorModalOpen}
-				className="h-priceModal w-priceModal rounded-2xl p-8"
+				className="p-8 h-priceModal w-priceModal rounded-2xl"
 			>
 				<section className="flex flex-row overflow-hidden">
 					<section
@@ -135,7 +136,7 @@ export default function ColorModalForm() {
 							nextModalOpen ? '-translate-x-full' : 'translate-x-0'
 						} `}
 					>
-						<div className="font-ptMedium text-xl font-medium">
+						<div className="text-xl font-medium font-ptMedium">
 							페이지에서 활용할 메인 테마 컬러를 선택해주세요
 						</div>
 						<div
@@ -243,7 +244,7 @@ export default function ColorModalForm() {
 											/>
 										</div>
 									</div>
-									<div className="mt-6 flex flex-row justify-between">
+									<div className="flex flex-row justify-between mt-6">
 										<p className="font-ptMedium text-base font-medium leading-[25.6px] text-borderGray">
 											HEX
 										</p>
@@ -266,7 +267,11 @@ export default function ColorModalForm() {
 									<button
 										type="button"
 										className="mt-4 h-[34px] w-[120px] gap-2 rounded border border-[#00A3FF] bg-white font-ptMedium text-base font-medium text-[#00A3FF] "
-										onClick={() => configDispatch(toggleOnBoardingModal())}
+										onClick={() =>
+											configState.isOnboardingModalOpen
+												? configDispatch(toggleOnBoardingModal())
+												: configDispatch(toggleColorModal())
+										}
 									>
 										취소
 									</button>
@@ -286,7 +291,7 @@ export default function ColorModalForm() {
 							nextModalOpen ? '-translate-x-[720px]' : 'translate-x-0'
 						} `}
 					>
-						<div className="font-ptMedium text-xl font-medium">
+						<div className="text-xl font-medium font-ptMedium">
 							선택한 메인 테마 컬러와 어울리는 서브컬러와 글꼴 컬러를
 							선택해주세요
 						</div>
@@ -327,7 +332,7 @@ export default function ColorModalForm() {
 												</div>
 											</div>
 
-											<div className="g-1 mt-5 flex flex-col items-center justify-center">
+											<div className="flex flex-col items-center justify-center mt-5 g-1">
 												<p className="font-ptRegular text-sm font-normal leading-[22.4px] text-borderGray">
 													{color.rgb.r} {color.rgb.g} {color.rgb.b}
 												</p>
@@ -351,10 +356,10 @@ export default function ColorModalForm() {
 										</div>
 									))}
 								</section>
-								<section className="mt-6 flex w-full flex-row justify-between gap-3 ">
+								<section className="flex flex-row justify-between w-full gap-3 mt-6 ">
 									<div>
 										{selectedColors.length === 2 && (
-											<span className="font-ptRegular text-lg text-red-700">
+											<span className="text-lg text-red-700 font-ptRegular">
 												2개만 선택 가능합니다
 											</span>
 										)}

@@ -5,7 +5,11 @@
 import React, { useState } from 'react';
 import Dropzone from './Dropzone';
 import { toggleUploadModal, useConfig } from '@/store/slice/configSlice';
-import { setFormData, useUploadModal } from '@/store/slice/uploadModalSlice';
+import {
+	setFormData,
+	setPreviewImg,
+	useUploadModal,
+} from '@/store/slice/uploadModalSlice';
 import { usePriceModal } from '@/store/slice/priceModalSlice';
 
 export default function UploadModalForm() {
@@ -18,8 +22,19 @@ export default function UploadModalForm() {
 		// nextModalOpen 값을 토글
 
 		priceModal.isCardSet
-			? [configDispatch(toggleUploadModal()), uploadDispatch(setFormData(null))]
-			: [setNextModalOpen(!nextModalOpen), uploadDispatch(setFormData(null))];
+			? [
+					configDispatch(toggleUploadModal()),
+					uploadDispatch(setFormData(null)),
+					uploadDispatch(setPreviewImg(null)),
+			  ]
+			: [
+					configState.isOnboardingModalOpen
+						? setNextModalOpen(!nextModalOpen)
+						: configDispatch(toggleUploadModal()),
+					,
+					uploadDispatch(setFormData(null)),
+					uploadDispatch(setPreviewImg(null)),
+			  ];
 	};
 	const nextModal = () => {
 		if (uploadModal.formData) {

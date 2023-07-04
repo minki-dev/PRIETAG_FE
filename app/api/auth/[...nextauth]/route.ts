@@ -9,7 +9,7 @@ const handler = NextAuth({
 			clientSecret: `${process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET}` || '',
 			authorization: {
 				params: {
-					redirect_uri: `https://ezfee.vercel.app`,
+					redirect_uri: `http://localhost:3000`,
 				},
 			},
 		}),
@@ -25,7 +25,7 @@ const handler = NextAuth({
 			return baseUrl;
 		},
 	},
-	secret: process.env.NEXTAUTH_SECRET
+	secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };

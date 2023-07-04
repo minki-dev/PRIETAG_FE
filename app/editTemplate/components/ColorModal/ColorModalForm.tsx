@@ -20,12 +20,14 @@ import {
 	rgbToHsl,
 } from '@/util/color';
 import { config } from 'process';
+import { toggleIsCardSet, usePriceModal } from '@/store/slice/priceModalSlice';
 
 export default function ColorModalForm() {
 	const [mainColor, setMainColor] = useState({ r: 255, g: 255, b: 255 });
 	const [hexCode, setHexCode] = useState('');
 	const [nextModalOpen, setNextModalOpen] = useState(false);
 	const [moveToPriceModal, setMoveToPriceModal] = useState(false);
+	const { priceModal, dispatch: priceDispatch } = usePriceModal();
 	const [selectedColors, setSelectedColors] = useState<number[]>([]);
 	/** 서브 컬러 선택 버튼 클릭 메소드*/
 	const handleButtonClick = (index: number) => {
@@ -128,7 +130,7 @@ export default function ColorModalForm() {
 		>
 			<dialog
 				open={configState.isOnboardingModalOpen || configState.isColorModalOpen}
-				className="p-8 h-priceModal w-priceModal rounded-2xl"
+				className="h-priceModal w-priceModal rounded-2xl p-8"
 			>
 				<section className="flex flex-row overflow-hidden">
 					<section
@@ -136,7 +138,7 @@ export default function ColorModalForm() {
 							nextModalOpen ? '-translate-x-full' : 'translate-x-0'
 						} `}
 					>
-						<div className="text-xl font-medium font-ptMedium">
+						<div className="font-ptMedium text-xl font-medium">
 							페이지에서 활용할 메인 테마 컬러를 선택해주세요
 						</div>
 						<div
@@ -244,7 +246,7 @@ export default function ColorModalForm() {
 											/>
 										</div>
 									</div>
-									<div className="flex flex-row justify-between mt-6">
+									<div className="mt-6 flex flex-row justify-between">
 										<p className="font-ptMedium text-base font-medium leading-[25.6px] text-borderGray">
 											HEX
 										</p>
@@ -269,8 +271,14 @@ export default function ColorModalForm() {
 										className="mt-4 h-[34px] w-[120px] gap-2 rounded border border-[#00A3FF] bg-white font-ptMedium text-base font-medium text-[#00A3FF] "
 										onClick={() =>
 											configState.isOnboardingModalOpen
-												? configDispatch(toggleOnBoardingModal())
-												: configDispatch(toggleColorModal())
+												? [
+														configDispatch(toggleOnBoardingModal()),
+														priceDispatch(toggleIsCardSet()),
+												  ]
+												: [
+														configDispatch(toggleColorModal()),
+														priceDispatch(toggleIsCardSet()),
+												  ]
 										}
 									>
 										취소
@@ -291,7 +299,7 @@ export default function ColorModalForm() {
 							nextModalOpen ? '-translate-x-[720px]' : 'translate-x-0'
 						} `}
 					>
-						<div className="text-xl font-medium font-ptMedium">
+						<div className="font-ptMedium text-xl font-medium">
 							선택한 메인 테마 컬러와 어울리는 서브컬러와 글꼴 컬러를
 							선택해주세요
 						</div>
@@ -332,7 +340,7 @@ export default function ColorModalForm() {
 												</div>
 											</div>
 
-											<div className="flex flex-col items-center justify-center mt-5 g-1">
+											<div className="g-1 mt-5 flex flex-col items-center justify-center">
 												<p className="font-ptRegular text-sm font-normal leading-[22.4px] text-borderGray">
 													{color.rgb.r} {color.rgb.g} {color.rgb.b}
 												</p>
@@ -356,10 +364,10 @@ export default function ColorModalForm() {
 										</div>
 									))}
 								</section>
-								<section className="flex flex-row justify-between w-full gap-3 mt-6 ">
+								<section className="mt-6 flex w-full flex-row justify-between gap-3 ">
 									<div>
 										{selectedColors.length === 2 && (
-											<span className="text-lg text-red-700 font-ptRegular">
+											<span className="font-ptRegular text-lg text-red-700">
 												2개만 선택 가능합니다
 											</span>
 										)}

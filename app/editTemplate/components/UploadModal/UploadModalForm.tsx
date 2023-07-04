@@ -10,12 +10,12 @@ import {
 	setPreviewImg,
 	useUploadModal,
 } from '@/store/slice/uploadModalSlice';
-import { usePriceModal } from '@/store/slice/priceModalSlice';
+import { toggleIsCardSet, usePriceModal } from '@/store/slice/priceModalSlice';
 
 export default function UploadModalForm() {
 	const { configState, dispatch: configDispatch } = useConfig();
 	const { uploadModal, dispatch: uploadDispatch } = useUploadModal();
-	const { priceModal } = usePriceModal();
+	const { priceModal, dispatch: priceDispatch } = usePriceModal();
 	const [nextModalOpen, setNextModalOpen] = useState(false);
 	const [isFileUploaded, setIsFileUploaded] = useState(true);
 	const toggleModalOpen = () => {
@@ -26,19 +26,25 @@ export default function UploadModalForm() {
 					configDispatch(toggleUploadModal()),
 					uploadDispatch(setFormData(null)),
 					uploadDispatch(setPreviewImg(null)),
+					priceDispatch(toggleIsCardSet()),
 			  ]
 			: [
 					configState.isOnboardingModalOpen
 						? setNextModalOpen(!nextModalOpen)
-						: configDispatch(toggleUploadModal()),
+						: [
+								configDispatch(toggleUploadModal()),
+								priceDispatch(toggleIsCardSet()),
+						  ],
 					,
 					uploadDispatch(setFormData(null)),
 					uploadDispatch(setPreviewImg(null)),
 			  ];
 	};
-	const nextModal = () => {
-		if (uploadModal.formData) {
-			setNextModalOpen(true);
+	const confirmModal = () => {
+		if (uploadModal.formData !== undefined) {
+			configState.isOnboardingModalOpen
+				? setNextModalOpen(true)
+				: configDispatch(toggleUploadModal());
 		} else {
 			setIsFileUploaded(false);
 			return;
@@ -76,25 +82,7 @@ export default function UploadModalForm() {
 						1/4단계
 					</div>
 				</section>
-				{/* 업로드 섹션 */}
-				{/* <section className="flex h-[370px] w-[768px] flex-col items-center  rounded-2xl border border-dashed  border-gray-700 py-5 pb-14 pl-14 pr-14 ">
-					<div className="mb-10">
-						<Image
-							width={200}
-							height={176}
-							src={'/icons/icon_upload.svg'}
-							alt="drag handle svg image"
-						/>
-					</div>
-					<div className="flex flex-col items-center justify-center">
-						<p className="font-ptMedium text-base font-medium leading-[25.6px] text-borderGray">
-							큰 점선 안의 영역에 드래그 하여 업로드 해주세요
-						</p>
-						<p className="font-ptMedium text-base font-medium leading-[25.6px] text-borderGray">
-							또는 위의 아이콘을 클릭하여 업로드 해주세요
-						</p>
-					</div>
-				</section> */}
+				{/* 드랍존 */}
 				<Dropzone className="flex h-[370px] w-[768px] flex-col items-center  rounded-2xl border border-dashed  border-gray-700 py-5 pb-14 pl-14 pr-14 " />
 				{/* 버튼 섹션 */}
 				<section className="mt-6 flex flex-row justify-between">
@@ -131,7 +119,7 @@ export default function UploadModalForm() {
 							<button
 								type="button"
 								className="[3px] mt-4 h-[34px] w-[120px] rounded bg-[#00A3FF] font-ptMedium text-base font-medium text-white"
-								onClick={nextModal}
+								onClick={confirmModal}
 							>
 								다음
 							</button>

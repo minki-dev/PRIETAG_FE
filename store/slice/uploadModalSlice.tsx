@@ -3,12 +3,21 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { RootState } from '..';
 
+export interface FormDataPreview extends FormData {
+	preview: Blob;
+}
+
+export interface FileWithPreview extends File {
+	preview: string;
+}
 interface UploadModalState {
-	formData: FormData | null;
+	formData: FormDataPreview | null;
+	previewImg: FileWithPreview | null;
 }
 
 const initialState: UploadModalState = {
 	formData: null,
+	previewImg: null,
 };
 
 export const uploadModalSlice = createSlice({
@@ -18,10 +27,13 @@ export const uploadModalSlice = createSlice({
 		setFormData: (state, action) => {
 			state.formData = action.payload;
 		},
+		setPreviewImg: (state, action) => {
+			state.previewImg = action.payload;
+		},
 	},
 });
 
-export const { setFormData } = uploadModalSlice.actions;
+export const { setFormData, setPreviewImg } = uploadModalSlice.actions;
 
 export function useUploadModal() {
 	const uploadModal = useSelector((state: RootState) => state.uploadModal);

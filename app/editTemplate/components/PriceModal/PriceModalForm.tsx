@@ -308,8 +308,8 @@ export default function PriceModalForm({}: {}) {
 								<div
 									className={`h-12 w-14 rounded-tl-lg ${
 										priceModal.isCardHighLight
-											? 'bg-optionColor'
-											: 'bg-disabledGray'
+											? 'bg-optionColor text-black'
+											: 'bg-disabledGray  text-white'
 									}  py-3 pl-4 `}
 								>
 									<Checkbox

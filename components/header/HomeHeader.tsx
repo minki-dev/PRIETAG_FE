@@ -39,26 +39,7 @@ export default function HomeHeader() {
 	// const urlParams = new URLSearchParams(queryString);
 	// const code = urlParams.get('code') || '';
 	const code = params.get('code') || '';
-	const fetchData = async () => {
-		try {
-			const res = await login(code);
 
-			if (window !== undefined) {
-				if (res.data.email !== null) {
-					localStorage.setItem('email', res.data.email);
-					// console.log('이메일 설정');
-				}
-			}
-
-			const authToken = getAuthorizationTokenFromCookie();
-
-			if (authToken !== '') {
-				setIsLogin(true);
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
 	const getAuthorizationTokenFromCookie = () => {
 		const cookies = document.cookie.split(';');
 		for (let i = 0; i < cookies.length; i++) {
@@ -70,15 +51,33 @@ export default function HomeHeader() {
 		return '';
 	};
 	useEffect(() => {
-		if (code !== '') {
-			if (window !== undefined) {
+		if (window !== undefined) {
+			const email = localStorage.getItem('email');
+			const fetchData = async () => {
+				try {
+					const res = await login(code);
+					if (res.data.email !== null) {
+						localStorage.setItem('email', res.data.email);
+						setIsLogin(true);
+					}
+					const authToken = getAuthorizationTokenFromCookie();
+					if (authToken !== '') {
+						setIsLogin(true);
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			};
+			if (email !== null) {
+				setIsLogin(true);
+			}
+			if (code !== '') {
 				if (localStorage.getItem('email') === null) {
 					fetchData();
 				}
+			} else {
+				return;
 			}
-			setIsLogin(true);
-		} else {
-			return;
 		}
 	}, []);
 	const movePage = (url: string) => {
@@ -162,7 +161,7 @@ export default function HomeHeader() {
 								height={32}
 								className="mr-[8px]"
 							/>
-							{window !== undefined && localStorage.getItem('email') !== null
+							{isLogin
 								? localStorage.getItem('email')
 								: '로그인을 진행해주세요'}
 						</button>

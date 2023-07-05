@@ -71,7 +71,7 @@ export default function PriceModalForm({}: {}) {
 	} = useForm({
 		resolver: yupResolver(schema),
 	});
-	const { priceModal, dispatch } = usePriceModal();
+	const { priceModal, dispatch: priceDispatch } = usePriceModal();
 	const { configState, dispatch: configDispatch } = useConfig();
 	const [isChecked, setIsChecked] = useState(
 		Array.from({ length: 4 }, (_, i) => i < priceModal.priceCards.length),
@@ -89,12 +89,12 @@ export default function PriceModalForm({}: {}) {
 		updatedChecked[index] = !updatedChecked[index];
 		setIsChecked(updatedChecked);
 		if (updatedChecked[index]) {
-			dispatch(addPriceCard());
+			priceDispatch(addPriceCard());
 		} else {
 			if (index > priceModal.priceCards.length - 1) {
-				dispatch(deletePriceCard(countItem(isChecked, true) - 1));
+				priceDispatch(deletePriceCard(countItem(isChecked, true) - 1));
 			}
-			dispatch(deletePriceCard(index));
+			priceDispatch(deletePriceCard(index));
 		}
 	};
 
@@ -183,25 +183,14 @@ export default function PriceModalForm({}: {}) {
 			return card;
 		});
 
-		dispatch(setPriceCard(updatedCard));
+		priceDispatch(setPriceCard(updatedCard));
 
 		// 연간 할인율 업데이트
-		dispatch(setYearDiscount(Number(yearDiscountRate)));
-
-		// // 가격표 할인율 업데이트
-		// tierInputValues.forEach((inputValue, index) => {
-		// 	dispatch(
-		// 		updateTierDiscount({
-		// 			tierPrice: Number(inputValue.price),
-		// 			discountRate: Number(inputValue.discountRate),
-		// 			index,
-		// 		}),
-		// 	);
-		// });
+		priceDispatch(setYearDiscount(Number(yearDiscountRate)));
 
 		// 인원당 할인율 업데이트
 		headInputValues.forEach((inputValue, index) => {
-			dispatch(
+			priceDispatch(
 				updateHeadDiscount({
 					headCount: Number(inputValue.headCount),
 					discountRate: Number(inputValue.discountRate),
@@ -210,10 +199,10 @@ export default function PriceModalForm({}: {}) {
 			);
 		});
 		if (configState.isOnboardingModalOpen) {
-			dispatch(toggleIsCardSet());
+			priceDispatch(toggleIsCardSet());
 			configDispatch(toggleOnBoardingModal());
 		} else {
-			dispatch(togglePriceModal());
+			priceDispatch(togglePriceModal());
 		}
 	};
 
@@ -269,7 +258,7 @@ export default function PriceModalForm({}: {}) {
 									} h-12 w-14 rounded-tl-lg py-3 pl-4`}
 								>
 									<Checkbox
-										onClick={() => dispatch(toggleIsCheckPerYear())}
+										onClick={() => priceDispatch(toggleIsCheckPerYear())}
 										checked={priceModal.isCheckPerYear}
 									/>
 								</div>
@@ -308,12 +297,12 @@ export default function PriceModalForm({}: {}) {
 								<div
 									className={`h-12 w-14 rounded-tl-lg ${
 										priceModal.isCardHighLight
-											? 'bg-optionColor'
-											: 'bg-disabledGray'
+											? 'bg-optionColor text-black'
+											: 'bg-disabledGray  text-white'
 									}  py-3 pl-4 `}
 								>
 									<Checkbox
-										onClick={() => dispatch(toggleHighLight())}
+										onClick={() => priceDispatch(toggleHighLight())}
 										checked={priceModal.isCardHighLight}
 									/>
 								</div>
@@ -425,7 +414,7 @@ export default function PriceModalForm({}: {}) {
 									<Checkbox
 										onClick={() => {
 											if (priceModal.pricing === '정량제') {
-												dispatch(toggleIsCheckPerPerson());
+												priceDispatch(toggleIsCheckPerPerson());
 											}
 										}}
 										checked={
@@ -537,7 +526,17 @@ export default function PriceModalForm({}: {}) {
 						<button
 							type="button"
 							className="[3px] mt-4  h-[34px] w-[120px] rounded border-1 border-[#747474] bg-white font-ptMedium text-base  font-medium text-borderGray"
-							onClick={() => configDispatch(toggleOnBoardingModal())}
+							onClick={() =>
+								configState.isOnboardingModalOpen
+									? [
+											configDispatch(toggleOnBoardingModal()),
+											priceDispatch(toggleIsCardSet()),
+									  ]
+									: [
+											configDispatch(togglePriceModal()),
+											priceDispatch(toggleIsCardSet()),
+									  ]
+							}
 						>
 							취소
 						</button>

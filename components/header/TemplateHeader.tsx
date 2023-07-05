@@ -19,14 +19,18 @@ import {
 	toggleUploadModal,
 	useConfig,
 } from '@/store/slice/configSlice';
-import { useUploadModal } from '@/store/slice/uploadModalSlice';
+import {
+	FormDataPreview,
+	useUploadModal,
+} from '@/store/slice/uploadModalSlice';
+import { url } from 'inspector';
 
 export default function TemplateHeader() {
 	const [isClicked, setIsClicked] = useState(false);
 	const { configState, dispatch: configDispatch } = useConfig();
 	const { uploadModal } = useUploadModal();
-	const file = uploadModal?.formData?.get('file') as File;
-	const imageUrl = file ? URL.createObjectURL(file) : '';
+	const { previewImg } = uploadModal;
+
 	const resetPreviewMode = () => {
 		configDispatch(setPreviewMode('desktop'));
 		configDispatch(togglePreview());
@@ -86,12 +90,16 @@ export default function TemplateHeader() {
 				) : (
 					<div className="flex h-full w-full items-center px-[20px]">
 						<div className=" relative  cursor-pointer sm:h-[32px] sm:w-[93px] xl:h-[32px] xl:w-[94px]">
-							{uploadModal?.formData?.get('file') ? (
+							{previewImg !== undefined && previewImg !== null ? (
 								<Image
-									src={imageUrl}
+									src={
+										previewImg !== null
+											? URL.createObjectURL(previewImg)
+											: '/img/upload_logo.svg'
+									}
 									alt="로고 이미지"
-									width={32}
-									height={32}
+									width={50}
+									height={50}
 									className="object-cover"
 									onClick={() => configDispatch(toggleUploadModal())}
 								/>

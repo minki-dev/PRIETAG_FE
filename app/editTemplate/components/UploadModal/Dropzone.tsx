@@ -1,13 +1,15 @@
 'use-client';
 
-import { setFormData, useUploadModal } from '@/store/slice/uploadModalSlice';
+import {
+	FileWithPreview,
+	setFormData,
+	setPreviewImg,
+	useUploadModal,
+} from '@/store/slice/uploadModalSlice';
 import Image from 'next/image';
 import React, { useCallback, useState } from 'react';
 import { FileError, useDropzone } from 'react-dropzone';
 
-interface FileWithPreview extends File {
-	preview: string;
-}
 type ValidatorFunction = (file: File) => null | FileError | FileError[];
 
 export default function Dropzone({ className }: { className: string }) {
@@ -24,6 +26,7 @@ export default function Dropzone({ className }: { className: string }) {
 		const formData = new FormData();
 		formData.append('file', filesWithPreview[0]);
 		uploadDispatch(setFormData(formData));
+		uploadDispatch(setPreviewImg(filesWithPreview[0]));
 
 		setFiles(filesWithPreview);
 	}, []);
@@ -103,7 +106,7 @@ export default function Dropzone({ className }: { className: string }) {
 				{fileRejections.map(({ file, errors }) => (
 					<div key={file.name}>
 						<p
-							className="font-ptRegular text-sm text-red-700"
+							className="text-sm text-red-700 font-ptRegular"
 							key={errors[0].code}
 						>
 							{errors[0].code === 'file-invalid-type'

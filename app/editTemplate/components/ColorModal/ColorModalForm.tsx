@@ -19,12 +19,15 @@ import {
 	rgbToHex,
 	rgbToHsl,
 } from '@/util/color';
+import { config } from 'process';
+import { toggleIsCardSet, usePriceModal } from '@/store/slice/priceModalSlice';
 
 export default function ColorModalForm() {
 	const [mainColor, setMainColor] = useState({ r: 255, g: 255, b: 255 });
 	const [hexCode, setHexCode] = useState('');
 	const [nextModalOpen, setNextModalOpen] = useState(false);
 	const [moveToPriceModal, setMoveToPriceModal] = useState(false);
+	const { priceModal, dispatch: priceDispatch } = usePriceModal();
 	const [selectedColors, setSelectedColors] = useState<number[]>([]);
 	/** 서브 컬러 선택 버튼 클릭 메소드*/
 	const handleButtonClick = (index: number) => {
@@ -266,7 +269,17 @@ export default function ColorModalForm() {
 									<button
 										type="button"
 										className="mt-4 h-[34px] w-[120px] gap-2 rounded border border-[#00A3FF] bg-white font-ptMedium text-base font-medium text-[#00A3FF] "
-										onClick={() => configDispatch(toggleOnBoardingModal())}
+										onClick={() =>
+											configState.isOnboardingModalOpen
+												? [
+														configDispatch(toggleOnBoardingModal()),
+														priceDispatch(toggleIsCardSet()),
+												  ]
+												: [
+														configDispatch(toggleColorModal()),
+														priceDispatch(toggleIsCardSet()),
+												  ]
+										}
 									>
 										취소
 									</button>

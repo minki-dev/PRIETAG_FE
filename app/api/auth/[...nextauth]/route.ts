@@ -9,12 +9,14 @@ const handler = NextAuth({
 			clientSecret: `${process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET}` || '',
 			authorization: {
 				params: {
-					redirect_uri: `http://localhost:3000`,
+					redirect_uri: `https://ezfee.vercel.app`,
 				},
 			},
 		}),
 	],
 	callbacks: {
+
+
 		async redirect({ url, baseUrl }) {
 			if (url.startsWith('/')) {
 				return `${baseUrl}${url}`;

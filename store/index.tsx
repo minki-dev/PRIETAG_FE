@@ -15,6 +15,7 @@ import versionListReducer from './slice/versionListSlice';
 import uploadModalReducer from './slice/uploadModalSlice';
 import templateReducer from './slice/templateSlice';
 import versionReducer from './slice/versionSlice';
+import authReducer from './slice/authSlice'
 
 const logger = createLogger();
 
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
 	template: templateReducer,
 	version: versionReducer,
 	monthYearToggle: monthYearToggleReducer,
+	auth: authReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

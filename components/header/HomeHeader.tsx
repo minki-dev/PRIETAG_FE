@@ -115,7 +115,7 @@ export default function HomeHeader() {
 	}, [path]);
 
 
-	const userSignIn = async () => {
+	const userSignIn = () => {
 		const redirectUri = 'http://localhost:3000';
 		const clientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 

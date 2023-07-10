@@ -2,7 +2,7 @@
 
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
@@ -13,16 +13,58 @@ import { useDispatch } from 'react-redux';
 import { toggleMoreIsClicked } from '@/store/slice/templateSlice';
 import { TemplateItem } from '@/constants/template';
 import { RootState } from '@/store';
+import { login } from '../api/api';
+import { useCookies } from 'react-cookie';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
 	const router = useRouter();
 	const dispatch = useDispatch();
-	const template = useSelector((state: RootState) => state.template);
+	// const template = useSelector((state: RootState) => state.template);
+	const [templates, setTemplates] = useState<TemplateItem[]>([]);
+	const [sortStandard, setSortStandard] = useState('정렬기준');
 	const handleMoreClick = (id: number) => {
 		dispatch(toggleMoreIsClicked({ id }));
 	};
+	const fetchData = async () => {
+		try {
+			const res = await fetch(
+				'https://ezfee.site/api/templates?page=0&pageSize=4',
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${cookies.authorizationToken}`,
+					},
+				},
+			);
 
+			const data = await res.json();
+			const fetchedTemplates = data.data.template;
+			setTemplates(fetchedTemplates);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const onSortByName = (): void => {
+		const sorted: TemplateItem[] = [...templates].sort((a, b) => {
+			if (a.title.toLowerCase() < b.title.toLowerCase()) {
+				return -1;
+			}
+			if (a.title.toLowerCase() > b.title.toLowerCase()) {
+				return 1;
+			}
+			return 0;
+		});
+		console.log(sorted);
+		setTemplates(sorted);
+	};
+	const onFinalEditDate = () => {
+		fetchData();
+	};
+	const [cookies] = useCookies(['authorizationToken']);
+	useEffect(() => {
+		fetchData();
+	}, []);
 	return (
 		<>
 			<Header />
@@ -78,15 +120,22 @@ export default function TemplateList() {
 						}}
 						className="relative flex h-[26px] w-[166px] items-center justify-between rounded-[4px] border border-[#796161] px-[8px]"
 					>
-						<div className="p-[8px]"> 정렬기준</div>
+						<div className="cursor-pointer p-[8px]">{sortStandard}</div>
 						<div>
 							<ToggleDropDown viewIsClicked={viewIsClicked} />
 						</div>
-						{viewIsClicked ? <ViewDropDown /> : null}
+						{viewIsClicked ? (
+							<ViewDropDown
+								onSortByName={onSortByName}
+								onFinalEditDate={onFinalEditDate}
+								setSortStandard={setSortStandard}
+								setViewIsClicked={setViewIsClicked}
+							/>
+						) : null}
 					</div>
 				</div>
 				<div className=" grid min-w-[900px] grid-cols-[repeat(3,minmax(100px,413px))] grid-rows-[repeat(3,minmax(100px,327px))] justify-evenly gap-[80px] ">
-					{template.map((item: TemplateItem, index: number) => (
+					{templates.map((item: TemplateItem, index: number) => (
 						<div
 							key={item.id}
 							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
@@ -107,7 +156,7 @@ export default function TemplateList() {
 									최종편집일시
 								</div>
 								<div className="leading-0  text-[14px] font-normal">
-									{item.date}
+									{item.updated_at}
 								</div>
 								<button
 									type="button"

@@ -23,8 +23,8 @@ import {
 	togglePriceModal,
 	useConfig,
 } from '@/store/slice/configSlice';
-import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
-import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
+import PriceCardBox from '../../priceCard/components/PriceCardBox/PriceCardBox';
+import DiscountOptionBox from '../../priceCard/components/DiscountOptionBox/DiscountOptionBox';
 import TableContainer from './components/Table/TableContainer';
 import { useModal } from '@/store/slice/modalSlice';
 import Header from '@/components/header/Header';
@@ -148,10 +148,10 @@ export default function EditTemplate() {
 			<GlobalModal />
 			<Header />
 			<main
-				className={` responsiveLayout mx-auto mt-36 box-content flex  flex-col justify-center
+				className={`responsiveLayout mx-auto mt-36 box-content flex  flex-col justify-center
 					${
 						configState.previewMode === 'tablet'
-							? 'w-[1020px] border-x-[120px] border-[#E0E0E0]'
+							? 'w-[1104px] border-x-[88px] border-[#E0E0E0]'
 							: configState.previewMode === 'mobile'
 							? 'border-x-[20]x w-[335px]'
 							: 'w-[calc(100vw-14.5rem)]'
@@ -165,7 +165,7 @@ export default function EditTemplate() {
 				<section
 					className={`${
 						isPreview ? 'editable-outer-preview' : 'editable-outer '
-					} w-full`}
+					} w-full   `}
 				>
 					<DraggableArea areaType="priceCardArea" />
 					<DiscountOptionBox />

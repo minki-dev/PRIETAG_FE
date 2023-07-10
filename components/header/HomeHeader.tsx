@@ -2,92 +2,144 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { signIn, signOut } from 'next-auth/react';
-import { login } from '@/app/api/api';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { login } from '@/app/api/auth/user/kakaoUser';
 import { useCookies } from 'react-cookie';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { loggedIn, loggedOut, useAuth } from '@/store/slice/authSlice';
 
 export default function HomeHeader() {
-	const [cookie, setCookie] = useCookies();
-	const [isLogin, setIsLogin] = useState(false);
+	// const [cookie, setCookie] = useCookies();
+	// const [isLogin, setIsLogin] = useState(false);
 
+	// const router = useRouter();
+	// const params = useSearchParams();
+
+	// const userSignIn = async () => {
+	// 	signIn('kakao');
+	// };
+	// const userSignOut = async () => {
+	// 	const data = await signOut({
+	// 		redirect: false,
+	// 		callbackUrl: 'http://localhost:3000/',
+	// 	});
+
+	// 	router.push(data.url);
+
+	// 	//authorization cookie 삭제
+	// 	router.replace('/');
+	// 	setCookie('authorizationToken', '', { path: '/' });
+	// 	setIsLogin(false);
+	// 	if (window !== undefined) {
+	// 		localStorage.removeItem('email');
+	// 	}
+	// };
+	// // const queryString = window.location.search;
+	// // const urlParams = new URLSearchParams(queryString);
+	// // const code = urlParams.get('code') || '';
+	// const code = params.get('code') || '';
+
+	// const getAuthorizationTokenFromCookie = () => {
+	// 	const cookies = document.cookie.split(';');
+	// 	for (let i = 0; i < cookies.length; i++) {
+	// 		const cookie = cookies[i].trim();
+	// 		if (cookie.startsWith('authorizationToken=')) {
+	// 			return cookie.substring('authorizationToken='.length);
+	// 		}
+	// 	}
+	// 	return '';
+	// };
+	// // useEffect(() => {
+	// // 	if (window !== undefined) {
+	// // 		const email = localStorage.getItem('email');
+	// // 		const fetchData = async () => {
+	// // 			try {
+	// // 				const res = await login(code);
+	// // 				if (res.data.email !== null) {
+	// // 					localStorage.setItem('email', res.data.email);
+	// // 					setIsLogin(true);
+	// // 				}
+	// // 				const authToken = getAuthorizationTokenFromCookie();
+	// // 				if (authToken !== '') {
+	// // 					setIsLogin(true);
+	// // 				}
+	// // 			} catch (error) {
+	// // 				console.log(error);
+	// // 			}
+	// // 		};
+	// // 		if (email !== null) {
+	// // 			setIsLogin(true);
+	// // 		}
+	// // 		if (code !== '') {
+	// // 			if (localStorage.getItem('email') === null) {
+	// // 				fetchData();
+	// // 			}
+	// // 		} else {
+	// // 			return;
+	// // 		}
+	// // 	}
+	// // }, []);
+	// const movePage = (url: string) => {
+	// 	if (isLogin === false) {
+	// 		alert('로그인이 필요합니다.');
+	// 		return;
+	// 	} else {
+	// 		router.push(`/${url}`);
+	// 	}
+	// };
+	const {
+		auth: { authenticated, userInfo },
+		dispatch,
+	} = useAuth();
+
+	const searchParams = useSearchParams();
+	const path = usePathname();
 	const router = useRouter();
-	const params = useSearchParams();
-
-	const userSignIn = async () => {
-		signIn('kakao', { callbackUrl: 'http://localhost:3000/' });
-	};
-	const userSignOut = async () => {
-		const data = await signOut({
-			redirect: false,
-			callbackUrl: 'http://localhost:3000/',
-		});
-
-		router.push(data.url);
-
-		//authorization cookie 삭제
-		router.replace('/');
-		setCookie('authorizationToken', '', { path: '/' });
-		setIsLogin(false);
-		if (window !== undefined) {
-			localStorage.removeItem('email');
-		}
-	};
-	// const queryString = window.location.search;
-	// const urlParams = new URLSearchParams(queryString);
-	// const code = urlParams.get('code') || '';
-	const code = params.get('code') || '';
-	const fetchData = async () => {
-		try {
-			const res = await login(code);
-
-			if (window !== undefined) {
-				if (res.data.email !== null) {
-					localStorage.setItem('email', res.data.email);
-					// console.log('이메일 설정');
-				}
-			}
-
-			const authToken = getAuthorizationTokenFromCookie();
-
-			if (authToken !== '') {
-				setIsLogin(true);
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
-	const getAuthorizationTokenFromCookie = () => {
-		const cookies = document.cookie.split(';');
-		for (let i = 0; i < cookies.length; i++) {
-			const cookie = cookies[i].trim();
-			if (cookie.startsWith('authorizationToken=')) {
-				return cookie.substring('authorizationToken='.length);
-			}
-		}
-		return '';
-	};
-	useEffect(() => {
-		if (code !== '') {
-			if (window !== undefined) {
-				if (localStorage.getItem('email') === null) {
-					fetchData();
-				}
-			}
-			setIsLogin(true);
-		} else {
-			return;
-		}
-	}, []);
+	const [cookie, setCookie] = useCookies();
 	const movePage = (url: string) => {
-		if (isLogin === false) {
+		if (authenticated !== 'AUTHENTICATED') {
 			alert('로그인이 필요합니다.');
 			return;
 		} else {
 			router.push(`/${url}`);
 		}
+	};
+
+	useEffect(() => {
+		const code = searchParams.get('code');
+		if (code !== null) {
+			handleKaKaoSignIn(code);
+		}
+	}, [path]);
+
+
+	const userSignIn = () => {
+		const redirectUri = 'http://localhost:3000';
+		const clientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+
+		const url = new URL('https://kauth.kakao.com/oauth/authorize');
+		url.searchParams.append('client_id', clientId || '');
+		url.searchParams.append('redirect_uri', redirectUri);
+		url.searchParams.append('response_type', 'code');
+		router.push(url.toString());
+	};
+
+	const handleKaKaoSignIn = async (code: string) => {
+
+			const result = await login(code);
+			const { id, email } = result.data;
+			localStorage.setItem('userInfo', JSON.stringify({ id, email }))
+			dispatch(loggedIn({ id, email }));
+			router.push('/');
+	};
+
+	const userSignOut = async () => {
+		setCookie('accessToken', '', { path: '/',expires: new Date() });
+		localStorage.removeItem('userInfo')
+		dispatch(loggedOut());
+		router.push('/')
 	};
 
 	const pathname = usePathname();
@@ -162,13 +214,11 @@ export default function HomeHeader() {
 								height={32}
 								className="mr-[8px]"
 							/>
-							{window !== undefined && localStorage.getItem('email') !== null
-								? localStorage.getItem('email')
-								: '로그인을 진행해주세요'}
+							{authenticated === 'AUTHENTICATED' ? userInfo?.email : '로그인을 진행해주세요'}
 						</button>
 						<button
 							className={` ${
-								isLogin ? 'hidden' : ''
+								authenticated === 'AUTHENTICATED' ? 'hidden' : ''
 							}  h-[34px] w-[100px]  items-center text-[#989898] `}
 							onClick={() => userSignIn()}
 						>
@@ -176,7 +226,7 @@ export default function HomeHeader() {
 						</button>
 						<button
 							className={` ${
-								isLogin ? '' : 'hidden'
+								authenticated === 'AUTHENTICATED' ? '' : 'hidden'
 							}  h-[34px] w-[100px]  items-center text-[#989898] `}
 							onClick={() => userSignOut()}
 						>

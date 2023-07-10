@@ -15,6 +15,8 @@ const handler = NextAuth({
 		}),
 	],
 	callbacks: {
+
+
 		async redirect({ url, baseUrl }) {
 			if (url.startsWith('/')) {
 				return `${baseUrl}${url}`;
@@ -25,7 +27,7 @@ const handler = NextAuth({
 			return baseUrl;
 		},
 	},
-	secret: process.env.NEXTAUTH_SECRET
+	secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };

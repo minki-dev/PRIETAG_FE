@@ -1,3 +1,5 @@
+'use client'
+
 import React, { SyntheticEvent, useState } from 'react';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';

@@ -2,7 +2,7 @@
 
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
@@ -10,9 +10,17 @@ import ToggleDropDown from './components/ToggleDropDown';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { toggleMoreIsClicked } from '@/store/slice/templateSlice';
-import { TemplateItem } from '@/constants/template';
+import {
+	toggleMoreIsClicked,
+	updateTemplateList,
+} from '@/store/slice/templateSlice';
+import { TemplateItem, VersionTemplateItem } from '@/constants/template';
 import { RootState } from '@/store';
+import {
+	getTemplateList,
+	getVersionTemplateList,
+} from '@/app/api/auth/templateList/templateList';
+import Link from 'next/link';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
@@ -23,6 +31,28 @@ export default function TemplateList() {
 		dispatch(toggleMoreIsClicked({ id }));
 	};
 
+	useEffect(() => {
+		const fetchData = async () => {
+			const res = await getTemplateList({ pageNumber: 0, pageSize: 10 });
+			const { totalCount, template } = res;
+			
+			if (template.length > 0) {
+				const templateData: TemplateItem[] = template.map((template: VersionTemplateItem) => {
+					return {
+						id: template.id,
+						title: template.title,
+						date: template.updated_at,
+						moreIsClicked: false,
+						image: template.image,
+					};
+				});
+				dispatch(updateTemplateList(templateData));
+			
+			}
+		};
+
+		fetchData();
+	}, []);
 	return (
 		<>
 			<Header />
@@ -55,7 +85,7 @@ export default function TemplateList() {
 								src="/img/edit.svg"
 								width={24}
 								height={24}
-								className=" object-cover "
+								className="object-cover "
 								alt="연필아이콘"
 							/>{' '}
 						</div>
@@ -67,7 +97,7 @@ export default function TemplateList() {
 								src="/img/create.svg"
 								width={24}
 								height={24}
-								className=" object-cover "
+								className="object-cover "
 								alt="생성아이콘"
 							/>{' '}
 						</div>
@@ -86,48 +116,55 @@ export default function TemplateList() {
 					</div>
 				</div>
 				<div className=" grid min-w-[900px] grid-cols-[repeat(3,minmax(100px,413px))] grid-rows-[repeat(3,minmax(100px,327px))] justify-evenly gap-[80px] ">
-					{template.map((item: TemplateItem, index: number) => (
-						<div
-							key={item.id}
-							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
-							onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-								router.push('/templateList/edit');
-								e.stopPropagation();
-							}}
-						>
-							<div className="h-[72px] p-[24px]"></div>
-							<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
-								<Image src="/img/a.png" width={400} height={300} alt="가격표" />
-							</div>
-							<div className="relative flex flex-col justify-center px-[24px] py-[16px]">
-								<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">
-									{item.title}
-								</div>
-								<div className="pt-[8px] text-[14px] font-normal leading-snug text-neutral-500">
-									최종편집일시
-								</div>
-								<div className="leading-0  text-[14px] font-normal">
-									{item.date}
-								</div>
-								<button
-									type="button"
-									className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
-									onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-										handleMoreClick(item.id);
-										e.stopPropagation();
-									}}
-								>
+					{template.length > 0 &&
+						template.map((item: TemplateItem, index: number) => (
+							<Link
+								key={item.id}
+								className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
+								// onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+								// 	router.push('/templateList/edit');
+								// 	e.stopPropagation();
+								// }}
+								href={`/templateList/edit/${item.id}`}
+							>
+								<div className="h-[72px] p-[24px]"></div>
+								<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
 									<Image
-										src="/img/menu_dots.svg"
-										width={4}
-										height={20}
-										alt="더보기"
+										src={`${item.image ?? 'icons/close_large.svg'}`}
+										width={400}
+										height={300}
+										alt="가격표"
 									/>
-								</button>
-								{item.moreIsClicked ? <MoreDropDown /> : null}
-							</div>
-						</div>
-					))}
+								</div>
+								<div className="relative flex flex-col justify-center px-[24px] py-[16px]">
+									<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">
+										{item.title}
+									</div>
+									<div className="pt-[8px] text-[14px] font-normal leading-snug text-neutral-500">
+										최종편집일시
+									</div>
+									<div className="leading-0  text-[14px] font-normal">
+										{item.date}
+									</div>
+									<button
+										type="button"
+										className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
+										onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+											handleMoreClick(item.id);
+											e.stopPropagation();
+										}}
+									>
+										<Image
+											src="/img/menu_dots.svg"
+											width={4}
+											height={20}
+											alt="더보기"
+										/>
+									</button>
+									{item.moreIsClicked ? <MoreDropDown /> : null}
+								</div>
+							</Link>
+						))}
 				</div>{' '}
 				<div className="relative flex h-[168px] w-full justify-center">
 					<div className="flex items-center">

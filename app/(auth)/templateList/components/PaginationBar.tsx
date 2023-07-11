@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import SquareBtn from '@/components/button/SquareBtn';
 import { openModal, useModal } from '@/store/slice/modalSlice';

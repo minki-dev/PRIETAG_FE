@@ -29,7 +29,7 @@ export default function Edit() {
 					<SearchInput />
 				</div>
 				<div className="mt-[40px] h-full w-full min-w-[900px]  border-y-[2px] border-[#989898] ">
-					<TableListExample />
+					{/* <TableListExample /> */}
 				</div>
 				<PaginationBar />{' '}
 			</div>

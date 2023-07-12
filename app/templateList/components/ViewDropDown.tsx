@@ -5,6 +5,7 @@ function ViewDropDown({
 	onFinalEditDate,
 	setSortStandard,
 	setViewIsClicked,
+	currentPage,
 }) {
 	return (
 		<nav className="absolute -left-[1px] top-[30px] z-20  w-[166px] rounded-xl bg-white text-base  font-normal leading-[26px] text-black shadow-[0_0_4px_rgba(0,0,0,0.5)] shadow-[#D9D9D9] ">
@@ -13,7 +14,7 @@ function ViewDropDown({
 					<span
 						className="absolute left-[16px]  rounded-[12px_12px_0_0] "
 						onClick={(e) => {
-							onFinalEditDate();
+							onFinalEditDate(currentPage);
 							setSortStandard('최종편집일시');
 							e.stopPropagation();
 							setViewIsClicked(false);

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { BOX_PROPERTY, BoxType } from '../../../../constants/box';
+import { BOX_PROPERTY, BoxType } from '../../../../../constants/box';
 import { useConfig } from '@/store/slice/configSlice';
 import Image from 'next/image';
 import {

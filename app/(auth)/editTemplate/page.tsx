@@ -23,8 +23,8 @@ import {
 	togglePriceModal,
 	useConfig,
 } from '@/store/slice/configSlice';
-import PriceCardBox from '../priceCard/components/PriceCardBox/PriceCardBox';
-import DiscountOptionBox from '../priceCard/components/DiscountOptionBox/DiscountOptionBox';
+import PriceCardBox from '../../priceCard/components/PriceCardBox/PriceCardBox';
+import DiscountOptionBox from '../../priceCard/components/DiscountOptionBox/DiscountOptionBox';
 import TableContainer from './components/Table/TableContainer';
 import { useModal } from '@/store/slice/modalSlice';
 import Header from '@/components/header/Header';

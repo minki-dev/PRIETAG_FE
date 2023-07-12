@@ -4,14 +4,14 @@ import { openModal, useModal } from '@/store/slice/modalSlice';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import { ModalTypes } from '@/components/modal/ModalState';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { deleteItem, setCurrentPage } from '@/store/slice/versionSlice';
-import { ModalState } from '@/store/slice/modalSlice';
+// import { deleteItem, setCurrentPage } from '@/store/slice/versionSlice';
+// import { ModalState } from '@/store/slice/modalSlice';
 
 function PaginationBar() {
 	const { dispatch, params } = useModal();
-	const versions = useSelector((state: RootState) => state.version.versions);
+	// const versions = useSelector((state: RootState) => state.version.versions);
 	const currentPage = useSelector(
 		(state: RootState) => state.version.currentPage,
 	);

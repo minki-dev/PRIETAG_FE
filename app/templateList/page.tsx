@@ -8,28 +8,29 @@ import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { toggleMoreIsClicked } from '@/store/slice/templateSlice';
 import { TemplateItem } from '@/constants/template';
 import { RootState } from '@/store';
-import { login } from '../api/api';
 import { useCookies } from 'react-cookie';
+import Pagination from './components/Pagination';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
 	const router = useRouter();
 	const dispatch = useDispatch();
-	// const template = useSelector((state: RootState) => state.template);
 	const [templates, setTemplates] = useState<TemplateItem[]>([]);
 	const [sortStandard, setSortStandard] = useState('정렬기준');
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
 	const handleMoreClick = (id: number) => {
 		dispatch(toggleMoreIsClicked({ id }));
 	};
-	const fetchData = async () => {
+
+	const fetchData = async (currentPage: number) => {
 		try {
 			const res = await fetch(
-				'https://ezfee.site/api/templates?page=0&pageSize=4',
+				`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
 				{
 					method: 'GET',
 					headers: {
@@ -39,10 +40,30 @@ export default function TemplateList() {
 			);
 
 			const data = await res.json();
+			const pageCount = data.data.totalCount;
 			const fetchedTemplates = data.data.template;
 			setTemplates(fetchedTemplates);
+			setTotalPages(Math.ceil(pageCount / 9));
 		} catch (error) {
 			console.log(error);
+		}
+	};
+
+	const fetchTemplateHistory = async (id: number) => {
+		try {
+			const res = await fetch(
+				`https://ezfee.site/api/templates/${id}?page=0&pageSize=10`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${cookies.authorizationToken}`,
+					},
+				},
+			);
+			const data = await res.json();
+			const fetchedTemplateVersions = data.data;
+		} catch (err) {
+			console.log(err);
 		}
 	};
 	const onSortByName = (): void => {
@@ -55,16 +76,21 @@ export default function TemplateList() {
 			}
 			return 0;
 		});
-		console.log(sorted);
+		// console.log(sorted);
 		setTemplates(sorted);
 	};
-	const onFinalEditDate = () => {
-		fetchData();
+	const onFinalEditDate = (currentPage) => {
+		fetchData(currentPage);
+	};
+	const onPageChange = (pageNumber) => {
+		setCurrentPage(pageNumber);
+		fetchData(pageNumber);
 	};
 	const [cookies] = useCookies(['authorizationToken']);
+
 	useEffect(() => {
-		fetchData();
-	}, []);
+		fetchData(currentPage);
+	}, [currentPage]);
 	return (
 		<>
 			<Header />
@@ -130,91 +156,73 @@ export default function TemplateList() {
 								onFinalEditDate={onFinalEditDate}
 								setSortStandard={setSortStandard}
 								setViewIsClicked={setViewIsClicked}
+								currentPage={currentPage}
 							/>
 						) : null}
 					</div>
 				</div>
 				<div className=" grid min-w-[900px] grid-cols-[repeat(3,minmax(100px,413px))] grid-rows-[repeat(3,minmax(100px,327px))] justify-evenly gap-[80px] ">
-					{templates.map((item: TemplateItem, index: number) => (
-						<div
-							key={item.id}
-							className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
-							onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-								router.push('/templateList/edit');
-								e.stopPropagation();
-							}}
-						>
-							<div className="h-[72px] p-[24px]"></div>
-							<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
-								<Image src="/img/a.png" width={400} height={300} alt="가격표" />
-							</div>
-							<div className="relative flex flex-col justify-center px-[24px] py-[16px]">
-								<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">
-									{item.title}
-								</div>
-								<div className="pt-[8px] text-[14px] font-normal leading-snug text-neutral-500">
-									최종편집일시
-								</div>
-								<div className="leading-0  text-[14px] font-normal">
-									{item.updated_at}
-								</div>
-								<button
-									type="button"
-									className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
-									onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-										handleMoreClick(item.id);
-										e.stopPropagation();
-									}}
-								>
+					{templates &&
+						templates.map((item: TemplateItem, index: number) => (
+							<div
+								key={item.id}
+								className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
+								onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+									// router.push('/templateList/edit');
+									e.stopPropagation();
+									console.log(item.id);
+									fetchTemplateHistory(item.id);
+								}}
+							>
+								<div className="h-[72px] p-[24px]"></div>
+								<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
 									<Image
-										src="/img/menu_dots.svg"
-										width={4}
-										height={20}
-										alt="더보기"
+										src="/img/a.png"
+										width={400}
+										height={300}
+										alt="가격표"
 									/>
-								</button>
-								{item.moreIsClicked ? <MoreDropDown /> : null}
+								</div>
+								<div className="relative flex flex-col justify-center px-[24px] py-[16px]">
+									<div className="h-[26px] overflow-hidden text-[16px] font-medium leading-relaxed">
+										{item.title}
+									</div>
+									<div className="pt-[8px] text-[14px] font-normal leading-snug text-neutral-500">
+										최종편집일시
+									</div>
+									<div className="leading-0  text-[14px] font-normal">
+										{item.updated_at}
+									</div>
+									<button
+										type="button"
+										className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
+										onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+											handleMoreClick(item.id);
+											e.stopPropagation();
+										}}
+									>
+										<Image
+											src="/img/menu_dots.svg"
+											width={4}
+											height={20}
+											alt="더보기"
+										/>
+									</button>
+									{item.moreIsClicked ? <MoreDropDown /> : null}
+								</div>
 							</div>
-						</div>
-					))}
+						))}
 				</div>{' '}
 				<div className="relative flex h-[168px] w-full justify-center">
 					<div className="flex items-center">
-						<button>
-							<Image
-								src="/img/page_first.svg"
-								alt="처음으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
-						<button>
-							<Image
-								src="/img/page_pre.svg"
-								alt="이전으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
 						<nav className="flex">
-							<button>1</button>
+							<Pagination
+								setCurrentPage={setCurrentPage}
+								currentPage={currentPage}
+								totalPages={totalPages}
+								onPageChange={onPageChange}
+							/>
 						</nav>
-						<button>
-							<Image
-								src="/img/page_next.svg"
-								alt="다음으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
-						<button>
-							<Image
-								src="/img/page_end.svg"
-								alt="마지막으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
 					</div>
 				</div>
 			</div>

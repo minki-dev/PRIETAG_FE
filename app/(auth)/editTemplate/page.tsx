@@ -39,6 +39,8 @@ import Footer from '@/components/footer/Footer';
 import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
 import NoResponsiveFooter from '@/components/footer/NoResponsiveFooter';
 import UploadModal from './components/UploadModal/UploadModal';
+import PriceCardBox from '@/app/priceCard/components/PriceCardBox/PriceCardBox';
+import DiscountOptionBox from '@/app/priceCard/components/DiscountOptionBox/DiscountOptionBox';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);

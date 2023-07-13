@@ -21,6 +21,7 @@ import {
 	getVersionTemplateList,
 } from '@/app/api/auth/templateList/templateList';
 import Link from 'next/link';
+import { createTemplate } from '@/app/api/auth/template/template';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
@@ -31,11 +32,15 @@ export default function TemplateList() {
 		dispatch(toggleMoreIsClicked({ id }));
 	};
 
+	const handleNewTemplateBtn = async () => {
+		await createTemplate()
+		router.push('/editTemplate')
+	}
+
 	useEffect(() => {
 		const fetchData = async () => {
-			const res = await getTemplateList({ pageNumber: 0, pageSize: 10 });
-			const { totalCount, template } = res;
-			
+			const { totalCount, template } = await getTemplateList({ pageNumber: 0, pageSize: 10 });
+
 			if (template.length > 0) {
 				const templateData: TemplateItem[] = template.map((template: VersionTemplateItem) => {
 					return {
@@ -74,9 +79,7 @@ export default function TemplateList() {
 			<div className="h-full  w-full   bg-[#F7F8FC] px-[240px] pb-[240px] pt-[80px]">
 				<div className="flex h-[120px] w-full min-w-[900px] items-center  justify-between">
 					<button
-						onClick={() => {
-							router.push('/editTemplate');
-						}}
+						onClick={handleNewTemplateBtn}
 						className="  flex h-[58px]  w-[262px] justify-around rounded-[10px] border border-stone-300 bg-white p-4"
 					>
 						<div>
@@ -125,12 +128,12 @@ export default function TemplateList() {
 								// 	router.push('/templateList/edit');
 								// 	e.stopPropagation();
 								// }}
-								href={`/templateList/edit/${item.id}`}
+								href={`/templateList/${item.id}`}
 							>
 								<div className="h-[72px] p-[24px]"></div>
 								<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
 									<Image
-										src={`${item.image ?? 'icons/close_large.svg'}`}
+										src={`${item.image ?? '/img/a.png'}`}
 										width={400}
 										height={300}
 										alt="가격표"

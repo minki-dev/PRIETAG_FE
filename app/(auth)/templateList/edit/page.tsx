@@ -9,7 +9,7 @@ import SearchInput from '../components/SearchInput';
 import PaginationBar from '../components/PaginationBar';
 import { deleteItem } from '@/store/slice/versionSlice';
 import { useDispatch } from 'react-redux';
-import TableListExample from '../components/TableListExample';
+import TableListExample from '../components/TableList';
 
 export interface Post {
 	id: number;

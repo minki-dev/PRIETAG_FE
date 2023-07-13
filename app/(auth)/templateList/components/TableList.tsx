@@ -1,22 +1,21 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import SquareBtn from '@/components/button/SquareBtn';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/store/slice/modalSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { VersionHistoryType, setVersions } from '@/store/slice/versionSlice';
+import { VersionHistoryType, checkAllVersions, setVersions } from '@/store/slice/versionSlice';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getVersionTemplateList } from '@/app/api/auth/templateList/templateList';
+import TableVersionData from './TableVersionData';
 
 function TableListExample({ id }: { id: string }) {
 	const { dispatch } = useModal();
 	const pathname = usePathname();
-	const router = useRouter();
 	const edit = '/templateList/edit';
-	const publish = '/templateList/publish';
+	console.log(pathname)
 
 	// const versions = useSelector((state: RootState) => state.version.versions);
 	// const currentPage = useSelector(
@@ -26,16 +25,16 @@ function TableListExample({ id }: { id: string }) {
 	// 	(state: RootState) => state.version.itemsPerPage,
 	// );
 
-	const { versions, currentPage, itemsPerPage } = useSelector(
+	const { versions, currentPage, itemsPerPage, isAllChecked, havePublish } = useSelector(
 		(state: RootState) => state.version,
 	);
-	console.log(versions);
+
 	const totalItems = versions.length;
 	const pageCount = Math.ceil(totalItems / itemsPerPage);
 	const indexOfLastItem = currentPage * itemsPerPage;
 	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 	const currentItems = versions.slice(indexOfFirstItem, indexOfLastItem);
-	const isAllChecked = currentItems.every((version) => version._publishing);
+	// const isAllChecked = currentItems.every((version) => version._publishing);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -46,26 +45,29 @@ function TableListExample({ id }: { id: string }) {
 					pageSize: 10,
 					searchTerm: '',
 				});
-			dispatch(setVersions(template));
+				const data = template.map((templateItem: Exclude<VersionHistoryType, 'isChecked'>) => {
+					return {...templateItem, havePublish, isChceked: false } as VersionHistoryType
+				})
+			dispatch(setVersions(data));
 		};
 		fetchData();
 	}, []);
 
-	const handleAllChecked = () => {
-		const updatedVersions = versions.map((version) => ({
-			...version,
-			isChecked: !isAllChecked,
-		}));
-		dispatch(setVersions(updatedVersions));
-	};
-	const handleCheckboxChange = (itemId: number) => {
-		const updatedVersions = versions.map((version) =>
-			version.id === itemId
-				? { ...version, isChecked: !version._publishing }
-				: version,
-		);
-		dispatch(setVersions(updatedVersions));
-	};
+	// const handleAllChecked = () => {
+	// 	const updatedVersions = versions.map((version) => ({
+	// 		...version,
+	// 		isChecked: !isAllChecked,
+	// 	}));
+	// 	dispatch(setVersions(updatedVersions));
+	// };
+	// const handleCheckboxChange = (itemId: number) => {
+	// 	const updatedVersions = versions.map((version) =>
+	// 		version.id === itemId
+	// 			? { ...version, isChecked: !version._publishing }
+	// 			: version,
+	// 	);
+	// 	dispatch(setVersions(updatedVersions));
+	// };
 	return (
 		<div>
 			<table className="w-full ">
@@ -76,7 +78,9 @@ function TableListExample({ id }: { id: string }) {
 								type="checkbox"
 								className="h-[24px] w-[24px]"
 								checked={isAllChecked}
-								onChange={handleAllChecked}
+								onChange={() => {
+									dispatch(checkAllVersions())	
+								}}
 							/>
 						</th>
 						<th className="relative flex min-w-[150px] ">
@@ -119,12 +123,12 @@ function TableListExample({ id }: { id: string }) {
 							</div>
 						</th>
 						<th className="w-[100px] min-w-[28px]">
-							{pathname === edit ? '편집' : '퍼블리시'}
+							{havePublish ? '편집' : '퍼블리시'}
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr className="flex h-[81px] w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px]  text-[#747474] hover:bg-[#c8e5f4]">
+					{/* <tr className="flex h-[81px] w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px]  text-[#747474] hover:bg-[#c8e5f4]">
 						<td className="min-w-[140px]">
 							{pathname === edit ? (
 								<SquareBtn
@@ -168,37 +172,10 @@ function TableListExample({ id }: { id: string }) {
 								/>
 							)}
 						</td>
-					</tr>
+					</tr> */}
 					{versions &&
 						versions.map((version) => (
-							<tr
-								key={version.id}
-								className="flex h-[81px]  w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px] text-[#747474] hover:bg-[#c8e5f4]"
-							>
-								<td className="min-w-[140px] ">
-									<input
-										type="checkbox"
-										className="h-[24px] w-[24px]"
-										checked={version._publishing}
-										onChange={() => {
-											handleCheckboxChange(version.id);
-										}}
-									/>
-								</td>
-								<td className="min-w-[150px]">{version.updated_at}</td>
-								<td className="min-w-[210px]">{version.version}.0</td>
-								<td className="min-w-[400px] text-left">{version.title}</td>
-								<td className="flex w-[100px] min-w-[28px] items-center justify-center">
-									<SquareBtn
-										textColor="#747474"
-										width="88px"
-										textContent="편집"
-										bg="white"
-										borderColor="#747474"
-										onClick={() => {}}
-									/>
-								</td>
-							</tr>
+							<TableVersionData {...version}/>
 						))}
 				</tbody>
 			</table>

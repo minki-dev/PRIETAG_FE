@@ -22,13 +22,17 @@ export default function TemplateList() {
 
 	const router = useRouter();
 
-	const handleMoreClick = (id: number) => {
+	const handleMoreClick = (
+		id: number,
+		e: React.MouseEvent<HTMLButtonElement>,
+	) => {
 		setTemplates((prev) => {
 			return prev.map((item) => {
 				if (item.id === id) item.moreIsClicked = !item.moreIsClicked;
 				return item;
 			});
 		});
+		e.preventDefault();
 	};
 
 	const handleNewTemplateBtn = async () => {
@@ -203,21 +207,22 @@ export default function TemplateList() {
 									<div className="leading-0  text-[14px] font-normal">
 										{item.updated_at}
 									</div>
-									<button
-										type="button"
-										className="absolute bottom-[16px] right-0  h-[30px] w-[30px] cursor-pointer "
-										onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-											handleMoreClick(item.id);
-											e.stopPropagation();
-										}}
-									>
-										<Image
-											src="/img/menu_dots.svg"
-											width={4}
-											height={20}
-											alt="더보기"
-										/>
-									</button>
+									<div className="relative  bottom-[10px] h-[30px]  w-full">
+										<button
+											type="button"
+											className="absolute -right-[30px] bottom-[20px] h-[30px] w-[30px] cursor-pointer "
+											onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+												handleMoreClick(item.id, e);
+											}}
+										>
+											<Image
+												src="/img/menu_dots.svg"
+												width={4}
+												height={20}
+												alt="더보기"
+											/>
+										</button>
+									</div>
 									{item.moreIsClicked ? <MoreDropDown /> : null}
 								</div>
 							</Link>
@@ -225,22 +230,6 @@ export default function TemplateList() {
 				</div>{' '}
 				<div className="relative flex h-[168px] w-full justify-center">
 					<div className="flex items-center">
-						<button>
-							<Image
-								src="/img/page_first.svg"
-								alt="처음으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
-						<button>
-							<Image
-								src="/img/page_pre.svg"
-								alt="이전으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
 						<nav className="flex">
 							<Pagination
 								setCurrentPage={setCurrentPage}
@@ -248,22 +237,6 @@ export default function TemplateList() {
 								totalPages={totalPages}
 							/>
 						</nav>
-						<button>
-							<Image
-								src="/img/page_next.svg"
-								alt="다음으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
-						<button>
-							<Image
-								src="/img/page_end.svg"
-								alt="마지막으로"
-								width={40}
-								height={40}
-							/>{' '}
-						</button>
 					</div>
 				</div>
 			</div>

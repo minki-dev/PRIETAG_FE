@@ -4,8 +4,9 @@ import React from 'react';
 import Subheader from '../components/Subheader';
 import ReturnToList from '../components/ReturnToList';
 import SearchInput from '../components/SearchInput';
-import PaginationBar from '../components/PaginationBar';
-import TableListExample from '../components/TableList';
+
+
+import TableListSection from '../components/TableListSection';
 
 export interface Post {
 	id: number;
@@ -28,10 +29,7 @@ export default async function Edit({
 					<ReturnToList />
 					<SearchInput />
 				</div>
-				<div className="mt-[40px] h-full w-full min-w-[900px]  border-y-[2px] border-[#989898] ">
-					<TableListExample id={id} />
-				</div>
-				<PaginationBar />{' '}
+				<TableListSection id={id} />
 			</div>
 			<Footer />{' '}
 		</>

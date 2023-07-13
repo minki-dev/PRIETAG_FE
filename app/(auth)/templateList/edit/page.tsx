@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Subheader from '../components/Subheader';
 import ReturnToList from '../components/ReturnToList';
 import SearchInput from '../components/SearchInput';
-import PaginationBar from '../components/PaginationBar';
+// import PaginationBar from '../components/PaginationBar';
 import { deleteItem } from '@/store/slice/versionSlice';
 import { useDispatch } from 'react-redux';
 import TableListExample from '../components/TableList';
@@ -31,7 +31,7 @@ export default function Edit() {
 				<div className="mt-[40px] h-full w-full min-w-[900px]  border-y-[2px] border-[#989898] ">
 					{/* <TableListExample /> */}
 				</div>
-				<PaginationBar />{' '}
+				{/* <PaginationBar />{' '} */}
 			</div>
 			<Footer />{' '}
 		</>

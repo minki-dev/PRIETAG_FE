@@ -1,7 +1,7 @@
 export interface TemplateItem {
 	id: number;
 	title: string;
-	date: string;
+	updated_at: string;
 	moreIsClicked: boolean;
 	image: string;
 }

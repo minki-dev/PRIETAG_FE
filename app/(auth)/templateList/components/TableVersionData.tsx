@@ -3,7 +3,7 @@ import versionSlice, { VersionHistoryType, toggleVersion } from '@/store/slice/v
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-export default function PublishedVersion({
+export default function TableVersionData({
 	id,
 	title,
 	updated_at,

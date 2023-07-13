@@ -1,63 +1,142 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { toggleMoreIsClicked } from '@/store/slice/templateSlice';
+import { TemplateItem } from '@/constants/template';
+import Link from 'next/link';
+
+import { getTemplateList } from '@/app/api/auth/templateList/templateList';
+import { createTemplate } from '@/app/api/auth/template/template';
+
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
-import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import {
-	toggleMoreIsClicked,
-	updateTemplateList,
-} from '@/store/slice/templateSlice';
-import { TemplateItem, VersionTemplateItem } from '@/constants/template';
-import { RootState } from '@/store';
-import {
-	getTemplateList,
-	getVersionTemplateList,
-} from '@/app/api/auth/templateList/templateList';
-import Link from 'next/link';
-import { createTemplate } from '@/app/api/auth/template/template';
+import Pagination from './components/Pagination';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
 	const router = useRouter();
-	const dispatch = useDispatch();
-	const template = useSelector((state: RootState) => state.template);
+
+	const [templates, setTemplates] = useState<TemplateItem[]>([]);
+	const [sortStandard, setSortStandard] = useState<string>('정렬기준');
+	const [currentPage, setCurrentPage] = useState<number>(0);
+	const [totalPages, setTotalPages] = useState<number>(0);
 	const handleMoreClick = (id: number) => {
-		dispatch(toggleMoreIsClicked({ id }));
+		setTemplates((prev) => {
+			return prev.map((item) => {
+				if (item.id === id) item.moreIsClicked = !item.moreIsClicked;
+				return item
+			});
+		});
 	};
 
 	const handleNewTemplateBtn = async () => {
-		await createTemplate()
-		router.push('/editTemplate')
-	}
+		await createTemplate();
+		router.push('/editTemplate');
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const { totalCount, template } = await getTemplateList({ pageNumber: 0, pageSize: 10 });
+			const { totalCount, template } = await getTemplateList({
+				pageNumber: currentPage,
+				pageSize: 9,
+			});
 
 			if (template.length > 0) {
-				const templateData: TemplateItem[] = template.map((template: VersionTemplateItem) => {
-					return {
-						id: template.id,
-						title: template.title,
-						date: template.updated_at,
-						moreIsClicked: false,
-						image: template.image,
-					};
-				});
-				dispatch(updateTemplateList(templateData));
-			
+				const templateData: TemplateItem[] = template.map(
+					(template: {
+						id: number;
+						title: string;
+						updated_at: string;
+						image: string;
+					}) => {
+						return { ...template, moreIsClicked: false };
+					},
+				);
+				// dispatch(updateTemplateList(templateData));
+				setTemplates(templateData);
+				setTotalPages(Math.ceil(totalCount / 9));
 			}
 		};
 
 		fetchData();
-	}, []);
+	}, [currentPage]);
+	// const fetchData = async (currentPage: number) => {
+	// 	try {
+	// 		const res = await fetch(
+	// 			`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
+	// 			{
+	// 				method: 'GET',
+	// 				headers: {
+	// 					Authorization: `Bearer ${cookies.accessToken}`,
+	// 				},
+	// 			},
+	// 		);
+
+	// 		const data = await res.json();
+	// 		const pageCount = data.data.totalCount;
+	// 		const fetchedTemplates = data.data.template;
+	// 		setTemplates(fetchedTemplates);
+	// 		setTotalPages(Math.ceil(pageCount / 9));
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
+
+	// const fetchTemplateHistory = async (id: number) => {
+	// 	try {
+	// 		const res = await fetch(
+	// 			`https://ezfee.site/api/templates/${id}?page=0&pageSize=10`,
+	// 			{
+	// 				method: 'GET',
+	// 				headers: {
+	// 					Authorization: `Bearer ${cookies.accessToken}`,
+	// 				},
+	// 			},
+	// 		);
+	// 		const data = await res.json();
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// };
+	const onSortByName = () => {
+		setTemplates((prev) =>
+			[...prev].sort((a, b) => {
+				if (a.title.toLowerCase() < b.title.toLowerCase()) {
+					return -1;
+				}
+				if (a.title.toLowerCase() > b.title.toLowerCase()) {
+					return 1;
+				}
+				return 0;
+			}),
+		);
+	};
+	const onFinalEditDate = () => {
+		setTemplates((prev) =>
+			[...prev].sort((a, b) => {
+				if (
+					new Date(formatDate(a.updated_at)) <
+					new Date(formatDate(b.updated_at))
+				) {
+					return -1;
+				}
+				if (
+					new Date(formatDate(a.updated_at)) >
+					new Date(formatDate(b.updated_at))
+				) {
+					return 1;
+				}
+				return 0;
+			}),
+		);
+	};
+
 	return (
 		<>
 			<Header />
@@ -111,29 +190,38 @@ export default function TemplateList() {
 						}}
 						className="relative flex h-[26px] w-[166px] items-center justify-between rounded-[4px] border border-[#796161] px-[8px]"
 					>
-						<div className="p-[8px]"> 정렬기준</div>
+						<div className="cursor-pointer p-[8px]">{sortStandard}</div>
 						<div>
 							<ToggleDropDown viewIsClicked={viewIsClicked} />
 						</div>
-						{viewIsClicked ? <ViewDropDown /> : null}
+						{viewIsClicked ? (
+							<ViewDropDown
+								onSortByName={onSortByName}
+								onFinalEditDate={onFinalEditDate}
+								setSortStandard={setSortStandard}
+								setViewIsClicked={setViewIsClicked}
+								currentPage={currentPage}
+							/>
+						) : null}
 					</div>
 				</div>
 				<div className=" grid min-w-[900px] grid-cols-[repeat(3,minmax(100px,413px))] grid-rows-[repeat(3,minmax(100px,327px))] justify-evenly gap-[80px] ">
-					{template.length > 0 &&
-						template.map((item: TemplateItem, index: number) => (
+					{templates &&
+						templates.map((item: TemplateItem) => (
 							<Link
 								key={item.id}
 								className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
 								// onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-								// 	router.push('/templateList/edit');
 								// 	e.stopPropagation();
+								// 	console.log(item.id);
+								// 	fetchTemplateHistory(item.id);
 								// }}
 								href={`/templateList/${item.id}`}
 							>
 								<div className="h-[72px] p-[24px]"></div>
 								<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
 									<Image
-										src={`${item.image ?? '/img/a.png'}`}
+										src="/img/a.png"
 										width={400}
 										height={300}
 										alt="가격표"
@@ -147,7 +235,7 @@ export default function TemplateList() {
 										최종편집일시
 									</div>
 									<div className="leading-0  text-[14px] font-normal">
-										{item.date}
+										{item.updated_at}
 									</div>
 									<button
 										type="button"
@@ -188,7 +276,11 @@ export default function TemplateList() {
 							/>{' '}
 						</button>
 						<nav className="flex">
-							<button>1</button>
+							<Pagination
+								setCurrentPage={setCurrentPage}
+								currentPage={currentPage}
+								totalPages={totalPages}
+							/>
 						</nav>
 						<button>
 							<Image
@@ -213,4 +305,13 @@ export default function TemplateList() {
 			<Footer />
 		</>
 	);
+}
+
+function formatDate(dateString: string) {
+	var dateParts = dateString.split('.');
+	var year = dateParts[0];
+	var month = dateParts[1];
+	var day = dateParts[2];
+
+	return year + '-' + month + '-' + day;
 }

@@ -1,73 +1,19 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { useModal } from '@/store/slice/modalSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
-import { VersionHistoryType, checkAllVersions, setVersions } from '@/store/slice/versionSlice';
+import React from 'react';
+
+import { VersionHistoryState, VersionHistoryType, checkAllVersions, setVersions } from '@/store/slice/versionSlice';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { getVersionTemplateList } from '@/app/api/auth/templateList/templateList';
 import TableVersionData from './TableVersionData';
+import { useDispatch } from 'react-redux';
 
-function TableListExample({ id }: { id: string }) {
-	const { dispatch } = useModal();
-	const pathname = usePathname();
-	const edit = '/templateList/edit';
-	console.log(pathname)
+type Props = Pick<VersionHistoryState, 'havePublish' | 'versions' | 'isAllChecked' > & {id: string}
 
-	// const versions = useSelector((state: RootState) => state.version.versions);
-	// const currentPage = useSelector(
-	// 	(state: RootState) => state.version.currentPage,
-	// );
-	// const itemsPerPage = useSelector(
-	// 	(state: RootState) => state.version.itemsPerPage,
-	// );
+function TableList({ havePublish, versions, isAllChecked, id }: Props) {
+	const dispatch = useDispatch();
 
-	const { versions, currentPage, itemsPerPage, isAllChecked, havePublish } = useSelector(
-		(state: RootState) => state.version,
-	);
 
-	const totalItems = versions.length;
-	const pageCount = Math.ceil(totalItems / itemsPerPage);
-	const indexOfLastItem = currentPage * itemsPerPage;
-	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-	const currentItems = versions.slice(indexOfFirstItem, indexOfLastItem);
-	// const isAllChecked = currentItems.every((version) => version._publishing);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const { totalCount, template, havePublish } =
-				await getVersionTemplateList({
-					templateId: Number(id),
-					pageNumber: 0,
-					pageSize: 10,
-					searchTerm: '',
-				});
-				const data = template.map((templateItem: Exclude<VersionHistoryType, 'isChecked'>) => {
-					return {...templateItem, havePublish, isChceked: false } as VersionHistoryType
-				})
-			dispatch(setVersions(data));
-		};
-		fetchData();
-	}, []);
-
-	// const handleAllChecked = () => {
-	// 	const updatedVersions = versions.map((version) => ({
-	// 		...version,
-	// 		isChecked: !isAllChecked,
-	// 	}));
-	// 	dispatch(setVersions(updatedVersions));
-	// };
-	// const handleCheckboxChange = (itemId: number) => {
-	// 	const updatedVersions = versions.map((version) =>
-	// 		version.id === itemId
-	// 			? { ...version, isChecked: !version._publishing }
-	// 			: version,
-	// 	);
-	// 	dispatch(setVersions(updatedVersions));
-	// };
 	return (
 		<div>
 			<table className="w-full ">
@@ -128,51 +74,6 @@ function TableListExample({ id }: { id: string }) {
 					</tr>
 				</thead>
 				<tbody>
-					{/* <tr className="flex h-[81px] w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px]  text-[#747474] hover:bg-[#c8e5f4]">
-						<td className="min-w-[140px]">
-							{pathname === edit ? (
-								<SquareBtn
-									borderColor="#00A3FF"
-									textColor="#00A3FF"
-									textContent="퍼블리시중"
-									bg="#DEF4FF"
-									onClick={() => {}}
-								/>
-							) : (
-								<input type="checkbox" className="h-[24px] w-[24px]" />
-							)}
-						</td>
-
-						<td className="min-w-[150px]">2023.06.29.05:26</td>
-						<td className="min-w-[210px]">26.0</td>
-						<td className="min-w-[400px] text-left">
-							2023 프리미엄 요금제 최종본
-						</td>
-
-						<td className="flex w-[100px] min-w-[28px] items-center justify-center">
-							{pathname === edit ? (
-								<SquareBtn
-									textColor="#747474"
-									width="88px"
-									textContent="편집"
-									bg="white"
-									borderColor="#747474"
-									onClick={() => {
-										router.push('/editTemplate');
-									}}
-								/>
-							) : (
-								<SquareBtn
-									textColor="#00A3FF"
-									width="88px"
-									textContent="퍼블리시중"
-									bg="#DEF4FF"
-									borderColor="#00A3FF"
-									onClick={() => {}}
-								/>
-							)}
-						</td>
-					</tr> */}
 					{versions &&
 						versions.map((version) => (
 							<TableVersionData {...version}/>
@@ -183,4 +84,4 @@ function TableListExample({ id }: { id: string }) {
 	);
 }
 
-export default TableListExample;
+export default TableList;

@@ -4,16 +4,62 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '..';
 import { v4 as uuidv4 } from 'uuid';
 
+/** 가격 카드 */
 export interface PriceCard {
-	id: string; // id값 추가 -> uuid로 설정하여 key 값으로 사용
+	/** 가격 카드 제목(요금제 명) */
 	title: string;
+	/** 가격 카드 가격 */
 	price: number;
+	/** 가격 카드별 할인율 */
 	discountRate: number;
+	/** 가격 카드 요금제 설명 */
 	detail: string;
-	detailHeight: number; // 가격표 설명 부분 카드별 높이 저장 필요
+	/** 가격 카드 기능 설명 최상단 (타이틀을 입력해 주세요) */
 	feature: string;
+	/** 가격 카드 기능 목록 */
 	content: string[];
+
+	// ↓ api에서 사용 안함 ↓
+	/** 가격 카드 id값 추가 -> uuid로 설정하여 key 값으로 사용 */
+	id: string;
+	/** 가격표 설명 부분 가격 카드별 높이 저장 필요 */
+	detailHeight: number;
 }
+/** 가격 카드 영역 */
+type PriceModalState = {
+	/** 가격 카드 영역: 인원별 할인 유무 */
+	isCheckPerPerson: boolean;
+	/** 가격 카드 영역: 인원별 할인율 설정 내용[배열] */
+	headDiscount: HeadDiscountItem[];
+	/** 가격 카드 영역: 연간 할인 유무 */
+	isCheckPerYear: boolean;
+	/** 가격 카드 영역: 연간 할인율 */
+	yearDiscountRate: number;
+	/** 가격 카드 영역: 카드 설정 유무 */
+	isCardSet: boolean;
+	/** 가격 카드 영역에서 패딩 높이 저장 필요(연간 월간할인 토글, 사용자수 입력 부분과 가격 카드영역 사이 패딩) */
+	priceCardAreaPadding: number;
+	/** 가격 카드 별 설명(detail) 부분 높이 중 가장 큰 값 저장 */
+	priceCardDetailMaxHeight: number;
+	/** 특정 카드 강조 표시한 카드 인덱스 */
+	highLightIndex: number;
+	/** 가격 카드 영역: 정액제, 정량제 구분 */
+	pricing: string;
+	/** 가격 카드 영역: 특정 가격 카드 강조 유무 */
+	isCardHighLight: boolean;
+	/** 가격 카드 영역: 가격 카드의 최대 높이(가격 카드들의 높이 통일 위함) */
+	cardMaxHeight: string;
+	/** 가격 카드 영역: 가격 카드 배열  */
+	priceCard: PriceCard[];
+
+	// ↓ api에서 사용 안함 ↓
+	/** 가격 카드 개수 */
+	cardCount: number;
+	/** 월간/연간 토글 버튼 상태 저장 필요, 월간/연간에 따라 가격, 할인율 표시 위함, false -> month, true -> year */
+	monthYearToggle: boolean;
+	/** 사용자 수 입력 값 저장 필요, 가격 카드에서 사용자 수에 따라 가격, 할인율 표시 위함 */
+	userCount: number;
+};
 // updatePriceCard 리듀서에서
 // 카드 정보 업데이트 할 때 사용
 interface PriceCardIndex {
@@ -38,29 +84,6 @@ interface ContentDelete {
 	cardIndex: number;
 	contentIndex: number;
 }
-
-type PriceModalState = {
-	isCardSet: boolean;
-	highLightIndex: number;
-	pricing: string;
-	priceCards: PriceCard[]; // priceCard -> priceCards로 변경(끝에 's' 추가)
-	//priceCardOrder: string[];
-	priceCardAreaPadding: number; // 가격 카드 영역에서 패딩 높이 저장 필요
-	detailMaxHeight: number; // 가격 카드 별 설명 부분 높이 중 가장 큰 값 저장
-	cardCount: number;
-	isCheckPerYear: boolean;
-	isCardHighLight: boolean;
-	yearDiscountRate: number;
-	isCheckPerPerson: boolean;
-	headDiscount: HeadDiscountItem[];
-	cardMaxHeight: string;
-	// 월간/연간 토글 버튼 상태 저장 필요
-	// 월간/연간에 따라 가격, 할인율 표시 위함
-	monthYearToggle: boolean; // false: month, true: year
-	// 사용자 수 입력 값 저장 필요
-	// 가격 카드에서 사용자 수에 따라 가격, 할인율 표시 위함
-	userCount: number;
-};
 type HeadDiscountItem = {
 	headCount: number;
 	discountRate: number;
@@ -73,7 +96,7 @@ type TierDiscountItem = {
 const initialState: PriceModalState = {
 	isCardSet: false,
 	pricing: '정액제',
-	priceCards: [
+	priceCard: [
 		{
 			id: uuidv4(),
 			title: '가격제 이름',
@@ -86,7 +109,7 @@ const initialState: PriceModalState = {
 		},
 	],
 	priceCardAreaPadding: 10,
-	detailMaxHeight: 30,
+	priceCardDetailMaxHeight: 30,
 	highLightIndex: 0,
 	cardCount: 0,
 	isCheckPerYear: false,
@@ -205,7 +228,7 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<PriceCard[]>,
 		) => {
-			return { ...state, priceCards: action.payload };
+			return { ...state, priceCard: action.payload };
 		},
 
 		/** 가격 카드 설정 여부 토글 */
@@ -218,22 +241,22 @@ export const priceModalSlice = createSlice({
 			return { ...state, isCardSet: action.payload };
 		},
 
-		// 티어별 price, discountRate를 priceCards에 직접 입력하기 위한 리듀서
+		// 티어별 price, discountRate를 priceCard에 직접 입력하기 위한 리듀서
 		/** 가격 설정 모달에서 티어 별 가격, 할인율 입력 값 가져오기 */
 		getTierInput: (
 			state: PriceModalState,
 			action: PayloadAction<TierInput>,
 		) => {
-			const newPriceCards = [...state.priceCards];
-			newPriceCards[action.payload.index] = Object.assign(
+			const newPriceCard = [...state.priceCard];
+			newPriceCard[action.payload.index] = Object.assign(
 				{},
-				newPriceCards[action.payload.index],
+				newPriceCard[action.payload.index],
 				{
 					price: action.payload.price,
 					discountRate: action.payload.discountRate,
 				},
 			);
-			return Object.assign({}, state, { priceCards: newPriceCards });
+			return Object.assign({}, state, { priceCard: newPriceCard });
 		},
 
 		/** 가격 카드 추가하기 */
@@ -249,12 +272,12 @@ export const priceModalSlice = createSlice({
 				feature: '',
 				content: [],
 			};
-			const currentPriceCards = [...state.priceCards];
-			currentPriceCards.push(initialPriceCard);
-			const currentCardCount = currentPriceCards.length;
+			const currentPriceCard = [...state.priceCard];
+			currentPriceCard.push(initialPriceCard);
+			const currentCardCount = currentPriceCard.length;
 			return Object.assign({}, state, {
 				cardCount: currentCardCount,
-				priceCards: currentPriceCards,
+				priceCard: currentPriceCard,
 			});
 		},
 
@@ -263,9 +286,9 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<PriceCard[]>, // 카드 아이디 배열(priceCardOrder)
 		) => {
-			const changePriceCards: PriceCard[] = action.payload;
+			const changePriceCard: PriceCard[] = action.payload;
 			return Object.assign({}, state, {
-				priceCards: changePriceCards,
+				priceCard: changePriceCard,
 			});
 		},
 
@@ -274,14 +297,14 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<PriceCardIndex>, // 카드 정보(선택된 1개)
 		) => {
-			const newPriceCards = [...state.priceCards];
-			newPriceCards[action.payload.index] = action.payload.card;
+			const newPriceCard = [...state.priceCard];
+			newPriceCard[action.payload.index] = action.payload.card;
 			const maxHeight = Math.max(
-				...newPriceCards.map((card) => Number(card.detailHeight)),
+				...newPriceCard.map((card) => Number(card.detailHeight)),
 			);
 			return Object.assign({}, state, {
-				priceCards: newPriceCards,
-				detailMaxHeight: maxHeight,
+				priceCard: newPriceCard,
+				priceCardDetailMaxHeight: maxHeight,
 			});
 		},
 
@@ -290,7 +313,7 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<number>, // 카드의 인덱스: number 넘겨받음
 		) => {
-			state.priceCards[action.payload].content.push('');
+			state.priceCard[action.payload].content.push('');
 		},
 
 		/** 가격 카드 content 부분 업데이트하기 */
@@ -298,7 +321,7 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<ContentData>,
 		) => {
-			state.priceCards[action.payload.cardIndex].content[
+			state.priceCard[action.payload.cardIndex].content[
 				action.payload.contentIndex
 			] = action.payload.contentData;
 		},
@@ -308,12 +331,12 @@ export const priceModalSlice = createSlice({
 			state: PriceModalState,
 			action: PayloadAction<number>, // 카드 아이디(선택된 1개)
 		) => {
-			const newPriceCards = [...state.priceCards];
-			const spliceCards = newPriceCards.splice(action.payload, 1);
-			const currentCardCount = newPriceCards.length;
+			const newPriceCard = [...state.priceCard];
+			const spliceCards = newPriceCard.splice(action.payload, 1);
+			const currentCardCount = newPriceCard.length;
 			return Object.assign({}, state, {
 				cardCount: currentCardCount,
-				priceCards: newPriceCards,
+				priceCard: newPriceCard,
 			});
 		},
 
@@ -323,13 +346,13 @@ export const priceModalSlice = createSlice({
 			action: PayloadAction<ContentDelete>,
 		) => {
 			const contentArr = Array.from(
-				state.priceCards[action.payload.cardIndex].content,
+				state.priceCard[action.payload.cardIndex].content,
 			);
 			const spliceContentArr = contentArr.splice(
 				action.payload.contentIndex,
 				1,
 			);
-			state.priceCards[action.payload.cardIndex].content = contentArr;
+			state.priceCard[action.payload.cardIndex].content = contentArr;
 		},
 
 		/** 가격 카드 영역 패딩 값 업데이트하기 */

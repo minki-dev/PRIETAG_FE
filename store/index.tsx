@@ -9,19 +9,17 @@ import priceModalReducer from './slice/priceModalSlice';
 import faqSliceReducer from './slice/faqSlice';
 import monthYearToggleReducer from './slice/monthYearToggleSlice';
 import configReducer from './slice/configSlice';
-import priceCardReducer from './slice/priceCardSlice';
 import dashboardReducer from './slice/dashboardSlice';
 import versionListReducer from './slice/versionListSlice';
 import uploadModalReducer from './slice/uploadModalSlice';
 import templateReducer from './slice/templateSlice';
 import versionReducer from './slice/versionSlice';
-import authReducer from './slice/authSlice'
+import authReducer from './slice/authSlice';
 
 const logger = createLogger();
 
 const rootReducer = combineReducers({
 	modal: modalReducer,
-	priceCard: priceCardReducer,
 	featureTable: featureTableReducer,
 	faq: faqSliceReducer,
 	dndBox: DNDBoxReducer,

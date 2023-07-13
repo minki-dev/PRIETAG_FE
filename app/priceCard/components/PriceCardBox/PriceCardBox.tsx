@@ -31,7 +31,7 @@ function PriceCardBox() {
 	const { isPreview, previewMode, color } = configState;
 
 	const reorder = (startIndex: number, endIndex: number) => {
-		const result = Array.from(priceModal.priceCards);
+		const result = Array.from(priceModal.priceCard);
 		const [removed] = result.splice(startIndex, 1);
 		result.splice(endIndex, 0, removed);
 
@@ -46,12 +46,12 @@ function PriceCardBox() {
 	};
 
 	const handleAddCard = () => {
-		if (priceModal.priceCards.length > 3) return;
+		if (priceModal.priceCard.length > 3) return;
 
 		priceModalDispatch(addPriceCard());
 		featureTableDispatch(addColumn());
 	};
-	// console.log(priceModal.priceCards);
+	// console.log(priceModal.priceCard);
 	const cardBoxHeightRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -84,9 +84,9 @@ function PriceCardBox() {
 							} 
 							`}
 						>
-							{!priceModal.priceCards
+							{!priceModal.priceCard
 								? null
-								: priceModal.priceCards.map((card, index) => (
+								: priceModal.priceCard.map((card, index) => (
 										<Draggable
 											key={card.id}
 											draggableId={card.id}
@@ -112,7 +112,7 @@ function PriceCardBox() {
 					)}
 				</Droppable>
 			</DragDropContext>
-			{priceModal.priceCards.length > 3 ? null : (
+			{priceModal.priceCard.length > 3 ? null : (
 				<button type="button" onClick={handleAddCard}>
 					<AddCardButton />
 				</button>

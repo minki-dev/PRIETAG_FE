@@ -1,90 +1,142 @@
 'use client';
 
-import Footer from '@/components/footer/Footer';
-import Header from '@/components/header/Header';
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import MoreDropDown from './components/MoreDropDown';
-import ViewDropDown from './components/ViewDropDown';
-import ToggleDropDown from './components/ToggleDropDown';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { toggleMoreIsClicked } from '@/store/slice/templateSlice';
 import { TemplateItem } from '@/constants/template';
-import { useCookies } from 'react-cookie';
+import Link from 'next/link';
+
+import { getTemplateList } from '@/app/api/auth/templateList/templateList';
+import { createTemplate } from '@/app/api/auth/template/template';
+
+import Footer from '@/components/footer/Footer';
+import Header from '@/components/header/Header';
+import Image from 'next/image';
+import MoreDropDown from './components/MoreDropDown';
+import ViewDropDown from './components/ViewDropDown';
+import ToggleDropDown from './components/ToggleDropDown';
 import Pagination from './components/Pagination';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
 	const router = useRouter();
-	const dispatch = useDispatch();
+
 	const [templates, setTemplates] = useState<TemplateItem[]>([]);
 	const [sortStandard, setSortStandard] = useState<string>('정렬기준');
 	const [currentPage, setCurrentPage] = useState<number>(0);
 	const [totalPages, setTotalPages] = useState<number>(0);
 	const handleMoreClick = (id: number) => {
-		dispatch(toggleMoreIsClicked({ id }));
-	};
-
-	const fetchData = async (currentPage: number) => {
-		try {
-			const res = await fetch(
-				`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
-				{
-					method: 'GET',
-					headers: {
-						Authorization: `Bearer ${cookies.accessToken}`,
-					},
-				},
-			);
-
-			const data = await res.json();
-			const pageCount = data.data.totalCount;
-			const fetchedTemplates = data.data.template;
-			setTemplates(fetchedTemplates);
-			setTotalPages(Math.ceil(pageCount / 9));
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	const fetchTemplateHistory = async (id: number) => {
-		try {
-			const res = await fetch(
-				`https://ezfee.site/api/templates/${id}?page=0&pageSize=10`,
-				{
-					method: 'GET',
-					headers: {
-						Authorization: `Bearer ${cookies.accessToken}`,
-					},
-				},
-			);
-			const data = await res.json();
-		} catch (err) {
-			console.log(err);
-		}
-	};
-	const onSortByName = (): void => {
-		const sorted: TemplateItem[] = [...templates].sort((a, b) => {
-			if (a.title.toLowerCase() < b.title.toLowerCase()) {
-				return -1;
-			}
-			if (a.title.toLowerCase() > b.title.toLowerCase()) {
-				return 1;
-			}
-			return 0;
+		setTemplates((prev) => {
+			return prev.map((item) => {
+				if (item.id === id) item.moreIsClicked = !item.moreIsClicked;
+				return item
+			});
 		});
-		setTemplates(sorted);
-	};
-	const onFinalEditDate = (currentPage: number) => {
-		fetchData(currentPage);
 	};
 
-	const [cookies] = useCookies(['accessToken']);
+	const handleNewTemplateBtn = async () => {
+		await createTemplate();
+		router.push('/editTemplate');
+	};
 
 	useEffect(() => {
-		fetchData(currentPage);
+		const fetchData = async () => {
+			const { totalCount, template } = await getTemplateList({
+				pageNumber: currentPage,
+				pageSize: 9,
+			});
+
+			if (template.length > 0) {
+				const templateData: TemplateItem[] = template.map(
+					(template: {
+						id: number;
+						title: string;
+						updated_at: string;
+						image: string;
+					}) => {
+						return { ...template, moreIsClicked: false };
+					},
+				);
+				// dispatch(updateTemplateList(templateData));
+				setTemplates(templateData);
+				setTotalPages(Math.ceil(totalCount / 9));
+			}
+		};
+
+		fetchData();
 	}, [currentPage]);
+	// const fetchData = async (currentPage: number) => {
+	// 	try {
+	// 		const res = await fetch(
+	// 			`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
+	// 			{
+	// 				method: 'GET',
+	// 				headers: {
+	// 					Authorization: `Bearer ${cookies.accessToken}`,
+	// 				},
+	// 			},
+	// 		);
+
+	// 		const data = await res.json();
+	// 		const pageCount = data.data.totalCount;
+	// 		const fetchedTemplates = data.data.template;
+	// 		setTemplates(fetchedTemplates);
+	// 		setTotalPages(Math.ceil(pageCount / 9));
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
+
+	// const fetchTemplateHistory = async (id: number) => {
+	// 	try {
+	// 		const res = await fetch(
+	// 			`https://ezfee.site/api/templates/${id}?page=0&pageSize=10`,
+	// 			{
+	// 				method: 'GET',
+	// 				headers: {
+	// 					Authorization: `Bearer ${cookies.accessToken}`,
+	// 				},
+	// 			},
+	// 		);
+	// 		const data = await res.json();
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// };
+	const onSortByName = () => {
+		setTemplates((prev) =>
+			[...prev].sort((a, b) => {
+				if (a.title.toLowerCase() < b.title.toLowerCase()) {
+					return -1;
+				}
+				if (a.title.toLowerCase() > b.title.toLowerCase()) {
+					return 1;
+				}
+				return 0;
+			}),
+		);
+	};
+	const onFinalEditDate = () => {
+		setTemplates((prev) =>
+			[...prev].sort((a, b) => {
+				if (
+					new Date(formatDate(a.updated_at)) <
+					new Date(formatDate(b.updated_at))
+				) {
+					return -1;
+				}
+				if (
+					new Date(formatDate(a.updated_at)) >
+					new Date(formatDate(b.updated_at))
+				) {
+					return 1;
+				}
+				return 0;
+			}),
+		);
+	};
+
 	return (
 		<>
 			<Header />
@@ -106,9 +158,7 @@ export default function TemplateList() {
 			<div className="h-full  w-full   bg-[#F7F8FC] px-[240px] pb-[240px] pt-[80px]">
 				<div className="flex h-[120px] w-full min-w-[900px] items-center  justify-between">
 					<button
-						onClick={() => {
-							router.push('/editTemplate');
-						}}
+						onClick={handleNewTemplateBtn}
 						className="  flex h-[58px]  w-[262px] justify-around rounded-[10px] border border-stone-300 bg-white p-4"
 					>
 						<div>
@@ -117,7 +167,7 @@ export default function TemplateList() {
 								src="/img/edit.svg"
 								width={24}
 								height={24}
-								className=" object-cover "
+								className="object-cover "
 								alt="연필아이콘"
 							/>{' '}
 						</div>
@@ -129,7 +179,7 @@ export default function TemplateList() {
 								src="/img/create.svg"
 								width={24}
 								height={24}
-								className=" object-cover "
+								className="object-cover "
 								alt="생성아이콘"
 							/>{' '}
 						</div>
@@ -157,15 +207,16 @@ export default function TemplateList() {
 				</div>
 				<div className=" grid min-w-[900px] grid-cols-[repeat(3,minmax(100px,413px))] grid-rows-[repeat(3,minmax(100px,327px))] justify-evenly gap-[80px] ">
 					{templates &&
-						templates.map((item: TemplateItem, index: number) => (
-							<div
+						templates.map((item: TemplateItem) => (
+							<Link
 								key={item.id}
 								className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
-								onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-									e.stopPropagation();
-									console.log(item.id);
-									fetchTemplateHistory(item.id);
-								}}
+								// onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+								// 	e.stopPropagation();
+								// 	console.log(item.id);
+								// 	fetchTemplateHistory(item.id);
+								// }}
+								href={`/templateList/${item.id}`}
 							>
 								<div className="h-[72px] p-[24px]"></div>
 								<div className="flex h-[calc(100%-72px-112px)] items-center justify-center">
@@ -203,11 +254,27 @@ export default function TemplateList() {
 									</button>
 									{item.moreIsClicked ? <MoreDropDown /> : null}
 								</div>
-							</div>
+							</Link>
 						))}
 				</div>{' '}
 				<div className="relative flex h-[168px] w-full justify-center">
 					<div className="flex items-center">
+						<button>
+							<Image
+								src="/img/page_first.svg"
+								alt="처음으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
+						<button>
+							<Image
+								src="/img/page_pre.svg"
+								alt="이전으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
 						<nav className="flex">
 							<Pagination
 								setCurrentPage={setCurrentPage}
@@ -215,6 +282,22 @@ export default function TemplateList() {
 								totalPages={totalPages}
 							/>
 						</nav>
+						<button>
+							<Image
+								src="/img/page_next.svg"
+								alt="다음으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
+						<button>
+							<Image
+								src="/img/page_end.svg"
+								alt="마지막으로"
+								width={40}
+								height={40}
+							/>{' '}
+						</button>
 					</div>
 				</div>
 			</div>
@@ -222,4 +305,13 @@ export default function TemplateList() {
 			<Footer />
 		</>
 	);
+}
+
+function formatDate(dateString: string) {
+	var dateParts = dateString.split('.');
+	var year = dateParts[0];
+	var month = dateParts[1];
+	var day = dateParts[2];
+
+	return year + '-' + month + '-' + day;
 }

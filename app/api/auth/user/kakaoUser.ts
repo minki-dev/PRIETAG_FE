@@ -17,7 +17,7 @@ export const login = async (code: string) => {
 		const authorizationToken =
 			res.headers.get('authorization')?.slice('bearer '.length) || '';
 		document.cookie = `accessToken=${authorizationToken}; path=/; max-age=${60 * 60}; sameSite=Strict`;
-
+		console.log(authorizationToken)
 		return res.json();
 	} catch (err) {
 		console.error('API 요청 실패:', err);

@@ -4,7 +4,7 @@ import { authHeader } from "../../api";
 export const createTemplate = async () => {
   try {
 		const res = await fetch(`https://ezfee.site/api/template/history`, {
-			method: 'PATCH',
+			method: 'POST',
 			credentials: 'include',
 			headers: {
 				Authorization: authHeader.authroization,

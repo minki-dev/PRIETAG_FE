@@ -15,7 +15,7 @@ function ViewDropDown({
 	setViewIsClicked,
 	currentPage,
 }: Props) {
-	const handleClick = (e) => {
+	const handleClick = (e: React.MouseEvent<HTMLLIElement>) => {
 		e.stopPropagation();
 		setViewIsClicked(false);
 	};

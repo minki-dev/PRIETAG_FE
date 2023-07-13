@@ -11,7 +11,7 @@ type Props = Pick<VersionHistoryState, 'havePublish' | 'versions' | 'isAllChecke
 
 function TableList({ havePublish, versions, isAllChecked, id }: Props) {
 	const dispatch = useDispatch();
-
+ 
 
 
 	return (

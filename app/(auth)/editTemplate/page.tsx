@@ -1,21 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import {
-	PriceCard,
-	setPriceCard,
-	setYearDiscount,
-	updateCardCount,
-	updateHeadDiscount,
-	usePriceModal,
-} from '@/store/slice/priceModalSlice';
+import React, { useEffect, useState } from 'react';
+import { usePriceModal } from '@/store/slice/priceModalSlice';
 
 import FAQ from './components/FAQ';
 import PriceModal from './components/PriceModal/PriceModal';
-// import { testCard } from './components/Test';
 import RightMenu from './components/RightMenu';
-import { FAQCard, useFAQ } from '@/store/slice/faqSlice';
-import { set } from 'react-hook-form';
 import DraggableArea from './components/DraggableArea';
 import Table from './components/Table/Table';
 import {
@@ -23,22 +13,16 @@ import {
 	togglePriceModal,
 	useConfig,
 } from '@/store/slice/configSlice';
+
 import TableContainer from './components/Table/TableContainer';
-import { useModal } from '@/store/slice/modalSlice';
 import Header from '@/components/header/Header';
-import TemplateHeader from '@/components/header/TemplateHeader';
-import PaddingBox from './components/DraggableArea/PaddingBox';
 import ResizablePaddingWithHandle from '@/components/ResizablePaddingWithHandle';
 import { updateHeight, useDNDBox } from '@/store/slice/DNDBoxSlice';
-import debounce from 'lodash.debounce';
 import { GlobalModal } from '@/components/modal/GlobalModal';
 import ColorModal from './components/ColorModal/ColorModal';
-import Footer from '@/components/footer/Footer';
 import OnBoardingModal from './components/OnBoardingModal/OnBoardingModal';
 import NoResponsiveFooter from '@/components/footer/NoResponsiveFooter';
 import UploadModal from './components/UploadModal/UploadModal';
-import PriceCardBox from '@/app/priceCard/components/PriceCardBox/PriceCardBox';
-import DiscountOptionBox from '@/app/priceCard/components/DiscountOptionBox/DiscountOptionBox';
 
 export default function EditTemplate() {
 	const [isModalOpen, setIsModalOpen] = useState(false);

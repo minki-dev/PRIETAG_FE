@@ -1,21 +1,11 @@
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import React from 'react';
 import Subheader from '../components/Subheader';
 import ReturnToList from '../components/ReturnToList';
 import SearchInput from '../components/SearchInput';
-
-
 import TableListSection from '../components/TableListSection';
 
-export interface Post {
-	id: number;
-	title: string;
-	updated_at: string;
-	isChecked: boolean;
-}
-
-export default async function Edit({
+export default async function Template({
 	params: { id },
 }: {
 	params: { id: string };

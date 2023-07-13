@@ -7,9 +7,13 @@ import FAQ from './components/FAQ';
 import PriceModal from './components/PriceModal/PriceModal';
 import RightMenu from './components/RightMenu';
 import DraggableArea from './components/DraggableArea';
-import { toggleOnBoardingModal, useConfig } from '@/store/slice/configSlice';
-import PriceCardBox from '../../priceCard/components/PriceCardBox/PriceCardBox';
-import DiscountOptionBox from '../../priceCard/components/DiscountOptionBox/DiscountOptionBox';
+import Table from './components/Table/Table';
+import {
+	toggleOnBoardingModal,
+	togglePriceModal,
+	useConfig,
+} from '@/store/slice/configSlice';
+
 import TableContainer from './components/Table/TableContainer';
 import Header from '@/components/header/Header';
 import ResizablePaddingWithHandle from '@/components/ResizablePaddingWithHandle';

@@ -30,11 +30,11 @@ function PriceCardContent({
 	// }, []);
 
 	const [contentEl, setContentEl] = useState(
-		priceModal.priceCards[cardIndex].content[contentIndex],
+		priceModal.priceCard[cardIndex].content[contentIndex],
 	);
 	// useEffect(() => {
-	// 	setContentEl(priceModal.priceCards[cardIndex].content[contentIndex]);
-	// }, [priceModal.priceCards[cardIndex].content[contentIndex]]);
+	// 	setContentEl(priceModal.priceCard[cardIndex].content[contentIndex]);
+	// }, [priceModal.priceCard[cardIndex].content[contentIndex]]);
 
 	const inputHandle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		if (contentRef.current) {
@@ -54,6 +54,20 @@ function PriceCardContent({
 			}),
 		);
 	};
+
+	// useEffect(() => {
+	// 	setTimeout(
+	// 		() =>
+	// 			dispatch(
+	// 				updateContent({
+	// 					cardIndex,
+	// 					contentIndex,
+	// 					contentData: contentEl,
+	// 				}),
+	// 			),
+	// 		10000,
+	// 	);
+	// }, [contentEl]);
 
 	const deleteHandle = () => {
 		setContentEl('');

@@ -74,7 +74,7 @@ export default function PriceModalForm({}: {}) {
 	const { priceModal, dispatch: priceDispatch } = usePriceModal();
 	const { configState, dispatch: configDispatch } = useConfig();
 	const [isChecked, setIsChecked] = useState(
-		Array.from({ length: 4 }, (_, i) => i < priceModal.priceCards.length),
+		Array.from({ length: 4 }, (_, i) => i < priceModal.priceCard.length),
 	);
 
 	function countItem<T>(arr: T[], target: T): number {
@@ -91,7 +91,7 @@ export default function PriceModalForm({}: {}) {
 		if (updatedChecked[index]) {
 			priceDispatch(addPriceCard());
 		} else {
-			if (index > priceModal.priceCards.length - 1) {
+			if (index > priceModal.priceCard.length - 1) {
 				priceDispatch(deletePriceCard(countItem(isChecked, true) - 1));
 			}
 			priceDispatch(deletePriceCard(index));
@@ -101,12 +101,12 @@ export default function PriceModalForm({}: {}) {
 	const [tierInputValues, setTierInputValues] = useState<
 		Array<{ price: string; discountRate: string }>
 	>(() => {
-		const initialValues = priceModal.priceCards.map((card) => ({
+		const initialValues = priceModal.priceCard.map((card) => ({
 			price: String(card.price),
 			discountRate: String(card.discountRate),
 		}));
 
-		// priceModal.priceCards의 길이가 4 미만인 경우 기본값 추가
+		// priceModal.priceCard의 길이가 4 미만인 경우 기본값 추가
 		if (initialValues.length < 4) {
 			const defaultValues = Array(4 - initialValues.length).fill({
 				price: '',
@@ -172,7 +172,7 @@ export default function PriceModalForm({}: {}) {
 			.map((checked, index) => (checked ? tierInputValues[index] : null)) // 체크된 인덱스에 해당하는 값 유지, 체크되지 않은 인덱스에는 null로 설정
 			.filter((value) => value !== null); // null인 항목들을 제외하고 유효한 값만 필터링
 
-		const updatedCard = priceModal.priceCards.map((card, index) => {
+		const updatedCard = priceModal.priceCard.map((card, index) => {
 			if (checkedValues[index]) {
 				return {
 					...card,

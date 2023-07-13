@@ -11,7 +11,7 @@ export default function TableVersionData({
 	_publishing,
 	isChecked,
 }: VersionHistoryType) {
-
+ 
 	const dispatch = useDispatch()
 	return (
 		<tr className="flex h-[81px] w-full cursor-pointer items-center justify-between border-t-[1px] px-[16px]  text-[#747474] hover:bg-[#c8e5f4]">

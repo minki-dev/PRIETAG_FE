@@ -5,25 +5,23 @@ import { useRouter } from 'next/navigation';
 import { TemplateItem } from '@/constants/template';
 import Link from 'next/link';
 
-import { getTemplateList } from '@/app/api/auth/templateList/templateList';
-import { createTemplate } from '@/app/api/auth/template/template';
-
 import Footer from '@/components/footer/Footer';
-import Header from '@/components/header/Header';
 import Image from 'next/image';
 import MoreDropDown from './components/MoreDropDown';
 import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
 import Pagination from './components/Pagination';
+import { useCookies } from 'react-cookie';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
-	const router = useRouter();
-
 	const [templates, setTemplates] = useState<TemplateItem[]>([]);
 	const [sortStandard, setSortStandard] = useState<string>('정렬기준');
 	const [currentPage, setCurrentPage] = useState<number>(0);
 	const [totalPages, setTotalPages] = useState<number>(0);
+
+	const router = useRouter();
+
 	const handleMoreClick = (
 		id: number,
 		e: React.MouseEvent<HTMLButtonElement>,
@@ -38,74 +36,9 @@ export default function TemplateList() {
 	};
 
 	const handleNewTemplateBtn = async () => {
-		await createTemplate();
 		router.push('/editTemplate');
 	};
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const { totalCount, template } = await getTemplateList({
-				pageNumber: currentPage,
-				pageSize: 9,
-			});
-
-			if (template.length > 0) {
-				const templateData: TemplateItem[] = template.map(
-					(template: {
-						id: number;
-						title: string;
-						updated_at: string;
-						image: string;
-					}) => {
-						return { ...template, moreIsClicked: false };
-					},
-				);
-				// dispatch(updateTemplateList(templateData));
-				setTemplates(templateData);
-				setTotalPages(Math.ceil(totalCount / 9));
-			}
-		};
-
-		fetchData();
-	}, [currentPage]);
-	// const fetchData = async (currentPage: number) => {
-	// 	try {
-	// 		const res = await fetch(
-	// 			`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
-	// 			{
-	// 				method: 'GET',
-	// 				headers: {
-	// 					Authorization: `Bearer ${cookies.accessToken}`,
-	// 				},
-	// 			},
-	// 		);
-
-	// 		const data = await res.json();
-	// 		const pageCount = data.data.totalCount;
-	// 		const fetchedTemplates = data.data.template;
-	// 		setTemplates(fetchedTemplates);
-	// 		setTotalPages(Math.ceil(pageCount / 9));
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
-
-	// const fetchTemplateHistory = async (id: number) => {
-	// 	try {
-	// 		const res = await fetch(
-	// 			`https://ezfee.site/api/templates/${id}?page=0&pageSize=10`,
-	// 			{
-	// 				method: 'GET',
-	// 				headers: {
-	// 					Authorization: `Bearer ${cookies.accessToken}`,
-	// 				},
-	// 			},
-	// 		);
-	// 		const data = await res.json();
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
 	const onSortByName = () => {
 		setTemplates((prev) =>
 			[...prev].sort((a, b) => {
@@ -138,10 +71,50 @@ export default function TemplateList() {
 			}),
 		);
 	};
+	const [cookie, setCookie] = useCookies();
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const res = await fetch(
+					`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
+					{
+						method: 'GET',
+						credentials: 'include',
+						headers: {
+							Authorization: cookie['accessToken'],
+						},
+					},
+				);
+				const {
+					data: { totalCount, template },
+				} = await res.json();
+				if (template.length > 0) {
+					const templateData: TemplateItem[] = template.map(
+						(template: {
+							id: number;
+							title: string;
+							updated_at: string;
+							image: string;
+						}) => {
+							return { ...template, moreIsClicked: false };
+						},
+					);
+					setTemplates(templateData);
+					setTotalPages(Math.ceil(totalCount / 9));
+				}
+			} catch (err) {
+				console.log(err);
+			}
+			// const { totalCount, template } = await getTemplateList({
+			// 	pageNumber: currentPage,
+			// 	pageSize: 9,
+			// });
+		};
 
+		fetchData();
+	}, [currentPage]);
 	return (
 		<>
-			<Header />
 			<div className=" flex min-h-[324px] w-full min-w-[602px] flex-col justify-center bg-[url('/img/splash.svg')] px-[240px]">
 				<div className="mt-[72px] min-w-[602px] text-[32px] font-bold text-black">
 					가격 정책표 리스트
@@ -213,11 +186,6 @@ export default function TemplateList() {
 							<Link
 								key={item.id}
 								className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
-								// onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-								// 	e.stopPropagation();
-								// 	console.log(item.id);
-								// 	fetchTemplateHistory(item.id);
-								// }}
 								href={`/templateList/${item.id}`}
 							>
 								<div className="h-[72px] p-[24px]"></div>

@@ -8,7 +8,7 @@ import Pagination from '../components/Pagination';
 import { useDispatch } from 'react-redux';
 import { VersionHistoryType, setCurrentPage, setVersions } from '@/store/slice/versionSlice';
 import { getVersionTemplateList } from '@/app/api/auth/templateList/templateList';
-
+ 
 export default function TableListSection({ id }: { id: string }) {
 	const {
 		versions,

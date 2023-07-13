@@ -30,7 +30,9 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"commitlint.config.js",
-		"store/slice/configSlice.tsx"
+		"store/slice/configSlice.tsx",
+		"app/not-found.js",
+		"app/404.js"
 	],
 	"exclude": ["node_modules"]
 }

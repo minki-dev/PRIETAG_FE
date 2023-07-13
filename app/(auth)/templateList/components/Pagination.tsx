@@ -1,12 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
 
+interface PaginationProps {
+	setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+	currentPage: number;
+	totalPages: number;
+}
+
 const Pagination = ({
 	setCurrentPage,
 	currentPage,
 	totalPages,
-	onPageChange,
-}) => {
+}: PaginationProps) => {
 	const pageNumbers = [];
 
 	for (let i = 1; i <= totalPages; i++) {
@@ -39,7 +44,7 @@ const Pagination = ({
 				<li
 					key={index}
 					onClick={() => {
-						console.log(index);
+						setCurrentPage(index);
 					}}
 					className={`flex h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-full ${
 						index === currentPage ? 'bg-[#00A3FF] text-white' : 'bg-transparent'

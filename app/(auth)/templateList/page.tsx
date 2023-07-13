@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { toggleMoreIsClicked } from '@/store/slice/templateSlice';
 import { TemplateItem } from '@/constants/template';
-import { RootState } from '@/store';
 import { useCookies } from 'react-cookie';
 import Pagination from './components/Pagination';
 
@@ -20,9 +19,9 @@ export default function TemplateList() {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const [templates, setTemplates] = useState<TemplateItem[]>([]);
-	const [sortStandard, setSortStandard] = useState('정렬기준');
-	const [currentPage, setCurrentPage] = useState(0);
-	const [totalPages, setTotalPages] = useState(0);
+	const [sortStandard, setSortStandard] = useState<string>('정렬기준');
+	const [currentPage, setCurrentPage] = useState<number>(0);
+	const [totalPages, setTotalPages] = useState<number>(0);
 	const handleMoreClick = (id: number) => {
 		dispatch(toggleMoreIsClicked({ id }));
 	};
@@ -34,7 +33,7 @@ export default function TemplateList() {
 				{
 					method: 'GET',
 					headers: {
-						Authorization: `Bearer ${cookies.authorizationToken}`,
+						Authorization: `Bearer ${cookies.accessToken}`,
 					},
 				},
 			);
@@ -56,12 +55,11 @@ export default function TemplateList() {
 				{
 					method: 'GET',
 					headers: {
-						Authorization: `Bearer ${cookies.authorizationToken}`,
+						Authorization: `Bearer ${cookies.accessToken}`,
 					},
 				},
 			);
 			const data = await res.json();
-			const fetchedTemplateVersions = data.data;
 		} catch (err) {
 			console.log(err);
 		}
@@ -76,17 +74,13 @@ export default function TemplateList() {
 			}
 			return 0;
 		});
-		// console.log(sorted);
 		setTemplates(sorted);
 	};
-	const onFinalEditDate = (currentPage) => {
+	const onFinalEditDate = (currentPage: number) => {
 		fetchData(currentPage);
 	};
-	const onPageChange = (pageNumber) => {
-		setCurrentPage(pageNumber);
-		fetchData(pageNumber);
-	};
-	const [cookies] = useCookies(['authorizationToken']);
+
+	const [cookies] = useCookies(['accessToken']);
 
 	useEffect(() => {
 		fetchData(currentPage);
@@ -168,7 +162,6 @@ export default function TemplateList() {
 								key={item.id}
 								className="border-[#E0E0E0 ]   box-border  cursor-pointer  rounded-[16px] border-[1px]  bg-white outline-8 outline-offset-0 outline-[#9CDCFF] hover:outline"
 								onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-									// router.push('/templateList/edit');
 									e.stopPropagation();
 									console.log(item.id);
 									fetchTemplateHistory(item.id);
@@ -220,7 +213,6 @@ export default function TemplateList() {
 								setCurrentPage={setCurrentPage}
 								currentPage={currentPage}
 								totalPages={totalPages}
-								onPageChange={onPageChange}
 							/>
 						</nav>
 					</div>

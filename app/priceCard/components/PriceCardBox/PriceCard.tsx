@@ -38,33 +38,34 @@ function PriceCard({
 
 	// priceCard 전체 정보
 	const [priceCardInfoEl, setPriceCardInfoEl] = React.useState(
-		priceModal.priceCards[cardIndex],
+		priceModal.priceCard[cardIndex],
 	);
 	useEffect(() => {
-		setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
+		setPriceCardInfoEl(priceModal.priceCard[cardIndex]);
 	}, [
-		priceModal.priceCards[cardIndex].price,
-		priceModal.priceCards[cardIndex].discountRate,
-		//priceModal.priceCards[cardIndex].content,
+		priceModal.priceCard[cardIndex].price,
+		priceModal.priceCard[cardIndex].discountRate,
+		//priceModal.priceCard[cardIndex].content,
 		priceModal.pricing,
 	]);
 
 	// priceCard의 content부분
 	const [priceCardContentEl, setPriceCardContentEl] = React.useState(
-		priceModal.priceCards[cardIndex].content,
+		priceModal.priceCard[cardIndex].content,
 	);
 	useEffect(() => {
-		setPriceCardContentEl(priceModal.priceCards[cardIndex].content);
-	}, [priceModal.priceCards[cardIndex].content]);
+		setPriceCardContentEl(priceModal.priceCard[cardIndex].content);
+	}, [priceModal.priceCard[cardIndex].content]);
 
 	// detail 부분의 높이
 	const detailRef = React.useRef<HTMLTextAreaElement>(null);
 	useEffect(() => {
 		if (detailRef.current) {
 			detailRef.current.style.height = '30px';
-			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
+			detailRef.current.style.height =
+				priceModal.priceCardDetailMaxHeight + 'px';
 		}
-	}, [priceModal.detailMaxHeight]);
+	}, [priceModal.priceCardDetailMaxHeight]);
 
 	// feature 부분의 높이
 	const featureRef = React.useRef<HTMLTextAreaElement>(null);
@@ -111,7 +112,8 @@ function PriceCard({
 			featureRef.current.style.height = featureRef.current.scrollHeight + 'px';
 		}
 		if (detailRef.current)
-			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
+			detailRef.current.style.height =
+				priceModal.priceCardDetailMaxHeight + 'px';
 	};
 
 	const deleteTitleHandle = () => {
@@ -139,7 +141,8 @@ function PriceCard({
 		);
 		if (detailRef.current) {
 			detailRef.current.style.height = '30px';
-			detailRef.current.style.height = priceModal.detailMaxHeight + 'px';
+			detailRef.current.style.height =
+				priceModal.priceCardDetailMaxHeight + 'px';
 		}
 	};
 
@@ -198,7 +201,7 @@ function PriceCard({
 	]);
 
 	const headDiscountCalc = () => {
-		//setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
+		//setPriceCardInfoEl(priceModal.priceCard[cardIndex]);
 		if (priceModal.pricing === '정량제') {
 			// 정량제일 경우 사용자 수 할인 여부와 관계없이 사용자 수 카운트
 			if (priceModal.isCheckPerPerson) {
@@ -261,7 +264,7 @@ function PriceCard({
 	]);
 
 	const discountCalc = () => {
-		//setPriceCardInfoEl(priceModal.priceCards[cardIndex]);
+		//setPriceCardInfoEl(priceModal.priceCard[cardIndex]);
 		const sumDiscountRate: number =
 			currentTierDiscount + currentYearDiscount + currentHeadDiscount;
 		if (sumDiscountRate > 100) {

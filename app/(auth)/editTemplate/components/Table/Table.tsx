@@ -3,10 +3,7 @@
 import DeleteButton from '@/components/DeleteButton';
 import { ModalTypes } from '@/components/modal/ModalState';
 import { useConfig } from '@/store/slice/configSlice';
-import {
-	openModal,
-	useModal,
-} from '@/store/slice/modalSlice';
+import { openModal, useModal } from '@/store/slice/modalSlice';
 import {
 	addRow,
 	removeRow,
@@ -41,7 +38,7 @@ export default function Table({
 }: TablePropsType) {
 	// @Redux priceModal
 	const {
-		priceModal: { priceCards },
+		priceModal: { priceCard },
 	} = usePriceModal();
 
 	// @Redux featureTable
@@ -74,8 +71,8 @@ export default function Table({
 
 	//	add row on current table
 	const handleAddRow = () => {
-		if (priceCards.length !== 0)
-			tableDispatch(addRow({ featureTableIndex, qty: priceCards.length }));
+		if (priceCard.length !== 0)
+			tableDispatch(addRow({ featureTableIndex, qty: priceCard.length }));
 	};
 
 	// remove row on current table
@@ -83,13 +80,12 @@ export default function Table({
 		tableDispatch(removeRow({ featureTableIndex, rowIndex: idx }));
 	};
 
-
 	//	remove this component, resets after modal confirm click
 	const handleTableRemove = () => {
 		if (featureTableList.length === 1) {
 			const cb = () => {
-				tableDispatch(resetFeatureTable(priceCards.length + 1))
-			}
+				tableDispatch(resetFeatureTable(priceCard.length + 1));
+			};
 			const params = {
 				title: '상세 기능표 섹션 삭제 및 초기화',
 				description:
@@ -102,7 +98,7 @@ export default function Table({
 					behaveButton: {
 						text: '삭제 후 재생성',
 						color: 'bg-[#FF0000]',
-						onAction: cb
+						onAction: cb,
 					},
 				},
 			};
@@ -150,13 +146,15 @@ export default function Table({
 			/>
 
 			<div
-				className={`w-full border-black ${priceCards.length !== 0 && 'border-y-2'}`}
+				className={`w-full border-black ${
+					priceCard.length !== 0 && 'border-y-2'
+				}`}
 			>
-				{priceCards.length !== 0 && featureHeader && (
+				{priceCard.length !== 0 && featureHeader && (
 					<div
 						style={{
 							gridTemplateColumns: `repeat(${
-								priceCards.length + 1
+								priceCard.length + 1
 							}, minmax(0, 1fr))`,
 						}}
 						className={`${
@@ -167,13 +165,13 @@ export default function Table({
 							className="group-hover/header:block"
 							onClick={toggleHeader}
 						/>
-						{priceCards.map((card, index) => {
+						{priceCard.map((card, index) => {
 							return (
 								<div
 									key={uuid()}
 									className={`${!isPreview ? ' bg-gray-300 text-white' : ''} ${
 										index === 0 ? 'col-start-2' : ''
-									} prevent-text-overflow h-10  p-2 text-center w-full text-overflow`}
+									} prevent-text-overflow text-overflow  h-10 w-full p-2 text-center`}
 								>
 									{card.title}
 								</div>
@@ -183,11 +181,11 @@ export default function Table({
 				)}
 				<div className="w-full border-b-2 border-gray-300"></div>
 				<div className="w-full border-b-2 border-gray-300"></div>
-				{priceCards.length !== 0 && featureName && (
+				{priceCard.length !== 0 && featureName && (
 					<div
 						style={{
 							gridTemplateColumns: `repeat(${
-								priceCards.length + 1
+								priceCard.length + 1
 							}, minmax(0, 1fr))`,
 						}}
 						className="grid gap-x-5"
@@ -208,12 +206,12 @@ export default function Table({
 								placeholder={`${!isPreview ? '포함된 기능' : ''}`}
 								disabled={isPreview}
 								onBlur={(e) => setFeatureName(e.target.value)}
-								className="w-full h-full p-2 focus:outline-none disabled:bg-transparent"
+								className="h-full w-full p-2 focus:outline-none disabled:bg-transparent"
 							/>
 						</div>
 					</div>
 				)}
-				{priceCards.length !== 0 &&
+				{priceCard.length !== 0 &&
 					table.map((row, rowIndex) => {
 						return (
 							<div
@@ -225,7 +223,7 @@ export default function Table({
 								<div
 									style={{
 										gridTemplateColumns: `repeat(${
-											priceCards.length + 1
+											priceCard.length + 1
 										}, minmax(0, 1fr))`,
 									}}
 									className={`relative grid gap-x-5 border-2 border-transparent ${
@@ -255,14 +253,14 @@ export default function Table({
 				{!isPreview && (
 					<button
 						type="button"
-						className="flex items-center justify-center w-full h-16 col-span-5 border-2 border-gray-300 border-dashed"
+						className="col-span-5 flex h-16 w-full items-center justify-center border-2 border-dashed border-gray-300"
 						onClick={handleAddRow}
 					>
 						<HiOutlinePlus />
 					</button>
 				)}
 			</div>
-			<div className="col-span-5 mt-3 mb-4 border-b-2 border-gray">{}</div>
+			<div className="border-gray col-span-5 mb-4 mt-3 border-b-2">{}</div>
 		</div>
 	);
 }

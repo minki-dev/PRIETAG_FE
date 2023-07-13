@@ -25,13 +25,18 @@ export default function RightMenu() {
 	const [isMenuOpen, setIsMenuOpen] = useState(true);
 
 	const { dispatch: dndDispatch, boxState } = useDNDBox();
-	const { priceModal: { priceCards } } = usePriceModal()
+	const {
+		priceModal: { priceCard },
+	} = usePriceModal();
 	const { dispatch: modalDispatch } = useModal();
 	const { faq, dispatch: faqDispatch } = useFAQ();
-	const { configState: { isPreview, color }, dispatch: configDispatch } = useConfig();
+	const {
+		configState: { isPreview, color },
+		dispatch: configDispatch,
+	} = useConfig();
 
 	const handleAddTable = () => {
-		if (!isPreview) dndDispatch(addTable(priceCards.length + 1));
+		if (!isPreview) dndDispatch(addTable(priceCard.length + 1));
 	};
 
 	const handleAddBox = (boxType: BoxType) => {
@@ -181,7 +186,7 @@ export default function RightMenu() {
 							<button
 								type="button"
 								onClick={() => setIsTextboxOption(!isTextboxOption)}
-								className="relative button_li"
+								className="button_li relative"
 							>
 								<span className="option_li">텍스트 박스</span>
 								{isTextboxOption ? (
@@ -270,7 +275,7 @@ export default function RightMenu() {
 							<button
 								type="button"
 								onClick={() => setIsColorOption(!isColorOption)}
-								className="flex items-center justify-between w-full"
+								className="flex w-full items-center justify-between"
 							>
 								<div className="flex items-center">
 									<span className="option_li">컬러 정보</span>
@@ -284,7 +289,7 @@ export default function RightMenu() {
 							</button>
 							{isColorOption && (
 								<div>
-									<button type="button" className="flex items-center pt-4 mr-3">
+									<button type="button" className="mr-3 flex items-center pt-4">
 										<div className="ml-2 flex h-[32px] w-[32px] items-center justify-center rounded-[50%] border border-solid border-[#dddddd]">
 											<div
 												style={{
@@ -295,9 +300,9 @@ export default function RightMenu() {
 												{' '}
 											</div>
 										</div>
-										<span className="ml-2 text">메인 컬러</span>
+										<span className="text ml-2">메인 컬러</span>
 									</button>
-									<button type="button" className="flex items-center pt-4 mr-3">
+									<button type="button" className="mr-3 flex items-center pt-4">
 										<div className="ml-2 flex h-[32px] w-[32px] items-center justify-center rounded-[50%] border border-solid border-[#dddddd]">
 											<div
 												style={{
@@ -308,9 +313,9 @@ export default function RightMenu() {
 												{' '}
 											</div>
 										</div>
-										<span className="ml-2 text">서브 컬러 01</span>
+										<span className="text ml-2">서브 컬러 01</span>
 									</button>
-									<button type="button" className="flex items-center pt-4 mr-3">
+									<button type="button" className="mr-3 flex items-center pt-4">
 										<div className="ml-2 flex h-[32px] w-[32px] items-center justify-center rounded-[50%] border border-solid border-[#dddddd]">
 											<div
 												style={{
@@ -321,7 +326,7 @@ export default function RightMenu() {
 												{' '}
 											</div>
 										</div>
-										<span className="ml-2 text">서브 컬러 02</span>
+										<span className="text ml-2">서브 컬러 02</span>
 									</button>
 								</div>
 							)}

@@ -15,6 +15,7 @@ import uploadModalReducer from './slice/uploadModalSlice';
 import templateReducer from './slice/templateSlice';
 import versionReducer from './slice/versionSlice';
 import authReducer from './slice/authSlice';
+import templateListReducer from './slice/templateListSlice';
 
 const logger = createLogger();
 
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
 	version: versionReducer,
 	monthYearToggle: monthYearToggleReducer,
 	auth: authReducer,
+	templateList: templateListReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -42,5 +44,5 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: false,
-		}),
+		}).concat(logger),
 });

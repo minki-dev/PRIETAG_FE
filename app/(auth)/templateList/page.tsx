@@ -12,6 +12,10 @@ import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
 import Pagination from './components/Pagination';
 import { useCookies } from 'react-cookie';
+import {
+	getTemplateList,
+	useTemplateList,
+} from '@/store/slice/templateListSlice';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
@@ -113,6 +117,13 @@ export default function TemplateList() {
 
 		fetchData();
 	}, [currentPage]);
+
+	const { templateList, dispatch } = useTemplateList();
+	const token: string = cookie['accessToken'];
+	useEffect(() => {
+		dispatch(getTemplateList({ currentPage, token }));
+	}, [currentPage]);
+
 	return (
 		<>
 			<div className=" flex min-h-[324px] w-full min-w-[602px] flex-col justify-center bg-[url('/img/splash.svg')] px-[240px]">

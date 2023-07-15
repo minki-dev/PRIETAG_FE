@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import { useRouter } from 'next/navigation';
 
-export default function notfound() {
+export default function Notfound() {
 	const router = useRouter();
 
 	return (

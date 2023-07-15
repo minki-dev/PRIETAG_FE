@@ -7,7 +7,6 @@ import Image from 'next/image';
 export default function Home() {
 	return (
 		<main>
-			<Header />
 			{/* section01 */}
 			<section className="relative flex h-[950px] w-full bg-slate-50 pb-[153px] pl-[353px] pr-[349px] pt-[190px]">
 				<div className="flex-col">
@@ -140,28 +139,28 @@ export default function Home() {
 						alt="homeSection5"
 						width={232}
 						height={280}
-						className=" "
+						className=""
 					/>
 					<Image
 						src="/img/home_9092.svg"
 						alt="homeSection5"
 						width={232}
 						height={280}
-						className=" "
+						className=""
 					/>
 					<Image
 						src="/img/home_9081.svg"
 						alt="homeSection5"
 						width={232}
 						height={280}
-						className=" "
+						className=""
 					/>
 					<Image
 						src="/img/home_9093.svg"
 						alt="homeSection5"
 						width={232}
 						height={280}
-						className=" "
+						className=""
 					/>
 				</div>
 			</section>

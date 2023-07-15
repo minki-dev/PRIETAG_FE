@@ -28,7 +28,7 @@ export type Colors = {
 
 type ConfigPayload = {
 	color: Colors;
-	font: String;
+	font: string;
 };
 
 const initialState: ConfigState = {
@@ -82,8 +82,9 @@ export const configSlice = createSlice({
 			return state;
 		},
 
-		setFont: (state: ConfigState, action: PayloadAction<ConfigPayload>) => {
-			return state;
+		setFont: (state: ConfigState, action: PayloadAction<Pick<ConfigPayload, 'font'>>) => {
+			const { font } = action.payload
+			state.font = font
 		},
 
 		setColor: (

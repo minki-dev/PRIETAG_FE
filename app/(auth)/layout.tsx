@@ -1,4 +1,5 @@
-import ProtectedRoute from "../api/auth/ProtectedRoute";
+import ProtectedRoute from "@/fetch/auth/ProtectedRoute";
+
 
 export default function AuthLayout({
 	children,

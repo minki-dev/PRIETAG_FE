@@ -37,13 +37,13 @@ export interface getTemplateType {
 	token: string;
 }
 
-export const getTemplateList = createAsyncThunk<
+export const getTemplateListThunk = createAsyncThunk<
 	Entities,
 	getTemplateType,
 	{
 		dispatch: AppDispatch;
 	}
->('templateList/getTemplateList', async ({ currentPage, token }) => {
+>('templateList/getTemplateListThunk', async ({ currentPage, token }) => {
 	const res = await fetch(
 		`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
 		{
@@ -107,18 +107,18 @@ const templateListSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		/** 템플릿 리스트 가져오기 */
-		builder.addCase(getTemplateList.pending, (state: TemplateList) => {
+		builder.addCase(getTemplateListThunk.pending, (state: TemplateList) => {
 			state.loading = true;
 			state.error = false;
 		});
 		builder.addCase(
-			getTemplateList.fulfilled,
+			getTemplateListThunk.fulfilled,
 			(state: TemplateList, action: PayloadAction<Entities>) => {
 				state.loading = false;
 				state.entities = action.payload;
 			},
 		);
-		builder.addCase(getTemplateList.rejected, (state: TemplateList) => {
+		builder.addCase(getTemplateListThunk.rejected, (state: TemplateList) => {
 			state.error = true;
 		});
 		/** 템플릿 복제 */

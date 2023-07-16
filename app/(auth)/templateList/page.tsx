@@ -13,7 +13,7 @@ import ToggleDropDown from './components/ToggleDropDown';
 import Pagination from './components/Pagination';
 import { useCookies } from 'react-cookie';
 import {
-	getTemplateList,
+	getTemplateListThunk,
 	useTemplateList,
 } from '@/store/slice/templateListSlice';
 import { getTemplateList } from '@/fetch/auth/templateList/templateList';
@@ -108,7 +108,7 @@ export default function TemplateList() {
 	const { templateList, dispatch } = useTemplateList();
 	const token: string = cookie['accessToken'];
 	useEffect(() => {
-		dispatch(getTemplateList({ currentPage, token }));
+		dispatch(getTemplateListThunk({ currentPage, token }));
 	}, [currentPage]);
 
 	return (

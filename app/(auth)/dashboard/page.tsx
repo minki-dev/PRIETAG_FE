@@ -7,12 +7,10 @@ import VersionChart from './components/VersionChart';
 import DateChart from './components/DateChart';
 import { translateVersionListData } from '@/constants/versionList';
 import VersionList from './components/VersionList';
-import Header from '@/components/header/Header';
 
 export default function Dashboard() {
 	return (
 		<>
-			<Header />
 			<main className="w-full bg-[#F7F8FC] font-ptRegular">
 				<div className="">
 					<h1 className="font-ptBold text-[32px] leading-[51px]">Dashboard</h1>

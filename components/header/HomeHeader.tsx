@@ -1,14 +1,14 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { login } from '@/app/api/auth/user/kakaoUser';
+
 import { useCookies } from 'react-cookie';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { loggedIn, loggedOut, useAuth } from '@/store/slice/authSlice';
+import { login } from '@/fetch/auth/user/kakaoUser';
 
 export default function HomeHeader() {
 	// const [cookie, setCookie] = useCookies();

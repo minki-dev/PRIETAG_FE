@@ -234,7 +234,9 @@ export default function TemplateList() {
 											/>
 										</button>
 									</div>
-									{item.moreIsClicked ? <MoreDropDown /> : null}
+									{item.moreIsClicked ? (
+										<MoreDropDown itemId={item.id} token={token} />
+									) : null}
 								</div>
 							</Link>
 						))}

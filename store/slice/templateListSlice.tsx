@@ -76,6 +76,19 @@ export const getTemplateList = createAsyncThunk<
 	} else return { templateList: [], totalCount: 0 };
 });
 
+export const copyTemplate = createAsyncThunk(
+	'templateList/copyTemplate',
+	async ({ tid, token }: { tid: number; token: string }) => {
+		const res = await fetch(`https://ezfee.site/api/template/copy/${tid}`, {
+			method: 'POST',
+			credentials: 'include',
+			headers: {
+				Authorization: token,
+			},
+		});
+	},
+);
+
 const templateListSlice = createSlice({
 	name: 'templateList',
 	initialState,
@@ -106,6 +119,17 @@ const templateListSlice = createSlice({
 			},
 		);
 		builder.addCase(getTemplateList.rejected, (state: TemplateList) => {
+			state.error = true;
+		});
+		/** 템플릿 복제 */
+		builder.addCase(copyTemplate.pending, (state: TemplateList) => {
+			state.loading = true;
+			state.error = false;
+		});
+		builder.addCase(copyTemplate.fulfilled, (state: TemplateList) => {
+			state.loading = false;
+		});
+		builder.addCase(copyTemplate.rejected, (state: TemplateList) => {
 			state.error = true;
 		});
 	},

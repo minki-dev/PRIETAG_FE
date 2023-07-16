@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TemplateItem } from '@/constants/template';
 import Link from 'next/link';
@@ -12,6 +12,7 @@ import ViewDropDown from './components/ViewDropDown';
 import ToggleDropDown from './components/ToggleDropDown';
 import Pagination from './components/Pagination';
 import { useCookies } from 'react-cookie';
+import { getTemplateList } from '@/fetch/auth/templateList/templateList';
 
 export default function TemplateList() {
 	const [viewIsClicked, setViewIsClicked] = useState<boolean>(false);
@@ -21,22 +22,18 @@ export default function TemplateList() {
 	const [totalPages, setTotalPages] = useState<number>(0);
 
 	const router = useRouter();
-
+	const [cookie, setCookie] = useCookies();
 	const handleMoreClick = (
 		id: number,
 		e: React.MouseEvent<HTMLButtonElement>,
 	) => {
+		e.preventDefault();
 		setTemplates((prev) => {
 			return prev.map((item) => {
 				if (item.id === id) item.moreIsClicked = !item.moreIsClicked;
 				return item;
 			});
 		});
-		e.preventDefault();
-	};
-
-	const handleNewTemplateBtn = async () => {
-		router.push('/editTemplate');
 	};
 
 	const onSortByName = () => {
@@ -71,50 +68,40 @@ export default function TemplateList() {
 			}),
 		);
 	};
-	const [cookie, setCookie] = useCookies();
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const res = await fetch(
-					`https://ezfee.site/api/templates?page=${currentPage}&pageSize=9`,
-					{
-						method: 'GET',
-						credentials: 'include',
-						headers: {
-							Authorization: cookie['accessToken'],
-						},
-					},
-				);
-				const {
-					data: { totalCount, template },
-				} = await res.json();
-				if (template.length > 0) {
-					const templateData: TemplateItem[] = template.map(
-						(template: {
-							id: number;
-							title: string;
-							updated_at: string;
-							image: string;
-						}) => {
-							return { ...template, moreIsClicked: false };
-						},
-					);
-					setTemplates(templateData);
-					setTotalPages(Math.ceil(totalCount / 9));
+				const res = await getTemplateList({
+					pageNumber: currentPage,
+					pageSize: 9,
+				});
+				if (res) {
+					const { totalCount, template } = res;
+					if (template.length > 0) {
+						const templateData: TemplateItem[] = template.map(
+							(template: {
+								id: number;
+								title: string;
+								updated_at: string;
+								image: string;
+							}) => {
+								return { ...template, moreIsClicked: false };
+							},
+						);
+						setTemplates(templateData);
+						setTotalPages(Math.ceil(totalCount / 9));
+					}
 				}
 			} catch (err) {
-				console.log(err);
+				console.dir(err);
 			}
-			// const { totalCount, template } = await getTemplateList({
-			// 	pageNumber: currentPage,
-			// 	pageSize: 9,
-			// });
 		};
 
 		fetchData();
 	}, [currentPage]);
 	return (
-		<>
+		<Suspense fallback={<p>...Loading</p>}>
 			<div className=" flex min-h-[324px] w-full min-w-[602px] flex-col justify-center bg-[url('/img/splash.svg')] px-[240px]">
 				<div className="mt-[72px] min-w-[602px] text-[32px] font-bold text-black">
 					가격 정책표 리스트
@@ -133,7 +120,9 @@ export default function TemplateList() {
 			<div className="h-full  w-full   bg-[#F7F8FC] px-[240px] pb-[240px] pt-[80px]">
 				<div className="flex h-[120px] w-full min-w-[900px] items-center  justify-between">
 					<button
-						onClick={handleNewTemplateBtn}
+						onClick={() => {
+							router.push('/editTemplate');
+						}}
 						className="  flex h-[58px]  w-[262px] justify-around rounded-[10px] border border-stone-300 bg-white p-4"
 					>
 						<div>
@@ -242,7 +231,7 @@ export default function TemplateList() {
 			</div>
 
 			<Footer />
-		</>
+		</Suspense>
 	);
 }
 

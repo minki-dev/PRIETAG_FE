@@ -7,7 +7,10 @@ import TableList from '../components/TableList';
 import Pagination from '../components/Pagination';
 import { useDispatch } from 'react-redux';
 import { VersionHistoryType, setCurrentPage, setVersions } from '@/store/slice/versionSlice';
-import { getVersionTemplateList } from '@/app/api/auth/templateList/templateList';
+import { getVersionTemplateList } from '@/fetch/auth/templateList/templateList';
+import SquareBtn from '@/components/button/SquareBtn';
+import { deleteVersionHistories } from '@/fetch/auth/templateList/templateHistoryList';
+
  
 export default function TableListSection({ id }: { id: string }) {
 	const {
@@ -19,6 +22,20 @@ export default function TableListSection({ id }: { id: string }) {
 		havePublish,
 	} = useSelector((state: RootState) => state.version);
 	const dispatch = useDispatch();
+
+	const handleDelete = async () => {
+		
+		const isNothingChecked = 	versions.every(version => !version.isChecked) 
+		if(!isNothingChecked) {
+			
+			const ids = versions.map(version => {
+				if(version.isChecked) return version.id
+			})
+			
+			deleteVersionHistories(ids as number[])
+		}
+		
+	}
 	useEffect(() => {
 		const fetchData = async () => {
 			const { totalCount, template, havePublish } =
@@ -50,6 +67,7 @@ export default function TableListSection({ id }: { id: string }) {
 				setCurrentPage={dispatch(setCurrentPage)}
 				totalPages={totalPage}
 			/>{' '}
+			<SquareBtn borderColor='transparent' onClick={handleDelete} textContent='삭제' bg='#FF0000' width='96px' textColor='white' />
 		</>
 	);
 }

@@ -2,6 +2,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import React from 'react';
 import ReduxProvider from '@/store/ReduxProvider';
+import Header from '@/components/header/Header';
 const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({
 	children,
@@ -11,13 +12,13 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<link rel="icon" href="/img/ezfee.svg" sizes="any" />
-			<body className={inter.className} suppressHydrationWarning={true}>
+			<body
+				className={`w-screen bg-gray-100 ${inter.className}`}
+				suppressHydrationWarning={true}
+			>
 				<ReduxProvider>
-					<main className="w-screen min-h-screen bg-gray-100">
-						<main className=" m-auto w-[375px]  bg-white sm:w-full xl:min-w-[1280px] xl:max-w-[1920px]  ">
-						{children}
-						</main>
-					</main>
+					<Header />
+					{children}
 				</ReduxProvider>
 			</body>
 		</html>
